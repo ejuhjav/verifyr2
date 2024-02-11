@@ -1,0 +1,34 @@
+.container-fluid {
+    padding: 20px !important;
+}
+
+.form-group-custom {
+    padding-right: 50px; 
+    position: relative; 
+    width: 100%;
+}
+
+.form-group-custom .shinyDirectories {
+    position: absolute; 
+    right: 0px; 
+    top: 25px;
+}
+
+#save_comments, #clear_comments {
+    margin-bottom: 20px;
+}
+
+#summary_out td:hover {
+    cursor: pointer;
+}
+
+#comparison_comments_container {
+    display: none;
+    margin-top: 20px;
+}
+
+#download_csv {
+    display: none;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
