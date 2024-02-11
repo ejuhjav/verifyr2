@@ -47,3 +47,10 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# VIM temp files
+*.swo
+*.swp
+
+# TODO file
+TODO

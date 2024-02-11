@@ -1,0 +1,31 @@
+Package: verifyr2
+Type: Package
+Title: Compare and verify file output changes
+Version: 0.0.1.0
+Imports:
+    diffobj,
+    dplyr,
+    DT,
+    fs,
+    magrittr,
+    pdftools,
+    shiny,
+    shinyjs,
+    shinyFiles,
+    stringr,
+    striprtf,
+    tibble
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Encoding: UTF-8
+RoxygenNote: 7.3.1
+Collate: 
+    'FileComparator.R'
+    'BinaryFileComparator.R'
+    'TxtFileComparator.R'
+    'PdfFileComparator.R'
+    'RtfFileComparator.R'
+    'list_files.R'
+    'run_example.R'
+    'utils-pipe.R'
