@@ -4,6 +4,17 @@
 Verifyr2 is an R package for extendable file comparison classes and methods including an
 example shiny app for combining the functions into a convenient application.
 
+## Package installation ##
+
+Verifyr2 package can be installed directly from the github using different development packages. One
+such option would be to use the "devtools" package:
+
+``` bash
+> install.packages("devtools")
+> library("devtools")
+> install_github("ejuhjav/verifyr2")
+```
+
 ## Shiny app usage ##
 
 ``` bash
