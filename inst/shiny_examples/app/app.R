@@ -21,7 +21,7 @@ sel_row_index <- NULL
 ui <- shiny::fluidPage(
   shinyjs::useShinyjs(),
   shiny::includeCSS("styles.css"),
-  shiny::headerPanel("File Location Input"),
+  shiny::headerPanel("File content comparison"),
   shiny::wellPanel(
     shiny::fluidRow(
       shiny::column(6,
@@ -37,13 +37,13 @@ ui <- shiny::fluidPage(
   ),
   shiny::fluidRow(
     shiny::column(12,
-      h2("Summary comparison (using comparator compare_files_summary):"),
+      h2("Summary comparison (comparator compare_files_summary):"),
       DT::dataTableOutput("summary_out"),
       shiny::textOutput("summary_text_output"),
       shiny::downloadButton("download_csv", "Download comparison results as CSV"),
     ),
     shiny::column(12,
-      h2("Details comparison (using comparator compare_files_details):"),
+      h2("Details comparison (comparator compare_files_details):"),
       shiny::fluidRow(
         shiny::column(6,
           shiny::downloadLink("open_folder1_file_link", shiny::textOutput("open_folder1_file_link_output")),
