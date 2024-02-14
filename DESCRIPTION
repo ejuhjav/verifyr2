@@ -7,6 +7,7 @@ Imports:
     dplyr,
     DT,
     fs,
+    jsonlite,
     magrittr,
     pdftools,
     shiny,

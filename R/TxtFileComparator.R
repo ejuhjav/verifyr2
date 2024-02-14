@@ -67,15 +67,17 @@ setMethod("compare_files_details_inner", "TxtFileComparator", function(comparato
   file2_contents_list   <- compare_files_get_contents(comparator, file2, omit, options)
   file2_contents_whole  <- file2_contents_list[[1]]
 
+  context <- 2
+  if (!is.null(options) &&  "details" %in% names(options) && "mode" %in% names(options$details) && "full" == options$details$mode) {
+    context <- -1
+  }
+
   my_equalizer_with_omit <- function(x, x.chr) {
     my_finalizer(x, x.chr, omit)
   }
 
   style <- diffobj::StyleHtmlLightRgb(html.output = "diff.w.style", finalizer = my_equalizer_with_omit)
-  diff_print <- diffobj::diffPrint(file1_contents_whole, file2_contents_whole, style = style)
-
-  # TODO: add parameter to defined context
-  #diff_print <- diffobj::diffPrint(file1_contents_whole, file2_contents_whole, context = -1, style = style)
+  diff_print <- diffobj::diffPrint(file1_contents_whole, file2_contents_whole, context = context, style = style)
 
   return(diff_print)
 })
