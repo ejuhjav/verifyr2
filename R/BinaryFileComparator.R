@@ -15,7 +15,9 @@
 
 setClass("BinaryFileComparator", contains = "FileComparator", slots = list(file1 = "ANY", file2 = "ANY"))
 
-#' Generic for getting the single file contents for the comparison. This method is intended to be called only by the comparator classes in the
+#' Generic for getting the single file contents for the comparison. The method returns the file contents in two separate
+#' vectors inside a list. The first vector is the file contents and the second one is the file contents with the rows
+#' matching the omit string excluded. This method is intended to be called only by the comparator classes in the
 #' processing and shouldn't be called directly by the user.
 #'
 #' @param comparator comparator instance used for the comparison that is meant to be created with the factory method verifyr2::create_file_comparator.
@@ -35,7 +37,9 @@ setGeneric("compare_files_get_contents", function(comparator, file, omit, option
 
 setGeneric("compare_files_get_contents_inner", function(comparator, file_contents, omit, options, ...) standardGeneric("compare_files_get_contents_inner"))
 
-#' Method for comparing the inner part for the details query. This method can be overwritten by more specialized comparator classes. This
+#' Method for comparing the inner part for the details query. The method returns the file contents in two separate
+#' vectors inside a list. The first vector is the file contents and the second one is the file contents with the rows
+#' matching the omit string excluded. This method can be overwritten by more specialized comparator classes. This
 #' method is intended to be called only by the comparator classes in the processing and shouldn't be called directly by the user.
 #'
 #' @param comparator comparator instance used for the comparison that is meant to be created with the factory method verifyr2::create_file_comparator.
@@ -52,10 +56,13 @@ setMethod("compare_files_summary_inner", "BinaryFileComparator", function(compar
     return("Different file sizes for compared files")
   }
 
-  file1_contents <- compare_files_get_contents(comparator, file1, omit, options)
-  file2_contents <- compare_files_get_contents(comparator, file2, omit, options)
+  file1_contents_list <- compare_files_get_contents(comparator, file1, omit, options)
+  file1_contents_omit <- file1_contents_list[[2]]
 
-  if (!identical(file1_contents, file2_contents)) {
+  file2_contents_list <- compare_files_get_contents(comparator, file2, omit, options)
+  file2_contents_omit <- file2_contents_list[[2]]
+
+  if (!identical(file1_contents_omit, file2_contents_omit)) {
     return("Different content in compared files")
   }
 
@@ -75,7 +82,9 @@ setMethod("compare_files_details_inner", "BinaryFileComparator", function(compar
   return("Binary file without applicable comparator; unable to compare details")
 })
 
-#' Method for getting the single file contents for the comparison. This method can be overwritten by more specialized comparator classes. This
+#' Method for getting the single file contents for the comparison. The method returns the file contents in two separate
+#' vectors inside a list. The first vector is the file contents and the second one is the file contents with the rows
+#' matching the omit string excluded. This method can be overwritten by more specialized comparator classes. This
 #' method is intended to be called only by the comparator classes in the processing and shouldn't be called directly by the user.
 #'
 #' @param comparator comparator instance used for the comparison that is meant to be created with the factory method verifyr2::create_file_comparator.
@@ -87,7 +96,9 @@ setMethod("compare_files_get_contents", "BinaryFileComparator", function(compara
   return(compare_files_get_contents_inner(comparator, readLines(file, warn = FALSE), omit, options))
 })
 
-#' Generic for getting the inner part for the file contents query. This method can be overwritten by more specialized comparator classes. This
+#' Generic for getting the inner part for the file contents query. The method returns the file contents in two separate
+#' vectors inside a list. The first vector is the file contents and the second one is the file contents with the rows
+#' matching the omit string excluded. This method can be overwritten by more specialized comparator classes. This
 #' method is intended to be called only by the comparator classes in the processing and shouldn't be called directly by the user.
 #'
 #' @param comparator    comparator instance used for the comparison that is meant to be created with the factory method verifyr2::create_file_comparator.
@@ -96,5 +107,5 @@ setMethod("compare_files_get_contents", "BinaryFileComparator", function(compara
 #' @param options       additional comparator parameters
 
 setMethod("compare_files_get_contents_inner", "BinaryFileComparator", function(comparator, file_contents, omit, options, ...) {
-  return(file_contents)
+  return(list(file_contents, file_contents))
 })

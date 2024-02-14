@@ -32,3 +32,20 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+div.diffobj-container div.diffobj-line > div.ignore {
+  border-left: 1px solid #888888;
+}
+
+div.diffobj-container.light.rgb span.diffobj-word.ignore {
+    background-color: #ddd;
+}
+
+div.diffobj-container.light.rgb span.diffobj-word-highlight.ignore {
+    background-color: #ddd;
+}
+
+div.diffobj-container.light.rgb span.diffobj-word.ignore span.diffobj-word-highlight.ignore {
+    background-color: #ccc;
+}
+

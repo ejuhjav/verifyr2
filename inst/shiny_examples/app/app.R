@@ -31,7 +31,7 @@ ui <- shiny::fluidPage(
       ),
       shiny::column(6,
         shiny::textInput("file_name_patter", "File Name Pattern"),
-        shiny::textInput("omit_rows", "Omit rows with text", "Source:"),
+        shiny::textInput("omit_rows", "Omit rows with text", "versicolor"),
       ),
     ),
   ),
