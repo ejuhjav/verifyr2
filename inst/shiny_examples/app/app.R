@@ -28,6 +28,7 @@ ui <- shiny::fluidPage(
         custom_file_input("folder1", "Folder 1", "/extdata/base_files"),
         custom_file_input("folder2", "Folder 2", "/extdata/compare_files"),
         shiny::actionButton("go", "Go"),
+        shiny::actionButton("config", "Configure"),
       ),
       shiny::column(6,
         shiny::textInput("file_name_patter", "File Name Pattern"),
@@ -71,6 +72,9 @@ server <- function(input, output, session) {
   # Element initializations
   # ===============================================================================================
 
+  root   <- find.package("verifyr2", quiet = TRUE)
+  config <- jsonlite::fromJSON(file.path(root, "config.json"))
+
   roots  <- c(Home = fs::path_home(), Examples = fs::path_package("verifyr2", "extdata"))
   params <- list(roots = roots, session = session, restrictions = system.file(package = "base"), allowDirCreate = FALSE)
 
@@ -80,8 +84,9 @@ server <- function(input, output, session) {
   default1 <- "Select the compared file folders and execute the summary comparison by clicking on the 'Go' button."
   default2 <- "Click on a row in the summary comparison result to view the side-by-side details comparison."
 
-  summary_text <- shiny::reactiveVal(default1)
-  details_text <- shiny::reactiveVal(default2)
+  configuration <- shiny::reactiveValues(config = as.list(config))
+  summary_text  <- shiny::reactiveVal(default1)
+  details_text  <- shiny::reactiveVal(default2)
   open_folder1_file_link <- shiny::reactiveVal("")
   open_folder2_file_link <- shiny::reactiveVal("")
 
@@ -153,12 +158,31 @@ server <- function(input, output, session) {
     shiny::updateTextAreaInput(session, "details_out_comments", value = "")
   })
 
+  shiny::observeEvent(input$config, {
+    shiny::showModal(shiny::modalDialog(
+      shiny::tags$h2("Comparison configuration"),
+      shiny::selectInput("rtf_mode", "RTF comparison mode", choices = c("raw", "content"), selected = configuration$config$rtf$mode),
+      shiny::selectInput("details_mode", "Details comparison mode", choices = c("full", "summary"), selected = configuration$config$details$mode),
+      shiny::p("The default configuration values can be set in the config.json file."),
+      footer = shiny::tagList(
+        shiny::actionButton("submit", "Save"),
+        shiny::modalButton("Cancel")
+      )
+    ))
+  })
+
+  shiny::observeEvent(input$submit, {
+    shiny::removeModal()
+    configuration$config$rtf$mode <- input$rtf_mode
+    configuration$config$details$mode <- input$details_mode
+  })
+
   summary_verify <- shiny::reactive({
     shiny::req(list_of_files())
     dt_global_file_list <<- tibble::tibble(list_of_files()) %>%
       dplyr::mutate(omitted = input$omit_rows) %>%
       dplyr::rowwise() %>%
-      dplyr::mutate(comparison = verifyr2::compare_files_summary(verifyr2::create_file_comparator(folder1_path, folder2_path), omit = omitted)) %>% # nolint
+      dplyr::mutate(comparison = verifyr2::compare_files_summary(verifyr2::create_file_comparator(folder1_path, folder2_path), omit = omitted, options = configuration$config)) %>% # nolint
       dplyr::mutate(comments = "no") %>%
       dplyr::mutate(comments_details = "")
   })
@@ -226,7 +250,7 @@ server <- function(input, output, session) {
     output$details_out <- shiny::renderUI({
       shiny::HTML(
         as.character(
-          verifyr2::compare_files_details(verifyr2::create_file_comparator(file1, file2), omit = input$omit_rows)
+          verifyr2::compare_files_details(verifyr2::create_file_comparator(file1, file2), omit = input$omit_rows, options = configuration$config)
         )
       )
     })
