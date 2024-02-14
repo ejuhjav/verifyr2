@@ -16,7 +16,9 @@
 
 setClass("PdfFileComparator", contains = "TxtFileComparator", slots = list(file1 = "ANY", file2 = "ANY"))
 
-#' Method for getting the single file contents for the comparison. This method can be overwritten by more specialized comparator classes. This
+#' Method for getting the single file contents for the comparison. The method returns the file contents in two separate
+#' vectors inside a list. The first vector is the file contents and the second one is the file contents with the rows
+#' matching the omit string excluded. This method can be overwritten by more specialized comparator classes. This
 #' method is intended to be called only by the comparator classes in the processing and shouldn't be called directly by the user.
 #'
 #' For PdfComparator, the file contents are returned based on the mode parameter if available. "text" mode is the only supported
