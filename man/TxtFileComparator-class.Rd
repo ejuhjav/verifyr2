@@ -10,9 +10,11 @@ This comparator contains the methods for doing basic comparisons on raw texct co
 }
 \examples{
 
-The normal way for creating a comparator would be to call the generic factory
-method \code{verifyr2::create_file_comparator}, but if needed, an explicit comparator
-can be instantiated directly as well.
-\code{comparator <- new("TxtFileComparator")}
+## Not run:
+# The normal way for creating a comparator would be to call the generic factory
+# method verifyr2::create_file_comparator, but if needed, an explicit comparator
+# can be instantiated directly as well:
+comparator <- new("TxtFileComparator")
+## End(Not run)
 
 }

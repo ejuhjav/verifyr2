@@ -21,8 +21,8 @@ Returns a tibble, \code{selected_files} with 3 columns \code{file}, \code{folder
 }
 \examples{
 
-\code{folder1 <- paste0(fs::path_package("/extdata/base_files/", package = "verifyr2"))}
-\code{folder2 <- paste0(fs::path_package("/extdata/compare_files/", package = "verifyr2"))}
-\code{verifyr2::list_files(folder1 = folder1, folder2 = folder2, patter = "base")}
+folder1 <- paste0(fs::path_package("/extdata/base_files/", package = "verifyr2"))
+folder2 <- paste0(fs::path_package("/extdata/compare_files/", package = "verifyr2"))
+verifyr2::list_files(folder1 = folder1, folder2 = folder2, patter = "base")
 
 }

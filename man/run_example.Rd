@@ -4,13 +4,8 @@
 \alias{run_example}
 \title{Call for shiny example where the user can test verifyr2 package functions}
 \usage{
-run_example()
+verifyr2::run_example()
 }
 \description{
 \code{verifyr2::run_example} returns simple Shiny App where user can see how the verifyr2 functions work
-}
-\examples{
-
-\code{verifyr2::run_example()}
-
 }

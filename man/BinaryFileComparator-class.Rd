@@ -9,9 +9,9 @@ Fallback comparator for binary files without any specific definied comparator.
 }
 \examples{
 
-The normal way for creating a comparator would be to call the generic factory
-method \code{verifyr2::create_file_comparator}, but if needed, an explicit comparator
-can be instantiated directly as well.
-\code{comparator <- new("BinaryFileComparator")}
+# The normal way for creating a comparator would be to call the generic factory
+# method verifyr2::create_file_comparator, but if needed, an explicit comparator
+# can be instantiated directly as well.
+comparator <- new("BinaryFileComparator")
 
 }

@@ -23,6 +23,8 @@
 \item{omit}{all lines containing the omit string will be excluded from the comparison (detaulf = NULL)}
 
 \item{options}{additional comparator parameters}
+
+\item{...}{additional parameters}
 }
 \description{
 Method for comparing the file summary with the given comparator instance.
