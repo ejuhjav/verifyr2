@@ -17,8 +17,8 @@ Factory method for creating comparator instance based on the given two files.
 \examples{
 
 # file(x) in these examples are files with full file path in all the examples.
-\code{file1 <- paste0(fs::path_package("/extdata/base_files/file1.rtf", package = "verifyr")}
-\code{file2 <- paste0(fs::path_package("/extdata/compare_files/file1.rtf", package = "verifyr")}
+\code{file1 <- paste0(fs::path_package("/extdata/base_files/file1.rtf", package = "verifyr2"))}
+\code{file2 <- paste0(fs::path_package("/extdata/compare_files/file1.rtf", package = "verifyr2"))}
 \code{file3 <- file1}
 \code{file4 <- file2}
 

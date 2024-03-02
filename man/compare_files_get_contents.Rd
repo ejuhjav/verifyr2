@@ -2,7 +2,9 @@
 % Please edit documentation in R/BinaryFileComparator.R
 \name{compare_files_get_contents}
 \alias{compare_files_get_contents}
-\title{Generic for getting the single file contents for the comparison. This method is intended to be called only by the comparator classes in the
+\title{Generic for getting the single file contents for the comparison. The method returns the file contents in two separate
+vectors inside a list. The first vector is the file contents and the second one is the file contents with the rows
+matching the omit string excluded. This method is intended to be called only by the comparator classes in the
 processing and shouldn't be called directly by the user.}
 \usage{
 compare_files_get_contents(comparator, file, omit, options, ...)
@@ -17,6 +19,8 @@ compare_files_get_contents(comparator, file, omit, options, ...)
 \item{options}{additional comparator parameters}
 }
 \description{
-Generic for getting the single file contents for the comparison. This method is intended to be called only by the comparator classes in the
+Generic for getting the single file contents for the comparison. The method returns the file contents in two separate
+vectors inside a list. The first vector is the file contents and the second one is the file contents with the rows
+matching the omit string excluded. This method is intended to be called only by the comparator classes in the
 processing and shouldn't be called directly by the user.
 }
