@@ -2,8 +2,9 @@
 % Please edit documentation in R/TxtFileComparator.R
 \name{my_finalizer}
 \alias{my_finalizer}
-\title{Custom finalizer method for diffobj html content finalizing. This method is used to modify the
-diff html output so that omitted rows have their own special styling and gutters.}
+\title{Custom finalizer method for diffobj html content finalizing. This method is used to
+modify the diff html output so that omitted rows have their own special styling and
+gutters.}
 \usage{
 my_finalizer(x, x.chr, omit)
 }
@@ -15,6 +16,7 @@ my_finalizer(x, x.chr, omit)
 \item{omit}{all lines containing the omit string will be excluded from the comparison (detaulf = NULL)}
 }
 \description{
-Custom finalizer method for diffobj html content finalizing. This method is used to modify the
-diff html output so that omitted rows have their own special styling and gutters.
+Custom finalizer method for diffobj html content finalizing. This method is used to
+modify the diff html output so that omitted rows have their own special styling and
+gutters.
 }

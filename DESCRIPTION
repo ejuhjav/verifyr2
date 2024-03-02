@@ -1,7 +1,11 @@
 Package: verifyr2
 Type: Package
 Title: Compare and verify file output changes
-Version: 0.0.1.0
+Description: A package for file comparison algorithms and example shiny app for the comparison usage example.
+Version: 0.0.2.0
+License: MIT + file LICENSE
+Author: Juha Javanainen
+Maintainer: Juha Javanainen <ejuhjav@gmail.com>
 Imports:
     diffobj,
     dplyr,
@@ -9,6 +13,7 @@ Imports:
     fs,
     jsonlite,
     magrittr,
+    mime,
     pdftools,
     shiny,
     shinyjs,

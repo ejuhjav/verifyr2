@@ -2,8 +2,9 @@
 % Please edit documentation in R/FileComparator.R
 \name{compare_files_summary_inner}
 \alias{compare_files_summary_inner}
-\title{Generic for comparing the inner part for the summary query. This method can be overwritten by more specialized comparator classes. This
-method is intended to be called only by the comparator classes in the processing and shouldn't be called directly by the user.}
+\title{Generic for comparing the inner part for the summary query. This method can be overwritten
+by more specialized comparator classes. This method is intended to be called only by the
+comparator classes in the processing and shouldn't be called directly by the user.}
 \usage{
 compare_files_summary_inner(
   comparator,
@@ -24,8 +25,11 @@ compare_files_summary_inner(
 \item{omit}{all lines containing the omit string will be excluded from the comparison (detaulf = NULL)}
 
 \item{options}{additional comparator parameters}
+
+\item{...}{additional parameters}
 }
 \description{
-Generic for comparing the inner part for the summary query. This method can be overwritten by more specialized comparator classes. This
-method is intended to be called only by the comparator classes in the processing and shouldn't be called directly by the user.
+Generic for comparing the inner part for the summary query. This method can be overwritten
+by more specialized comparator classes. This method is intended to be called only by the
+comparator classes in the processing and shouldn't be called directly by the user.
 }

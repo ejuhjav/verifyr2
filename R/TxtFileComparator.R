@@ -7,23 +7,27 @@
 #'
 #' @examples
 #'
-#' The normal way for creating a comparator would be to call the generic factory
-#' method \code{verifyr2::create_file_comparator}, but if needed, an explicit comparator
-#' can be instantiated directly as well.
-#' \code{comparator <- new("TxtFileComparator")}
+#' ## Not run:
+#' # The normal way for creating a comparator would be to call the generic factory
+#' # method verifyr2::create_file_comparator, but if needed, an explicit comparator
+#' # can be instantiated directly as well:
+#' comparator <- new("TxtFileComparator")
+#' ## End(Not run)
 #'
 #' @export
 
 setClass("TxtFileComparator", contains = "BinaryFileComparator", slots = list(file1 = "ANY", file2 = "ANY"))
 
-#' Method for comparing the inner part for the details query. This method can be overwritten by more specialized comparator classes. This
-#' method is intended to be called only by the comparator classes in the processing and shouldn't be called directly by the user.
+#' Method for comparing the inner part for the details query. This method can be overwritten
+#' by more specialized comparator classes. This method is intended to be called only by the
+#' comparator classes in the processing and shouldn't be called directly by the user.
 #'
 #' @param comparator comparator instance used for the comparison that is meant to be created with the factory method verifyr2::create_file_comparator.
 #' @param file1      first file to compare
 #' @param file2      second file to compare
 #' @param omit       all lines containing the omit string will be excluded from the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
+#' @param ...        additional parameters
 
 setMethod("compare_files_summary_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options, ...) {
   file1_contents_list <- compare_files_get_contents(comparator, file1, omit, options)
@@ -51,14 +55,16 @@ setMethod("compare_files_summary_inner", "TxtFileComparator", function(comparato
   return(result)
 })
 
-#' Method for comparing the inner part for the details query. This method can be overwritten by more specialized comparator classes. This
-#' method is intended to be called only by the comparator classes in the processing and shouldn't be called directly by the user.
+#' Method for comparing the inner part for the details query. This method can be overwritten
+#' by more specialized comparator classes. This method is intended to be called only by the
+#' comparator classes in the processing and shouldn't be called directly by the user.
 #'
 #' @param comparator comparator instance used for the comparison that is meant to be created with the factory method verifyr2::create_file_comparator.
 #' @param file1      first file to compare
 #' @param file2      second file to compare
 #' @param omit       all lines containing the omit string will be excluded from the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
+#' @param ...        additional parameters
 
 setMethod("compare_files_details_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options, ...) {
   file1_contents_list   <- compare_files_get_contents(comparator, file1, omit, options)
@@ -83,15 +89,18 @@ setMethod("compare_files_details_inner", "TxtFileComparator", function(comparato
 })
 
 
-#' Generic for getting the inner part for the file contents query. The method returns the file contents in two separate
-#' vectors inside a list. The first vector is the file contents and the second one is the file contents with the rows
-#' matching the omit string excluded. This method can be overwritten by more specialized comparator classes. This
-#' method is intended to be called only by the comparator classes in the processing and shouldn't be called directly by the user.
+#' Generic for getting the inner part for the file contents query. The method returns the
+#' file contents in two separate vectors inside a list. The first vector is the file contents
+#' and the second one is the file contents with the rows matching the omit string excluded.
+#' This method can be overwritten by more specialized comparator classes. This method is
+#' intended to be called only by the comparator classes in the processing and shouldn't be
+#' called directly by the user.
 #'
 #' @param comparator    comparator instance used for the comparison that is meant to be created with the factory method verifyr2::create_file_comparator.
 #' @param file_contents first file to compare
 #' @param omit          all lines containing the omit string will be excluded from the comparison (detaulf = NULL)
 #' @param options       additional comparator parameters
+#' @param ...        additional parameters
 
 setMethod("compare_files_get_contents_inner", "TxtFileComparator", function(comparator, file_contents, omit, options, ...) {
   file_contents_omit <- file_contents
@@ -103,8 +112,9 @@ setMethod("compare_files_get_contents_inner", "TxtFileComparator", function(comp
   return(list(file_contents, file_contents_omit))
 })
 
-#' Custom finalizer method for diffobj html content finalizing. This method is used to modify the
-#' diff html output so that omitted rows have their own special styling and gutters.
+#' Custom finalizer method for diffobj html content finalizing. This method is used to
+#' modify the diff html output so that omitted rows have their own special styling and
+#' gutters.
 #'
 #' @param x    comparator instance used for the comparison that is meant to be created with the factory method verifyr2::create_file_comparator.
 #' @param x.chr character text representation of x, typically generated with the as.character
@@ -114,25 +124,27 @@ my_finalizer <- function(x, x.chr, omit) {
 
   split <- strsplit(x.chr, "<div class='diffobj-row'>")[[1]]
 
-  for (i in seq_along(split)) {
-    if (grepl(omit, split[[i]])) {
+  if (!is.null(omit) && "" != paste0(omit)) {
+    for (i in seq_along(split)) {
+      if (grepl(omit, split[[i]])) {
 
-      # modifying maching row markup
-      split[[i]] <- gsub("class='diffobj-match'", "class='ignore'", split[[i]])
-      split[[i]] <- gsub("<div class='diffobj-gutter'><div class='ignore'>&nbsp;", "<div class='diffobj-gutter'><div class='ignore'>x", split[[i]])
+        # modifying maching row markup
+        split[[i]] <- gsub("class='diffobj-match'", "class='ignore'", split[[i]])
+        split[[i]] <- gsub("<div class='diffobj-gutter'><div class='ignore'>&nbsp;", "<div class='diffobj-gutter'><div class='ignore'>x", split[[i]])
 
-      # modifying inserted row markup
-      split[[i]] <- gsub("class='insert'", "class='ignore'", split[[i]])
-      split[[i]] <- gsub("class='diffobj-word insert'", "class='diffobj-word ignore'", split[[i]])
-      split[[i]] <- gsub("<div class='diffobj-gutter'><div class='ignore'>&gt;", "<div class='diffobj-gutter'><div class='ignore'>X", split[[i]])
+        # modifying inserted row markup
+        split[[i]] <- gsub("class='insert'", "class='ignore'", split[[i]])
+        split[[i]] <- gsub("class='diffobj-word insert'", "class='diffobj-word ignore'", split[[i]])
+        split[[i]] <- gsub("<div class='diffobj-gutter'><div class='ignore'>&gt;", "<div class='diffobj-gutter'><div class='ignore'>X", split[[i]])
 
-      #modifying deleted row markup
-      split[[i]] <- gsub("class='delete'", "class='ignore'", split[[i]])
-      split[[i]] <- gsub("class='diffobj-word delete'", "class='diffobj-word ignore'", split[[i]])
-      split[[i]] <- gsub("<div class='diffobj-gutter'><div class='ignore'>&lt;", "<div class='diffobj-gutter'><div class='ignore'>X", split[[i]])
+        #modifying deleted row markup
+        split[[i]] <- gsub("class='delete'", "class='ignore'", split[[i]])
+        split[[i]] <- gsub("class='diffobj-word delete'", "class='diffobj-word ignore'", split[[i]])
+        split[[i]] <- gsub("<div class='diffobj-gutter'><div class='ignore'>&lt;", "<div class='diffobj-gutter'><div class='ignore'>X", split[[i]])
 
-      # highlight the ommitted part
-      split[[i]] <- gsub(omit, paste0("<span class='diffobj-word-highlight ignore'>", omit, "</span>"), split[[i]])
+        # highlight the ommitted part
+        split[[i]] <- gsub(omit, paste0("<span class='diffobj-word-highlight ignore'>", omit, "</span>"), split[[i]])
+      }
     }
   }
 

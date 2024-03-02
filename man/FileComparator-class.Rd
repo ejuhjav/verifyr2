@@ -11,20 +11,26 @@ method that is used to create the correct comparator automatically for the compa
 }
 \examples{
 
-file(x) in these examples are files with full file path in all the examples.
+# instantiating the compared files
+file1 <- paste0(fs::path_package("/extdata/base_files/file1.rtf", package = "verifyr2"))
+file2 <- paste0(fs::path_package("/extdata/compare_files/file1.rtf", package = "verifyr2"))
+file3 <- file1
+file4 <- file2
+file5 <- file1
+file6 <- file2
 
-instantiating a new comparator instance for every comparison:
-\code{verifyr2::compare_files_summary(verifyr2::create_file_comparator(file1, file2), omit = omit)}
-\code{verifyr2::compare_files_details(verifyr2::create_file_comparator(file1, file2), omit = omit)}
+# instantiating a new comparator instance for every comparison:
+verifyr2::compare_files_summary(verifyr2::create_file_comparator(file1, file2))
+verifyr2::compare_files_details(verifyr2::create_file_comparator(file1, file2))
 
-instantiating a comparator instance and using that same for both comparison of same files
-\code{comparator <- verifyr2::create_file_comparator(file1, file2)}
-\code{verifyr2::compare_files_summary(comparator, omit = omit)}
-\code{verifyr2::compare_files_details(comparator, omit = omit)}
+# instantiating a comparator instance and using that same for both comparison of same files
+comparator <- verifyr2::create_file_comparator(file1, file2)
+verifyr2::compare_files_summary(comparator)
+verifyr2::compare_files_details(comparator)
 
-insantiating an explicit comparator manually when comparing files of single specific type
-\code{comparator <- new("PdfFileComparator")}
-\code{verifyr2::compare_files_summary(comparator, file1, file2, omit = omit)}
-\code{verifyr2::compare_files_summary(comparator, file3, file4, omit = omit)}
-\code{verifyr2::compare_files_summary(comparator, file5, file6, omit = omit)}
+# insantiating an explicit comparator manually when comparing files of single specific type
+comparator <- new("RtfFileComparator")
+verifyr2::compare_files_summary(comparator, file1, file2)
+verifyr2::compare_files_summary(comparator, file3, file4)
+verifyr2::compare_files_summary(comparator, file5, file6)
 }

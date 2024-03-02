@@ -23,19 +23,27 @@ compare_files_summary(
 \item{omit}{all lines containing the omit string will be excluded from the comparison (detaulf = NULL)}
 
 \item{options}{additional comparator parameters}
+
+\item{...}{additional parameters}
 }
 \description{
 Generic for comparing the file summary with the given comparator instance.
 }
 \examples{
 
-# file(x) in these examples are files with full file path in all the examples.
+# instantiating the compared files
+file1 <- paste0(fs::path_package("/extdata/base_files/file1.rtf", package = "verifyr2"))
+file2 <- paste0(fs::path_package("/extdata/compare_files/file1.rtf", package = "verifyr2"))
 
-# invoking method directly with the comparator using the files stored in the comparator itself. Note that if the comprator
-# was manually created without files, this will return 'no files found'.
-\code{verifyr2::compare_files_summary(comparator, omit = omit)}
+# invoking method directly with the comparator using the files stored in the comparator
+# itself. Note that if the comprator was manually created without files, this will return
+# 'no files found'.
+comparator <- verifyr2::create_file_comparator(file1, file2)
+verifyr2::compare_files_summary(comparator)
 
-# invoking method with explicitly given files when using single comparator instance (when handling set of specific file types for example).
-\code{verifyr2::compare_files_summary(comparator, file1 = file1, file2 = file2,  omit = omit)}
+# invoking method with explicitly given files when using single comparator instance
+# (when handling set of specific file types for example).
+comparator <- new("RtfFileComparator")
+verifyr2::compare_files_summary(comparator, file1 = file1, file2 = file2)
 
 }

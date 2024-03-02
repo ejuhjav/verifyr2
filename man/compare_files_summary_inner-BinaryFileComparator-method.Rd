@@ -2,10 +2,12 @@
 % Please edit documentation in R/BinaryFileComparator.R
 \name{compare_files_summary_inner,BinaryFileComparator-method}
 \alias{compare_files_summary_inner,BinaryFileComparator-method}
-\title{Method for comparing the inner part for the details query. The method returns the file contents in two separate
-vectors inside a list. The first vector is the file contents and the second one is the file contents with the rows
-matching the omit string excluded. This method can be overwritten by more specialized comparator classes. This
-method is intended to be called only by the comparator classes in the processing and shouldn't be called directly by the user.}
+\title{Method for comparing the inner part for the details query. The method returns the file
+contents in two separate vectors inside a list. The first vector is the file contents
+and the second one is the file contents with the rows matching the omit string excluded.
+This method can be overwritten by more specialized comparator classes. This method is
+intended to be called only by the comparator classes in the processing and shouldn't be
+called directly by the user.}
 \usage{
 \S4method{compare_files_summary_inner}{BinaryFileComparator}(
   comparator,
@@ -26,10 +28,14 @@ method is intended to be called only by the comparator classes in the processing
 \item{omit}{all lines containing the omit string will be excluded from the comparison (detaulf = NULL)}
 
 \item{options}{additional comparator parameters}
+
+\item{...}{additional parameters}
 }
 \description{
-Method for comparing the inner part for the details query. The method returns the file contents in two separate
-vectors inside a list. The first vector is the file contents and the second one is the file contents with the rows
-matching the omit string excluded. This method can be overwritten by more specialized comparator classes. This
-method is intended to be called only by the comparator classes in the processing and shouldn't be called directly by the user.
+Method for comparing the inner part for the details query. The method returns the file
+contents in two separate vectors inside a list. The first vector is the file contents
+and the second one is the file contents with the rows matching the omit string excluded.
+This method can be overwritten by more specialized comparator classes. This method is
+intended to be called only by the comparator classes in the processing and shouldn't be
+called directly by the user.
 }
