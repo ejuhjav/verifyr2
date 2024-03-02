@@ -72,8 +72,8 @@ server <- function(input, output, session) {
   # Element initializations
   # ===============================================================================================
 
-  root   <- find.package("verifyr2", quiet = TRUE)
-  config <- jsonlite::fromJSON(file.path(root, "config.json"))
+  config_file <- paste0(fs::path_package("/config.json", package = "verifyr2"))
+  config_json <- jsonlite::fromJSON(config_file)
 
   roots  <- c(Home = fs::path_home(), Examples = fs::path_package("verifyr2", "extdata"))
   params <- list(roots = roots, session = session, restrictions = system.file(package = "base"), allowDirCreate = FALSE)
@@ -84,7 +84,7 @@ server <- function(input, output, session) {
   default1 <- "Select the compared file folders and execute the summary comparison by clicking on the 'Go' button."
   default2 <- "Click on a row in the summary comparison result to view the side-by-side details comparison."
 
-  configuration <- shiny::reactiveValues(config = as.list(config))
+  configuration <- shiny::reactiveValues(config = as.list(config_json))
   summary_text  <- shiny::reactiveVal(default1)
   details_text  <- shiny::reactiveVal(default2)
   open_folder1_file_link <- shiny::reactiveVal("")
