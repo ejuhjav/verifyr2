@@ -191,9 +191,10 @@ create_file_comparator <- function(file1, file2, ...) {
     return(new(comparator_name, file1 = file1, file2 = file2))
   } else {
     # generic comparator class used based on the file contents (text/binary).
+    # guess_type returns incorrectly application/octet-string for lst files so handle those separately
     mime_type <- mime::guess_type(file1)
 
-    if (startsWith(mime_type, "text/")) {
+    if (startsWith(mime_type, "text/") || grepl(file_extension, c("Lst"))) {
       return(new("TxtFileComparator", file1 = file1, file2 = file2))
     } else {
       return(new("BinaryFileComparator", file1 = file1, file2 = file2))
