@@ -2,13 +2,23 @@
     padding: 20px !important;
 }
 
+.well .tab-content {
+    background-color: #fff;
+    padding: 15px;
+    padding: 15px 15px 5px 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-top: 0;
+}
+
 .form-group-custom {
     padding-right: 50px; 
     position: relative; 
     width: 100%;
 }
 
-.form-group-custom .shinyDirectories {
+.form-group-custom .shinyDirectories,
+.form-group-custom .shinyFiles {
     position: absolute; 
     right: 0px; 
     top: 25px;
