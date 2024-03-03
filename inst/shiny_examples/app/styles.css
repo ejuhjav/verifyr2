@@ -43,6 +43,11 @@
     margin-bottom: 10px;
 }
 
+#details_tabs {
+    display: none;
+    margin-top: 20px;
+}
+
 div.diffobj-container div.diffobj-line > div.ignore {
   border-left: 1px solid #888888;
 }

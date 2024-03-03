@@ -84,7 +84,14 @@ ui <- shiny::fluidPage(
           shiny::downloadLink("open_folder2_file_link", shiny::textOutput("open_folder2_file_link_output")),
         ),
       ),
-      shiny::htmlOutput("details_out"),
+      shiny::tabsetPanel(id = "details_tabs",
+        shiny::tabPanel("Full file contents", value = "tabs_details_full",
+          shiny::htmlOutput("details_out_full"),
+        ),
+        shiny::tabPanel("Summary contents", value = "tabs_details_summary",
+          shiny::htmlOutput("details_out_summary"),
+        ),
+      ),
       shiny::textOutput("details_text_output"),
       shiny::fluidRow(
         id = "comparison_comments_container",
@@ -251,6 +258,7 @@ server <- function(input, output, session) {
     }
 
     set_visibility("comparison_comments_container", TRUE)
+    set_visibility("details_tabs", TRUE)
 
     sel_row_index <<- new_row_index
     sel_row <- summary_verify()[new_row_index, ]
@@ -260,6 +268,7 @@ server <- function(input, output, session) {
 
     # set up the file download links for the compared files
     update_download_links(sel_row)
+
   })
 
   # ===============================================================================================
@@ -312,13 +321,33 @@ server <- function(input, output, session) {
     file1 <- paste0(sel_row[1])
     file2 <- paste0(sel_row[2])
 
-    output$details_out <- shiny::renderUI({
+    options1 <- configuration$config
+    options1$details$mode <- "full"
+
+    output$details_out_full <- shiny::renderUI({
       shiny::HTML(
         as.character(
-          verifyr2::compare_files_details(verifyr2::create_file_comparator(file1, file2), omit = input$omit_rows, options = configuration$config)
+          verifyr2::compare_files_details(verifyr2::create_file_comparator(file1, file2), omit = input$omit_rows, options = options1)
         )
       )
     })
+
+    options2 <- configuration$config
+    options2$details$mode <- "summary"
+
+    output$details_out_summary <- shiny::renderUI({
+      shiny::HTML(
+        as.character(
+          verifyr2::compare_files_details(verifyr2::create_file_comparator(file1, file2), omit = input$omit_rows, options = options2)
+        )
+      )
+    })
+
+    if (configuration$config$details$mode == "summary") {
+      updateTabsetPanel(session, "details_tabs", selected = "tabs_details_summary")
+    } else {
+      updateTabsetPanel(session, "details_tabs", selected = "tabs_details_full")
+    }
   }
 
   update_download_links <- function(sel_row) {
