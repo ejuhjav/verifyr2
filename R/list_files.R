@@ -1,43 +1,33 @@
-#' List files that exist in two folders
+#' One row list for two distinct files
 #'
-#' \code{list_files} List files that exist in two folders with a specific name pattern
+#' \code{list_files} List single file row based on the explicit parameter files. This is a conveniency function
+#' for building same structure list for direct two file comparison case.
 #'
-#' @param folder1 character, giving the the full file path and name of the folder where first files are stored (required)
-#' @param folder2 character, giving the the full file path and name of the folder where second new files are stored (required)
-#' @param pattern character, limit the files to be listed to contain a specific pattern (optional)
+#' @param file1 character, giving the the full file path of the first file (required)
+#' @param file2 character, giving the the full file path of the second file (required)
 #'
-#' @return Returns a tibble, \code{selected_files} with 3 columns \code{file}, \code{folder1_path}, \code{folder2_path}
+#' @return Returns a tibble, \code{selected_files} with 2 columns \code{file1}, \code{file2}
 #'
 #' @examples
 #'
-#' folder1 <- paste0(fs::path_package("/extdata/base_files/", package = "verifyr2"))
-#' folder2 <- paste0(fs::path_package("/extdata/compare_files/", package = "verifyr2"))
-#' verifyr2::list_files(folder1 = folder1, folder2 = folder2, patter = "base")
+#' file1 <- paste0(fs::path_package("/extdata/base_files/file2_additional_rows.rtf", package = "verifyr2"))
+#' file2 <- paste0(fs::path_package("/extdata/compare_files/file3_changed_rows.rtf", package = "verifyr2"))
+#' verifyr2::list_files(file1, file2)
 #'
 #' @export
 
-list_files <- function(folder1, folder2, pattern = NULL) {
+list_files <- function(file1, file2) {
 
-  ## do the comparison only if both of the folders exist
-  if (file.exists(folder1) && file.exists(folder2)) {
+  ## do the comparison only if both of the files exist
+  if (file.exists(file1) && file.exists(file2)) {
 
-    folder1_info <- folder_info(folder1, "folder1_path", pattern)
-    folder2_info <- folder_info(folder2, "folder2_path", pattern)
+    data <- tibble::tibble(
+      "file1" = file1,
+      "file2" = file2
+    )
 
-    selected_files <- dplyr::full_join(folder1_info, folder2_info, by = "file") %>%
-      dplyr::arrange(file)
-
-    return(selected_files)
+    return(data)
   }
 
-  print("one or both of the folders do not exist")
-}
-
-folder_info <- function(folder, column_name, pattern) {
-  folder_files  <- list.files(path = folder, pattern = pattern)
-  folder_paths  <- list.files(path = folder, pattern = pattern, full.names = TRUE)
-  folder_data   <- tibble::tibble(file = folder_files)
-  folder_data[[column_name]] <- folder_paths
-
-  return(folder_data)
+  print("one or both of the files do not exist")
 }

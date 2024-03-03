@@ -3,7 +3,7 @@
 #' \code{verifyr2::run_example} returns simple Shiny App where user can see how the verifyr2 functions work
 #'
 
-custom_file_input <- function(input_id, label, value = "", ...) {
+custom_folder_input <- function(input_id, label, value = "", ...) {
   label_class  <- "control-label"
   input_class  <- "shiny-input-text form-control shiny-bound-input"
   folder_value <- system.file(value, package = "verifyr2")
@@ -15,6 +15,18 @@ custom_file_input <- function(input_id, label, value = "", ...) {
   )
 }
 
+custom_file_input <- function(input_id, label, value = "", ...) {
+  label_class  <- "control-label"
+  input_class  <- "shiny-input-text form-control shiny-bound-input"
+  file_value <- system.file(value, package = "verifyr2")
+
+  shiny::div(class = "form-group form-group-custom shiny-input-container",
+    shinyFiles::shinyFilesButton(paste0(input_id, "_select"), NULL, "Select file", FALSE, icon = shiny::icon("folder-open")),
+    shiny::tags$label(label, `for` = input_id, class = label_class),
+    shiny::tags$input(id = input_id, type = "text", class = input_class, value = file_value, ...),
+  )
+}
+
 dt_global_file_list <- NULL
 sel_row_index <- NULL
 
@@ -23,16 +35,35 @@ ui <- shiny::fluidPage(
   shiny::includeCSS("styles.css"),
   shiny::headerPanel("File content comparison"),
   shiny::wellPanel(
+    shiny::tabsetPanel(id = "compare_tabs",
+      shiny::tabPanel("Compare folder contents", value = "tabs_folder",
+        shiny::fluidRow(
+          shiny::column(6,
+            custom_folder_input("folder1", "Folder 1", "/extdata/base_files"),
+            custom_folder_input("folder2", "Folder 2", "/extdata/compare_files"),
+          ),
+          shiny::column(6,
+            shiny::textInput("omit_rows", "Omit rows with text", "versicolor"),
+            shiny::textInput("file_name_pattern", "File Name Pattern"),
+          ),
+        ),
+      ),
+      shiny::tabPanel("Compare specific files", value = "tabs_file",
+        shiny::fluidRow(
+          shiny::column(6,
+            custom_file_input("file1", "File 1", "/extdata/base_files/file2_additional_rows.rtf"),
+            custom_file_input("file2", "File 2", "/extdata/compare_files/file3_changed_rows.rtf"),
+          ),
+          shiny::column(6,
+            shiny::textInput("omit_file_rows", "Omit rows with text", "versicolor"),
+          ),
+        ),
+      ),
+    ),
     shiny::fluidRow(
-      shiny::column(6,
-        custom_file_input("folder1", "Folder 1", "/extdata/base_files"),
-        custom_file_input("folder2", "Folder 2", "/extdata/compare_files"),
+      shiny::column(12,
         shiny::actionButton("go", "Go"),
         shiny::actionButton("config", "Configure"),
-      ),
-      shiny::column(6,
-        shiny::textInput("file_name_patter", "File Name Pattern"),
-        shiny::textInput("omit_rows", "Omit rows with text", "versicolor"),
       ),
     ),
   ),
@@ -56,12 +87,12 @@ ui <- shiny::fluidPage(
       shiny::htmlOutput("details_out"),
       shiny::textOutput("details_text_output"),
       shiny::fluidRow(
+        id = "comparison_comments_container",
         shiny::column(12,
           shiny::textAreaInput("details_out_comments", "Comments", width = "100%"),
           shiny::actionButton("save_comments", "Save comments"),
           shiny::actionButton("clear_comments", "Clear comments"),
         ),
-        id = "comparison_comments_container",
       ),
     ),
   ),
@@ -80,6 +111,11 @@ server <- function(input, output, session) {
 
   do.call(shinyFiles::shinyDirChoose, c(list(input, "folder1_select"), params))
   do.call(shinyFiles::shinyDirChoose, c(list(input, "folder2_select"), params))
+
+  params <- list(roots = roots, session = session, restrictions = system.file(package = "base"))
+
+  do.call(shinyFiles::shinyFileChoose, c(list(input, "file1_select"), params))
+  do.call(shinyFiles::shinyFileChoose, c(list(input, "file2_select"), params))
 
   default1 <- "Select the compared file folders and execute the summary comparison by clicking on the 'Go' button."
   default2 <- "Click on a row in the summary comparison result to view the side-by-side details comparison."
@@ -119,14 +155,26 @@ server <- function(input, output, session) {
   # ===============================================================================================
 
   list_of_files <- shiny::eventReactive(input$go, {
-    if (file.exists(input$folder1) && file.exists(input$folder2)) {
-      set_visibility("comparison_comments_container", FALSE)
-      shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
-      set_reactive_text("summary_text", "")
-      verifyr2::list_files(input$folder1, input$folder2, input$file_name_patter)
+    if (input$compare_tabs == "tabs_folder") {
+      if (file.exists(input$folder1) && file.exists(input$folder2)) {
+        set_visibility("comparison_comments_container", FALSE)
+        shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
+        set_reactive_text("summary_text", "")
+        verifyr2::list_folder_files(input$folder1, input$folder2, input$file_name_pattern)
+      } else {
+        set_reactive_text("summary_text", "No folder selected or folders do not exist")
+        NULL
+      }
     } else {
-      set_reactive_text("summary_text", "No folder selected or folders do not exist")
-      NULL
+      if (file.exists(input$file1) && file.exists(input$file2)) {
+        set_visibility("comparison_comments_container", FALSE)
+        shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
+        set_reactive_text("summary_text", "")
+        verifyr2::list_files(input$file1, input$file2)
+      } else {
+        set_reactive_text("summary_text", "No files selected or files do not exist")
+        NULL
+      }
     }
   })
 
@@ -182,7 +230,7 @@ server <- function(input, output, session) {
     dt_global_file_list <<- tibble::tibble(list_of_files()) %>%
       dplyr::mutate(omitted = input$omit_rows) %>%
       dplyr::rowwise() %>%
-      dplyr::mutate(comparison = verifyr2::compare_files_summary(verifyr2::create_file_comparator(folder1_path, folder2_path), omit = omitted, options = configuration$config)) %>% # nolint
+      dplyr::mutate(comparison = verifyr2::compare_files_summary(verifyr2::create_file_comparator(file1, file2), omit = omitted, options = configuration$config)) %>% # nolint
       dplyr::mutate(comments = "no") %>%
       dplyr::mutate(comments_details = "")
   })
@@ -190,6 +238,7 @@ server <- function(input, output, session) {
   shiny::observe({
     # handle changes in folder selections
     update_folder_selections()
+    update_file_selections()
 
     # handle changes related to selecting a comparison row
     shiny::req(input$summary_out_rows_selected)
@@ -242,10 +291,26 @@ server <- function(input, output, session) {
     }
   }
 
+  update_file_selections <- function() {
+    if (!is.integer(input$file1_select)) {
+      shiny::updateTextInput(session, "file1",
+        NULL,
+        paste0(shinyFiles::parseFilePaths(roots, input$file1_select)$datapath)
+      )
+    }
+
+    if (!is.integer(input$file2_select)) {
+      shiny::updateTextInput(session, "file2",
+        NULL,
+        paste0(shinyFiles::parseFilePaths(roots, input$file2_select)$datapath)
+      )
+    }
+  }
+
   update_details_comparison <- function(sel_row) {
     set_reactive_text("details_text", "")
-    file1 <- paste0(sel_row[2])
-    file2 <- paste0(sel_row[3])
+    file1 <- paste0(sel_row[1])
+    file2 <- paste0(sel_row[2])
 
     output$details_out <- shiny::renderUI({
       shiny::HTML(
@@ -260,26 +325,28 @@ server <- function(input, output, session) {
     open_folder1_file_link("")
     open_folder2_file_link("")
 
-    if (!is.na(sel_row[2])) {
-      open_folder1_file_link(paste0("Open ", sel_row[1], " (folder1)"))
+    if (!is.na(sel_row$file1)) {
+      filename <- basename(sel_row$file1)
+      open_folder1_file_link(paste0("Open ", sel_row$file1))
       output$open_folder1_file_link <- shiny::downloadHandler(
         filename = function() {
-          paste0("old_", sel_row[1])
+          paste0("old_", filename)
         },
         content = function(file) {
-          file.copy(paste0(sel_row[2]), file)
+          file.copy(paste0(sel_row$file1), file)
         }
       )
     }
 
-    if (!is.na(sel_row[3])) {
-      open_folder2_file_link(paste0("Open ", sel_row[1], " (folder2)"))
+    if (!is.na(sel_row$file2)) {
+      filename <- basename(sel_row$file2)
+      open_folder2_file_link(paste0("Open ", sel_row$file2))
       output$open_folder2_file_link <- shiny::downloadHandler(
         filename = function() {
-          paste0("new_", sel_row[1])
+          paste0("new_", filename)
         },
         content = function(file) {
-          file.copy(paste0(sel_row[3]), file)
+          file.copy(paste0(sel_row$file2), file)
         }
       )
     }

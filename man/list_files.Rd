@@ -2,27 +2,26 @@
 % Please edit documentation in R/list_files.R
 \name{list_files}
 \alias{list_files}
-\title{List files that exist in two folders}
+\title{One row list for two distinct files}
 \usage{
-list_files(folder1, folder2, pattern = NULL)
+list_files(file1, file2)
 }
 \arguments{
-\item{folder1}{character, giving the the full file path and name of the folder where first files are stored (required)}
+\item{file1}{character, giving the the full file path of the first file (required)}
 
-\item{folder2}{character, giving the the full file path and name of the folder where second new files are stored (required)}
-
-\item{pattern}{character, limit the files to be listed to contain a specific pattern (optional)}
+\item{file2}{character, giving the the full file path of the second file (required)}
 }
 \value{
-Returns a tibble, \code{selected_files} with 3 columns \code{file}, \code{folder1_path}, \code{folder2_path}
+Returns a tibble, \code{selected_files} with 2 columns \code{file1}, \code{file2}
 }
 \description{
-\code{list_files} List files that exist in two folders with a specific name pattern
+\code{list_files} List single file row based on the explicit parameter files. This is a conveniency function
+for building same structure list for direct two file comparison case.
 }
 \examples{
 
-folder1 <- paste0(fs::path_package("/extdata/base_files/", package = "verifyr2"))
-folder2 <- paste0(fs::path_package("/extdata/compare_files/", package = "verifyr2"))
-verifyr2::list_files(folder1 = folder1, folder2 = folder2, patter = "base")
+file1 <- paste0(fs::path_package("/extdata/base_files/file2_additional_rows.rtf", package = "verifyr2"))
+file2 <- paste0(fs::path_package("/extdata/compare_files/file3_changed_rows.rtf", package = "verifyr2"))
+verifyr2::list_files(file1, file2)
 
 }
