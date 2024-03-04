@@ -344,9 +344,9 @@ server <- function(input, output, session) {
     })
 
     if (configuration$config$details$mode == "summary") {
-      updateTabsetPanel(session, "details_tabs", selected = "tabs_details_summary")
+      shiny::updateTabsetPanel(session, "details_tabs", selected = "tabs_details_summary")
     } else {
-      updateTabsetPanel(session, "details_tabs", selected = "tabs_details_full")
+      shiny::updateTabsetPanel(session, "details_tabs", selected = "tabs_details_full")
     }
   }
 
