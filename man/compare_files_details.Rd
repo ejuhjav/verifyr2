@@ -14,13 +14,16 @@ compare_files_details(
 )
 }
 \arguments{
-\item{comparator}{comparator instance used for the comparison that is meant to be created with the factory method verifyr2::create_file_comparator.}
+\item{comparator}{comparator instance used for the comparison}
 
-\item{file1}{first file to compare. NULL if using same values as for comparison creation}
+\item{file1}{first file to compare. NULL if using same values as for
+comparison creation}
 
-\item{file2}{second file to compare. NULL if using same values as for comparison creation}
+\item{file2}{second file to compare. NULL if using same values as for
+comparison creation}
 
-\item{omit}{all lines containing the omit string will be excluded from the comparison (detaulf = NULL)}
+\item{omit}{all lines containing the omit string will be excluded from
+the comparison (detaulf = NULL)}
 
 \item{options}{additional comparator parameters}
 
@@ -32,17 +35,20 @@ Generic for comparing the file details with the given comparator instance.
 \examples{
 
 # instantiating the compared files
-file1 <- paste0(fs::path_package("/extdata/base_files/file1.rtf", package = "verifyr2"))
-file2 <- paste0(fs::path_package("/extdata/compare_files/file1.rtf", package = "verifyr2"))
+file1 <- paste0(fs::path_package("/extdata/base_files/file1.rtf",
+                                 package = "verifyr2"))
 
-# invoking method directly with the comparator using the files stored in the comparator
-# itself. Note that if the comprator was manually created without files, this will return
-# 'no files found'.
+file2 <- paste0(fs::path_package("/extdata/compare_files/file1.rtf",
+                                 package = "verifyr2"))
+
+# invoking method directly with the comparator using the files stored in the
+# comparator itself. Note that if the comprator was manually created without
+# files, this will return 'no files found'.
 comparator <- verifyr2::create_file_comparator(file1, file2)
 verifyr2::compare_files_details(comparator)
 
-# invoking method with explicitly given files when using single comparator instance
-# (when handling set of specific file types for example).
+# invoking method with explicitly given files when using single comparator
+# instance (when handling set of specific file types for example).
 comparator <- new("RtfFileComparator")
 verifyr2::compare_files_details(comparator, file1 = file1, file2 = file2)
 

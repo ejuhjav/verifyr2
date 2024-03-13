@@ -2,31 +2,34 @@
 % Please edit documentation in R/BinaryFileComparator.R
 \name{compare_files_get_contents,BinaryFileComparator-method}
 \alias{compare_files_get_contents,BinaryFileComparator-method}
-\title{Method for getting the single file contents for the comparison. The method returns the
-file contents in two separate vectors inside a list. The first vector is the file contents
-and the second one is the file contents with the rows matching the omit string excluded.
-This method can be overwritten by more specialized comparator classes. This method is
-intended to be called only by the comparator classes in the processing and shouldn't be
-called directly by the user.}
+\title{Method for getting the single file contents for the comparison. The method
+returns the file contents in two separate vectors inside a list. The first
+vector is the file contents and the second one is the file contents with the
+rows matching the omit string excluded. This method can be overwritten by
+more specialized comparator classes. This method is intended to be called
+only by the comparator classes in the processing and shouldn't be called
+directly by the user.}
 \usage{
 \S4method{compare_files_get_contents}{BinaryFileComparator}(comparator, file, omit, options, ...)
 }
 \arguments{
-\item{comparator}{comparator instance used for the comparison that is meant to be created with the factory method verifyr2::create_file_comparator.}
+\item{comparator}{comparator instance used for the comparison}
 
 \item{file}{file for which to get the contents}
 
-\item{omit}{all lines containing the omit string will be excluded from the comparison (detaulf = NULL)}
+\item{omit}{all lines containing the omit string will be excluded from
+the comparison (detaulf = NULL)}
 
 \item{options}{additional comparator parameters}
 
 \item{...}{additional parameters}
 }
 \description{
-Method for getting the single file contents for the comparison. The method returns the
-file contents in two separate vectors inside a list. The first vector is the file contents
-and the second one is the file contents with the rows matching the omit string excluded.
-This method can be overwritten by more specialized comparator classes. This method is
-intended to be called only by the comparator classes in the processing and shouldn't be
-called directly by the user.
+Method for getting the single file contents for the comparison. The method
+returns the file contents in two separate vectors inside a list. The first
+vector is the file contents and the second one is the file contents with the
+rows matching the omit string excluded. This method can be overwritten by
+more specialized comparator classes. This method is intended to be called
+only by the comparator classes in the processing and shouldn't be called
+directly by the user.
 }

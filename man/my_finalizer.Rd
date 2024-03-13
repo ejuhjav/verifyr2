@@ -2,21 +2,24 @@
 % Please edit documentation in R/TxtFileComparator.R
 \name{my_finalizer}
 \alias{my_finalizer}
-\title{Custom finalizer method for diffobj html content finalizing. This method is used to
-modify the diff html output so that omitted rows have their own special styling and
-gutters.}
+\title{Custom finalizer method for diffobj html content finalizing. This method is
+used to modify the diff html output so that omitted rows have their own
+special styling and gutters.}
 \usage{
 my_finalizer(x, x.chr, omit)
 }
 \arguments{
-\item{x}{comparator instance used for the comparison that is meant to be created with the factory method verifyr2::create_file_comparator.}
+\item{x}{comparator instance used for the comparison that is meant to
+be created with the factory method create_file_comparator.}
 
-\item{x.chr}{character text representation of x, typically generated with the as.character}
+\item{x.chr}{character text representation of x, typically generated with
+the as character}
 
-\item{omit}{all lines containing the omit string will be excluded from the comparison (detaulf = NULL)}
+\item{omit}{all lines containing the omit string will be excluded from the
+comparison (detaulf = NULL)}
 }
 \description{
-Custom finalizer method for diffobj html content finalizing. This method is used to
-modify the diff html output so that omitted rows have their own special styling and
-gutters.
+Custom finalizer method for diffobj html content finalizing. This method is
+used to modify the diff html output so that omitted rows have their own
+special styling and gutters.
 }

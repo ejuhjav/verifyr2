@@ -6,13 +6,14 @@
 \title{RtfFileComparator.R}
 \description{
 Specialiced comparator for RTF file comparison.
-This comparator contains the custom handling for handling only RTF content part for the comparison.
+This comparator contains the custom handling for handling only RTF content
+part for the comparison.
 }
 \examples{
 
-# The normal way for creating a comparator would be to call the generic factory
-# method verifyr2::create_file_comparator, but if needed, an explicit comparator
-# can be instantiated directly as well.
+# The normal way for creating a comparator would be to call the generic
+# factory method verifyr2::create_file_comparator, but if needed, an
+# explicit comparator can be instantiated directly as well.
 comparator <- new("RtfFileComparator")
 
 }

@@ -6,15 +6,14 @@
 \title{TextFileComparator.R}
 \description{
 Fallback comparator for text files without any specific definied comparator.
-This comparator contains the methods for doing basic comparisons on raw texct contents.
+This comparator contains the methods for doing basic comparisons on raw text
+contents.
 }
 \examples{
 
-## Not run:
-# The normal way for creating a comparator would be to call the generic factory
-# method verifyr2::create_file_comparator, but if needed, an explicit comparator
-# can be instantiated directly as well:
+# The normal way for creating a comparator would be to call the generic
+# factory method verifyr2::create_file_comparator, but if needed, an explicit
+# comparator can be instantiated directly as well:
 comparator <- new("TxtFileComparator")
-## End(Not run)
 
 }

@@ -14,13 +14,16 @@
 )
 }
 \arguments{
-\item{comparator}{comparator instance used for the comparison that is meant to be created with the factory method verifyr2::create_file_comparator.}
+\item{comparator}{comparator instance used for the comparison}
 
-\item{file1}{first file to compare. NULL if using same values as for comparison creation}
+\item{file1}{first file to compare. NULL if using same values as for
+comparison creation}
 
-\item{file2}{second file to compare. NULL if using same values as for comparison creation}
+\item{file2}{second file to compare. NULL if using same values as for
+comparison creation}
 
-\item{omit}{all lines containing the omit string will be excluded from the comparison (detaulf = NULL)}
+\item{omit}{all lines containing the omit string will be excluded from
+the comparison (detaulf = NULL)}
 
 \item{options}{additional comparator parameters}
 

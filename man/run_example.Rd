@@ -7,5 +7,6 @@
 verifyr2::run_example()
 }
 \description{
-\code{verifyr2::run_example} returns simple Shiny App where user can see how the verifyr2 functions work
+\code{verifyr2::run_example} returns simple Shiny App where user can see how
+the verifyr2 functions work
 }
