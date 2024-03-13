@@ -7,21 +7,27 @@
 list_files(file1, file2)
 }
 \arguments{
-\item{file1}{character, giving the the full file path of the first file (required)}
+\item{file1}{character, giving the the full file path of the first file}
 
-\item{file2}{character, giving the the full file path of the second file (required)}
+\item{file2}{character, giving the the full file path of the second file}
 }
 \value{
-Returns a tibble, \code{selected_files} with 2 columns \code{file1}, \code{file2}
+Returns a tibble, \code{selected_files} with 2 columns \code{file1},
+                \code{file2}
 }
 \description{
-\code{list_files} List single file row based on the explicit parameter files. This is a conveniency function
-for building same structure list for direct two file comparison case.
+\code{list_files} List single file row based on the explicit parameter
+files. This is a conveniency function for building same structure list for
+direct two file comparison case.
 }
 \examples{
 
-file1 <- paste0(fs::path_package("/extdata/base_files/file2_additional_rows.rtf", package = "verifyr2"))
-file2 <- paste0(fs::path_package("/extdata/compare_files/file3_changed_rows.rtf", package = "verifyr2"))
+file1 <- paste0(fs::path_package("/extdata/base_files/file2_additional_rows.rtf",
+                                 package = "verifyr2"))
+
+file2 <- paste0(fs::path_package("/extdata/compare_files/file3_changed_rows.rtf",
+                                 package = "verifyr2"))
+
 verifyr2::list_files(file1, file2)
 
 }

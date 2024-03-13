@@ -7,22 +7,31 @@
 list_folder_files(folder1, folder2, pattern = NULL)
 }
 \arguments{
-\item{folder1}{character, giving the the full file path and name of the folder where first files are stored (required)}
+\item{folder1}{character, giving the the full file path and name of the
+folder where first files are stored (required)}
 
-\item{folder2}{character, giving the the full file path and name of the folder where second new files are stored (required)}
+\item{folder2}{character, giving the the full file path and name of the
+folder where second new files are stored (required)}
 
-\item{pattern}{character, limit the files to be listed to contain a specific pattern (optional)}
+\item{pattern}{character, limit the files to be listed to contain a
+specific pattern (optional)}
 }
 \value{
-Returns a tibble, \code{selected_files} with 2 columns \code{file1}, \code{file2}
+Returns a tibble, \code{selected_files} with 2 columns \code{file1},
+                \code{file2}
 }
 \description{
-\code{list_folder_files} List files that exist in two folders with a specific name pattern
+\code{list_folder_files} List files that exist in two folders with a specific
+name pattern
 }
 \examples{
 
-folder1 <- paste0(fs::path_package("/extdata/base_files/", package = "verifyr2"))
-folder2 <- paste0(fs::path_package("/extdata/compare_files/", package = "verifyr2"))
+folder1 <- paste0(fs::path_package("/extdata/base_files/",
+                                   package = "verifyr2"))
+
+folder2 <- paste0(fs::path_package("/extdata/compare_files/",
+                                   package = "verifyr2"))
+
 verifyr2::list_folder_files(folder1, folder2, "base")
 
 }

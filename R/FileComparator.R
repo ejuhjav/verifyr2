@@ -5,6 +5,7 @@
 #' also the \code{create_file_comparator} method that is used to create the
 #' correct comparator automatically for the compared files.
 #'
+#' @importFrom methods new isClass
 #' @examples
 #'
 #' # instantiating the compared files

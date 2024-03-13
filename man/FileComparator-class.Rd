@@ -5,15 +5,20 @@
 \alias{FileComparator-class}
 \title{FileComparator.R}
 \description{
-Comparator 'base' class containing the generic comparison methods and handling for high
-level checks (like file existence). This file contains also the \code{create_file_comparator}
-method that is used to create the correct comparator automatically for the compared files.
+Comparator 'base' class containing the generic comparison methods and
+handling for high level checks (like file existence). This file contains
+also the \code{create_file_comparator} method that is used to create the
+correct comparator automatically for the compared files.
 }
 \examples{
 
 # instantiating the compared files
-file1 <- paste0(fs::path_package("/extdata/base_files/file1.rtf", package = "verifyr2"))
-file2 <- paste0(fs::path_package("/extdata/compare_files/file1.rtf", package = "verifyr2"))
+file1 <- paste0(fs::path_package("/extdata/base_files/file1.rtf",
+                                 package = "verifyr2"))
+
+file2 <- paste0(fs::path_package("/extdata/compare_files/file1.rtf",
+                                 package = "verifyr2"))
+
 file3 <- file1
 file4 <- file2
 file5 <- file1
@@ -23,12 +28,14 @@ file6 <- file2
 verifyr2::compare_files_summary(verifyr2::create_file_comparator(file1, file2))
 verifyr2::compare_files_details(verifyr2::create_file_comparator(file1, file2))
 
-# instantiating a comparator instance and using that same for both comparison of same files
+# instantiating a comparator instance and using that same for both
+# comparison of same files
 comparator <- verifyr2::create_file_comparator(file1, file2)
 verifyr2::compare_files_summary(comparator)
 verifyr2::compare_files_details(comparator)
 
-# insantiating an explicit comparator manually when comparing files of single specific type
+# instantiating an explicit comparator manually when comparing files of
+# single specific type
 comparator <- new("RtfFileComparator")
 verifyr2::compare_files_summary(comparator, file1, file2)
 verifyr2::compare_files_summary(comparator, file3, file4)

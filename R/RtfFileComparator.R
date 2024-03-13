@@ -6,6 +6,7 @@
 #'
 #' @include TxtFileComparator.R
 #'
+#' @importFrom methods callNextMethod
 #' @examples
 #'
 #' # The normal way for creating a comparator would be to call the generic
