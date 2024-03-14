@@ -14,7 +14,9 @@
 #'
 #' @export
 
-setClass("BinaryFileComparator", contains = "FileComparator", slots = list(file1 = "ANY", file2 = "ANY"))
+setClass("BinaryFileComparator",
+         contains = "FileComparator",
+         slots = list(file1 = "ANY", file2 = "ANY"))
 
 #' Generic for getting the single file contents for the comparison. The method
 #' returns the file contents in two separate vectors inside a list. The first

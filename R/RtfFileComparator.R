@@ -16,7 +16,9 @@
 #'
 #' @export
 
-setClass("RtfFileComparator", contains = "TxtFileComparator", slots = list(file1 = "ANY", file2 = "ANY"))
+setClass("RtfFileComparator",
+         contains = "TxtFileComparator",
+         slots = list(file1 = "ANY", file2 = "ANY"))
 
 #' Method for getting the single file contents for the comparison. The method
 #' returns the file contents in two separate vectors inside a list. The first

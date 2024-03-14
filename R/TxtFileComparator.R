@@ -15,7 +15,9 @@
 #'
 #' @export
 
-setClass("TxtFileComparator", contains = "BinaryFileComparator", slots = list(file1 = "ANY", file2 = "ANY"))
+setClass("TxtFileComparator",
+         contains = "BinaryFileComparator",
+         lots = list(file1 = "ANY", file2 = "ANY"))
 
 #' Method for comparing the inner part for the details query. This method can be
 #' overwritten by more specialized comparator classes. This method is intended
@@ -35,7 +37,6 @@ setClass("TxtFileComparator", contains = "BinaryFileComparator", slots = list(fi
 setMethod("vrf_summary_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options, ...) {
 
   file1_contents_list <- vrf_contents(comparator, file1, omit, options)
-
   file2_contents_list <- vrf_contents(comparator, file2, omit, options)
 
   file1_contents_omit <- file1_contents_list[[2]]
