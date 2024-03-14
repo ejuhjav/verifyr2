@@ -227,8 +227,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.pdf")
   file2 <- testthat::test_path(base, "addition_two_rows.pdf")
 
+  omit       <- "additional row"
   comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "additional row", options = options)
+  result     <- vrf_summary(comparator, omit = omit, options = options)
 
   expect_equal(result, "No differences")
 })
@@ -241,8 +242,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "two_pages.pdf")
   file2 <- testthat::test_path(base, "two_pages_addition_two_rows.pdf")
 
+  omit       <- "additional row"
   comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "additional row", options = options)
+  result     <- vrf_summary(comparator, omit = omit, options = options)
 
   expect_equal(result, "No differences")
 })
