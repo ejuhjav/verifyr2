@@ -9,7 +9,7 @@
 #' @examples
 #'
 #' # The normal way for creating a comparator would be to call the generic
-#' # factory method verifyr2::create_file_comparator, but if needed, an explicit
+#' # factory method verifyr2::vrf_comparator, but if needed, an explicit
 #' # comparator can be instantiated directly as well:
 #' comparator <- new("TxtFileComparator")
 #'
@@ -29,18 +29,14 @@ setClass("TxtFileComparator", contains = "BinaryFileComparator", slots = list(fi
 #'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
 #' @param ...        additional parameters
+#'
+#' @keywords internal
 
-setMethod("compare_files_summary_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options, ...) {
+setMethod("vrf_summary_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options, ...) {
 
-  file1_contents_list <- compare_files_get_contents(comparator,
-                                                    file1,
-                                                    omit,
-                                                    options)
+  file1_contents_list <- vrf_contents(comparator, file1, omit, options)
 
-  file2_contents_list <- compare_files_get_contents(comparator,
-                                                    file2,
-                                                    omit,
-                                                    options)
+  file2_contents_list <- vrf_contents(comparator, file2, omit, options)
 
   file1_contents_omit <- file1_contents_list[[2]]
   file2_contents_omit <- file2_contents_list[[2]]
@@ -75,21 +71,16 @@ setMethod("compare_files_summary_inner", "TxtFileComparator", function(comparato
 #' @param file1      first file to compare
 #' @param file2      second file to compare
 #' @param omit       all lines containing the omit string will be excluded from
-#*                   the comparison (detaulf = NULL)
+#'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
 #' @param ...        additional parameters
+#'
+#' @keywords internal
 
-setMethod("compare_files_details_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options, ...) {
+setMethod("vrf_details_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options, ...) {
 
-  file1_contents_list <- compare_files_get_contents(comparator,
-                                                    file1,
-                                                    omit,
-                                                    options)
-
-  file2_contents_list <- compare_files_get_contents(comparator,
-                                                    file2,
-                                                    omit,
-                                                    options)
+  file1_contents_list <- vrf_contents(comparator, file1, omit, options)
+  file2_contents_list <- vrf_contents(comparator, file2, omit, options)
 
   file1_contents_whole <- file1_contents_list[[1]]
   file2_contents_whole <- file2_contents_list[[1]]
@@ -132,8 +123,10 @@ setMethod("compare_files_details_inner", "TxtFileComparator", function(comparato
 #'                      from the comparison (detaulf = NULL)
 #' @param options       additional comparator parameters
 #' @param ...           additional parameters
+#'
+#' @keywords internal
 
-setMethod("compare_files_get_contents_inner", "TxtFileComparator", function(comparator, file_contents, omit, options, ...) {
+setMethod("vrf_contents_inner", "TxtFileComparator", function(comparator, file_contents, omit, options, ...) {
   file_contents_omit <- file_contents
 
   if (!is.null(omit) && "" != paste0(omit)) {
@@ -150,11 +143,13 @@ setMethod("compare_files_get_contents_inner", "TxtFileComparator", function(comp
 #' special styling and gutters.
 #'
 #' @param x     comparator instance used for the comparison that is meant to
-#'              be created with the factory method create_file_comparator.
+#'              be created with the factory method vrf_comparator.
 #' @param x.chr character text representation of x, typically generated with
 #'              the as character
 #' @param omit  all lines containing the omit string will be excluded from the
 #'              comparison (detaulf = NULL)
+#'
+#' @keywords internal
 
 my_finalizer <- function(x, x.chr, omit) {
 

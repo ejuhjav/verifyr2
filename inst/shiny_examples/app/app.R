@@ -117,7 +117,7 @@ search_container <- function() {
 
 summary_container <- function() {
   shiny::column(12,
-    h2("Summary comparison (comparator compare_files_summary):"),
+    shiny::h2("Summary comparison (vrf_summary):"),
     DT::dataTableOutput("summary_out"),
     shiny::textOutput("summary_text_output"),
     shiny::downloadButton("download_csv",
@@ -127,7 +127,7 @@ summary_container <- function() {
 
 details_container <- function() {
   shiny::column(12,
-    h2("Details comparison (comparator compare_files_details):"),
+    shiny::h2("Details comparison (vrf_details):"),
     shiny::fluidRow(
       shiny::column(6,
         shiny::downloadLink("file1_link",
@@ -212,14 +212,14 @@ update_details_comparison <- function(input, output, session, configuration, sel
 
   options1 <- configuration$config
   options1$details$mode <- "full"
-  comparator <- verifyr2::create_file_comparator(file1, file2)
+  comparator <- verifyr2::vrf_comparator(file1, file2)
 
   output$details_out_full <- shiny::renderUI({
     shiny::HTML(
       as.character(
-        verifyr2::compare_files_details(comparator,
-                                        omit = input$omit_rows,
-                                        options = options1)
+        verifyr2::vrf_details(comparator,
+                              omit = input$omit_rows,
+                              options = options1)
       )
     )
   })
@@ -230,9 +230,9 @@ update_details_comparison <- function(input, output, session, configuration, sel
   output$details_out_summary <- shiny::renderUI({
     shiny::HTML(
       as.character(
-        verifyr2::compare_files_details(comparator,
-                                        omit = input$omit_rows,
-                                        options = options2)
+        verifyr2::vrf_details(comparator,
+                              omit = input$omit_rows,
+                              options = options2)
       )
     )
   })
@@ -453,7 +453,7 @@ server <- function(input, output, session) {
     dt_file_list <<- tibble::tibble(list_of_files()) %>%
       dplyr::mutate(omitted = input$omit_rows) %>%
       dplyr::rowwise() %>%
-      dplyr::mutate(comparison = verifyr2::compare_files_summary(verifyr2::create_file_comparator(file1, file2), omit = omitted, options = configuration$config)) %>% # nolint
+      dplyr::mutate(comparison = verifyr2::vrf_summary(verifyr2::vrf_comparator(file1, file2), omit = omitted, options = configuration$config)) %>% # nolint
       dplyr::mutate(comments = "no") %>%
       dplyr::mutate(comments_details = "")
   })

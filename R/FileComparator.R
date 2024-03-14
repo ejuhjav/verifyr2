@@ -2,8 +2,8 @@
 #'
 #' Comparator 'base' class containing the generic comparison methods and
 #' handling for high level checks (like file existence). This file contains
-#' also the \code{create_file_comparator} method that is used to create the
-#' correct comparator automatically for the compared files.
+#' also the \code{vrf_comparator} method that is used to create the correct
+#' comparator automatically for the compared files.
 #'
 #' @importFrom methods new isClass
 #' @examples
@@ -21,21 +21,21 @@
 #' file6 <- file2
 #'
 #' # instantiating a new comparator instance for every comparison:
-#' verifyr2::compare_files_summary(verifyr2::create_file_comparator(file1, file2))
-#' verifyr2::compare_files_details(verifyr2::create_file_comparator(file1, file2))
+#' verifyr2::vrf_summary(verifyr2::vrf_comparator(file1, file2))
+#' verifyr2::vrf_details(verifyr2::vrf_comparator(file1, file2))
 #'
 #' # instantiating a comparator instance and using that same for both
 #' # comparison of same files
-#' comparator <- verifyr2::create_file_comparator(file1, file2)
-#' verifyr2::compare_files_summary(comparator)
-#' verifyr2::compare_files_details(comparator)
+#' comparator <- verifyr2::vrf_comparator(file1, file2)
+#' verifyr2::vrf_summary(comparator)
+#' verifyr2::vrf_details(comparator)
 #'
 #' # instantiating an explicit comparator manually when comparing files of
 #' # single specific type
 #' comparator <- new("RtfFileComparator")
-#' verifyr2::compare_files_summary(comparator, file1, file2)
-#' verifyr2::compare_files_summary(comparator, file3, file4)
-#' verifyr2::compare_files_summary(comparator, file5, file6)
+#' verifyr2::vrf_summary(comparator, file1, file2)
+#' verifyr2::vrf_summary(comparator, file3, file4)
+#' verifyr2::vrf_summary(comparator, file5, file6)
 
 setClass("FileComparator", slots = list(file1 = "ANY", file2 = "ANY"))
 
@@ -69,17 +69,17 @@ setMethod("initialize", signature = "FileComparator", definition = function(.Obj
 #' # invoking method directly with the comparator using the files stored in the
 #' # comparator itself. Note that if the comprator was manually created without
 #' # files, this will return 'no files found'.
-#' comparator <- verifyr2::create_file_comparator(file1, file2)
-#' verifyr2::compare_files_summary(comparator)
+#' comparator <- verifyr2::vrf_comparator(file1, file2)
+#' verifyr2::vrf_summary(comparator)
 #'
 #' # invoking method with explicitly given files when using single comparator
 #' # instance (when handling set of specific file types for example).
 #' comparator <- new("RtfFileComparator")
-#' verifyr2::compare_files_summary(comparator, file1 = file1, file2 = file2)
+#' verifyr2::vrf_summary(comparator, file1 = file1, file2 = file2)
 #'
 #' @export
 
-setGeneric("compare_files_summary", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL, ...) standardGeneric("compare_files_summary"))
+setGeneric("vrf_summary", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL, ...) standardGeneric("vrf_summary"))
 
 #' Generic for comparing the file details with the given comparator instance.
 #'
@@ -105,17 +105,17 @@ setGeneric("compare_files_summary", function(comparator, file1 = NULL, file2 = N
 #' # invoking method directly with the comparator using the files stored in the
 #' # comparator itself. Note that if the comprator was manually created without
 #' # files, this will return 'no files found'.
-#' comparator <- verifyr2::create_file_comparator(file1, file2)
-#' verifyr2::compare_files_details(comparator)
+#' comparator <- verifyr2::vrf_comparator(file1, file2)
+#' verifyr2::vrf_details(comparator)
 #'
 #' # invoking method with explicitly given files when using single comparator
 #' # instance (when handling set of specific file types for example).
 #' comparator <- new("RtfFileComparator")
-#' verifyr2::compare_files_details(comparator, file1 = file1, file2 = file2)
+#' verifyr2::vrf_details(comparator, file1 = file1, file2 = file2)
 #'
 #' @export
 
-setGeneric("compare_files_details", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL, ...) standardGeneric("compare_files_details"))
+setGeneric("vrf_details", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL, ...) standardGeneric("vrf_details"))
 
 #' Generic for comparing the inner part for the summary query. This method can
 #' be overwritten by more specialized comparator classes. This method is
@@ -130,9 +130,9 @@ setGeneric("compare_files_details", function(comparator, file1 = NULL, file2 = N
 #' @param options    additional comparator parameters
 #' @param ...        additional parameters
 #'
-#' @export
+#' @keywords internal
 
-setGeneric("compare_files_summary_inner", function(comparator, file1, file2, omit, options = NULL, ...) standardGeneric("compare_files_summary_inner"))
+setGeneric("vrf_summary_inner", function(comparator, file1, file2, omit, options = NULL, ...) standardGeneric("vrf_summary_inner"))
 
 #' Generic for comparing the inner part for the details query. This method can
 #' be overwritten by more specialized comparator classes. This method is
@@ -146,8 +146,10 @@ setGeneric("compare_files_summary_inner", function(comparator, file1, file2, omi
 #'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
 #' @param ...        additional parameters
+#'
+#' @keywords internal
 
-setGeneric("compare_files_details_inner", function(comparator, file1, file2, omit, options = NULL, ...) standardGeneric("compare_files_details_inner"))
+setGeneric("vrf_details_inner", function(comparator, file1, file2, omit, options = NULL, ...) standardGeneric("vrf_details_inner"))
 
 #' Method for comparing the file summary with the given comparator instance.
 #'
@@ -160,10 +162,8 @@ setGeneric("compare_files_details_inner", function(comparator, file1, file2, omi
 #'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
 #' @param ...        additional parameters
-#'
-#' @export
 
-setMethod("compare_files_summary", "FileComparator", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL, ...) {
+setMethod("vrf_summary", "FileComparator", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL, ...) {
   file1 <- ifelse(!is.null(file1), file1, comparator@file1)
   file2 <- ifelse(!is.null(file2), file2, comparator@file2)
 
@@ -172,7 +172,7 @@ setMethod("compare_files_summary", "FileComparator", function(comparator, file1 
   }
 
   tryCatch({
-    compare_files_summary_inner(comparator, file1, file2, omit, options, ...)
+    vrf_summary_inner(comparator, file1, file2, omit, options, ...)
   }, error = function(e) {
     return(paste0("Error reading file contents: ", conditionMessage(e)))
   })
@@ -190,7 +190,7 @@ setMethod("compare_files_summary", "FileComparator", function(comparator, file1 
 #' @param options    additional comparator parameters
 #' @param ...        additional parameters
 
-setMethod("compare_files_details", "FileComparator", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL, ...) {
+setMethod("vrf_details", "FileComparator", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL, ...) {
   file1 <- ifelse(!is.null(file1), file1, comparator@file1)
   file2 <- ifelse(!is.null(file2), file2, comparator@file2)
 
@@ -199,7 +199,7 @@ setMethod("compare_files_details", "FileComparator", function(comparator, file1 
   }
 
   tryCatch({
-    compare_files_details_inner(comparator, file1, file2, omit, options, ...)
+    vrf_details_inner(comparator, file1, file2, omit, options, ...)
   }, error = function(e) {
     return(paste0("Error reading file contents: ", conditionMessage(e)))
   })
@@ -224,24 +224,24 @@ setMethod("compare_files_details", "FileComparator", function(comparator, file1 
 #' file4 <- file2
 #'
 #' # instantiating a new comparator instance for every comparison:
-#' verifyr2::compare_files_summary(verifyr2::create_file_comparator(file1, file2))
-#' verifyr2::compare_files_details(verifyr2::create_file_comparator(file1, file2))
+#' verifyr2::vrf_summary(verifyr2::vrf_comparator(file1, file2))
+#' verifyr2::vrf_details(verifyr2::vrf_comparator(file1, file2))
 #'
 #' # instantiating a comparator instance and using that same for both
 #' # comparison of same files
-#' comparator <- verifyr2::create_file_comparator(file1, file2)
-#' verifyr2::compare_files_summary(comparator)
-#' verifyr2::compare_files_details(comparator)
+#' comparator <- verifyr2::vrf_comparator(file1, file2)
+#' verifyr2::vrf_summary(comparator)
+#' verifyr2::vrf_details(comparator)
 #'
 #' # instantiating an explicit comparator manually when comparing files of
 #' # single specific type
 #' comparator <- new("RtfFileComparator")
-#' verifyr2::compare_files_summary(comparator, file1, file2)
-#' verifyr2::compare_files_summary(comparator, file3, file4)
+#' verifyr2::vrf_summary(comparator, file1, file2)
+#' verifyr2::vrf_summary(comparator, file3, file4)
 #'
 #' @export
 
-create_file_comparator <- function(file1, file2, ...) {
+vrf_comparator <- function(file1, file2, ...) {
   if (!file.exists(file1) || !file.exists(file2)) {
     return(new("BinaryFileComparator", file1 = file1, file2 = file2))
   }

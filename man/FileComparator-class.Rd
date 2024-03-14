@@ -7,8 +7,8 @@
 \description{
 Comparator 'base' class containing the generic comparison methods and
 handling for high level checks (like file existence). This file contains
-also the \code{create_file_comparator} method that is used to create the
-correct comparator automatically for the compared files.
+also the \code{vrf_comparator} method that is used to create the correct
+comparator automatically for the compared files.
 }
 \examples{
 
@@ -25,19 +25,19 @@ file5 <- file1
 file6 <- file2
 
 # instantiating a new comparator instance for every comparison:
-verifyr2::compare_files_summary(verifyr2::create_file_comparator(file1, file2))
-verifyr2::compare_files_details(verifyr2::create_file_comparator(file1, file2))
+verifyr2::vrf_summary(verifyr2::vrf_comparator(file1, file2))
+verifyr2::vrf_details(verifyr2::vrf_comparator(file1, file2))
 
 # instantiating a comparator instance and using that same for both
 # comparison of same files
-comparator <- verifyr2::create_file_comparator(file1, file2)
-verifyr2::compare_files_summary(comparator)
-verifyr2::compare_files_details(comparator)
+comparator <- verifyr2::vrf_comparator(file1, file2)
+verifyr2::vrf_summary(comparator)
+verifyr2::vrf_details(comparator)
 
 # instantiating an explicit comparator manually when comparing files of
 # single specific type
 comparator <- new("RtfFileComparator")
-verifyr2::compare_files_summary(comparator, file1, file2)
-verifyr2::compare_files_summary(comparator, file3, file4)
-verifyr2::compare_files_summary(comparator, file5, file6)
+verifyr2::vrf_summary(comparator, file1, file2)
+verifyr2::vrf_summary(comparator, file3, file4)
+verifyr2::vrf_summary(comparator, file5, file6)
 }

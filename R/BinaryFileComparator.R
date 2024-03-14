@@ -8,7 +8,7 @@
 #' @examples
 #'
 #' # The normal way for creating a comparator would be to call the generic
-#' # factory method verifyr2::create_file_comparator, but if needed, an explicit
+#' # factory method verifyr2::vrf_comparator, but if needed, an explicit
 #' # comparator can be instantiated directly as well.
 #' comparator <- new("BinaryFileComparator")
 #'
@@ -29,8 +29,10 @@ setClass("BinaryFileComparator", contains = "FileComparator", slots = list(file1
 #'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
 #' @param ...        additional parameters
+#'
+#' @keywords internal
 
-setGeneric("compare_files_get_contents", function(comparator, file, omit, options, ...) standardGeneric("compare_files_get_contents"))
+setGeneric("vrf_contents", function(comparator, file, omit, options, ...) standardGeneric("vrf_contents"))
 
 #' Generic for getting the inner part for the file contents query. This method
 #' can be overwritten by more specialized comparator classes. This method is
@@ -43,8 +45,10 @@ setGeneric("compare_files_get_contents", function(comparator, file, omit, option
 #'                      from the comparison (detaulf = NULL)
 #' @param options       additional comparator parameters
 #' @param ...           additional parameters
+#'
+#' @keywords internal
 
-setGeneric("compare_files_get_contents_inner", function(comparator, file_contents, omit, options, ...) standardGeneric("compare_files_get_contents_inner"))
+setGeneric("vrf_contents_inner", function(comparator, file_contents, omit, options, ...) standardGeneric("vrf_contents_inner"))
 
 #' Method for comparing the inner part for the details query. The method
 #' returns the file contents in two separate vectors inside a list. The first
@@ -61,8 +65,10 @@ setGeneric("compare_files_get_contents_inner", function(comparator, file_content
 #'                    the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
 #' @param ...        additional parameters
+#'
+#' @keywords internal
 
-setMethod("compare_files_summary_inner", "BinaryFileComparator", function(comparator, file1, file2, omit, options, ...) {
+setMethod("vrf_summary_inner", "BinaryFileComparator", function(comparator, file1, file2, omit, options, ...) {
   file_info1 <- file.info(file1)
   file_info2 <- file.info(file2)
 
@@ -70,15 +76,8 @@ setMethod("compare_files_summary_inner", "BinaryFileComparator", function(compar
     return("Different file sizes for compared files")
   }
 
-  file1_contents_list <- compare_files_get_contents(comparator,
-                                                    file1,
-                                                    omit,
-                                                    options)
-
-  file2_contents_list <- compare_files_get_contents(comparator,
-                                                    file2,
-                                                    omit,
-                                                    options)
+  file1_contents_list <- vrf_contents(comparator, file1, omit, options)
+  file2_contents_list <- vrf_contents(comparator, file2, omit, options)
 
   file1_contents_omit <- file1_contents_list[[2]]
   file2_contents_omit <- file2_contents_list[[2]]
@@ -102,8 +101,10 @@ setMethod("compare_files_summary_inner", "BinaryFileComparator", function(compar
 #'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
 #' @param ...        additional parameters
+#'
+#' @keywords internal
 
-setMethod("compare_files_details_inner", "BinaryFileComparator", function(comparator, file1, file2, omit, options, ...) {
+setMethod("vrf_details_inner", "BinaryFileComparator", function(comparator, file1, file2, omit, options, ...) {
   return("Binary file without applicable comparator; unable to compare details")
 })
 
@@ -121,9 +122,11 @@ setMethod("compare_files_details_inner", "BinaryFileComparator", function(compar
 #'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
 #' @param ...        additional parameters
+#'
+#' @keywords internal
 
-setMethod("compare_files_get_contents", "BinaryFileComparator", function(comparator, file, omit, options, ...) {
-  return(compare_files_get_contents_inner(comparator, readLines(file, warn = FALSE), omit, options))
+setMethod("vrf_contents", "BinaryFileComparator", function(comparator, file, omit, options, ...) {
+  return(vrf_contents_inner(comparator, readLines(file, warn = FALSE), omit, options))
 })
 
 #' Generic for getting the inner part for the file contents query. The method
@@ -140,7 +143,9 @@ setMethod("compare_files_get_contents", "BinaryFileComparator", function(compara
 #'                      from the comparison (detaulf = NULL)
 #' @param options       additional comparator parameters
 #' @param ...           additional parameters
+#'
+#' @keywords internal
 
-setMethod("compare_files_get_contents_inner", "BinaryFileComparator", function(comparator, file_contents, omit, options, ...) {
+setMethod("vrf_contents_inner", "BinaryFileComparator", function(comparator, file_contents, omit, options, ...) {
   return(list(file_contents, file_contents))
 })
