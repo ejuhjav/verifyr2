@@ -12,8 +12,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "nonexisting1.txt")
   file2 <- testthat::test_path(base, "nonexisting2.txt")
 
-  comparator <- create_file_comparator(file1, file2)
-  result     <- compare_files_details(comparator)
+  comparator <- vrf_comparator(file1, file2)
+  result     <- vrf_details(comparator)
 
   expect_equal(result, "File(s) not available; unable to compare")
 })
@@ -25,8 +25,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "nonexisting.txt")
 
-  comparator <- create_file_comparator(file1, file2)
-  result     <- compare_files_details(comparator)
+  comparator <- vrf_comparator(file1, file2)
+  result     <- vrf_details(comparator)
 
   expect_equal(result, "File(s) not available; unable to compare")
 })
@@ -41,8 +41,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "copy.txt")
 
-  comparator <- create_file_comparator(file1, file2)
-  result     <- compare_files_details(comparator)
+  comparator <- vrf_comparator(file1, file2)
+  result     <- vrf_details(comparator)
 
   expect_equal(typeof(result), "S4")
 })
@@ -53,8 +53,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "changes_one_row.txt")
 
-  comparator <- create_file_comparator(file1, file2)
-  result     <- compare_files_details(comparator)
+  comparator <- vrf_comparator(file1, file2)
+  result     <- vrf_details(comparator)
 
   expect_equal(typeof(result), "S4")
 })

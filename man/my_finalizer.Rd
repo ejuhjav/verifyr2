@@ -10,7 +10,7 @@ my_finalizer(x, x.chr, omit)
 }
 \arguments{
 \item{x}{comparator instance used for the comparison that is meant to
-be created with the factory method create_file_comparator.}
+be created with the factory method vrf_comparator.}
 
 \item{x.chr}{character text representation of x, typically generated with
 the as character}
@@ -23,3 +23,4 @@ Custom finalizer method for diffobj html content finalizing. This method is
 used to modify the diff html output so that omitted rows have their own
 special styling and gutters.
 }
+\keyword{internal}

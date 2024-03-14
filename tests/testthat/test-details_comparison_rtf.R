@@ -13,9 +13,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting2.rtf")
 
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- create_file_comparator(file1, file2)
-  result     <- compare_files_details(comparator,
-                                      options = options)
+  comparator <- vrf_comparator(file1, file2)
+  result     <- vrf_details(comparator, options = options)
 
   expect_equal(result, "File(s) not available; unable to compare")
 })
@@ -28,9 +27,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- create_file_comparator(file1, file2)
-  result     <- compare_files_details(comparator,
-                                      options = options)
+  comparator <- vrf_comparator(file1, file2)
+  result     <- vrf_details(comparator, options = options)
 
   expect_equal(result, "File(s) not available; unable to compare")
 })
@@ -47,9 +45,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "copy.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- create_file_comparator(file1, file2)
-  result     <- compare_files_details(comparator,
-                                      options = options)
+  comparator <- vrf_comparator(file1, file2)
+  result     <- vrf_details(comparator, options = options)
 
   expect_equal(typeof(result), "S4")
 })
@@ -62,9 +59,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "changes_one_row_content.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- create_file_comparator(file1, file2)
-  result     <- compare_files_details(comparator,
-                                      options = options)
+  comparator <- vrf_comparator(file1, file2)
+  result     <- vrf_details(comparator, options = options)
 
   expect_equal(typeof(result), "S4")
 })
@@ -77,9 +73,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "changes_one_row_content.rtf")
 
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- create_file_comparator(file1, file2)
-  result     <- compare_files_details(comparator,
-                                      options = options)
+  comparator <- vrf_comparator(file1, file2)
+  result     <- vrf_details(comparator, options = options)
 
   expect_equal(typeof(result), "S4")
 })

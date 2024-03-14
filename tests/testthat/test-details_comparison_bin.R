@@ -12,8 +12,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "nonexisting1.bin")
   file2 <- testthat::test_path(base, "nonexisting2.bin")
 
-  comparator <- create_file_comparator(file1, file2)
-  result     <- compare_files_details(comparator)
+  comparator <- vrf_comparator(file1, file2)
+  result     <- vrf_details(comparator)
 
   expect_equal(result, "File(s) not available; unable to compare")
 })
@@ -25,8 +25,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.bin")
   file2 <- testthat::test_path(base, "nonexisting.bin")
 
-  comparator <- create_file_comparator(file1, file2)
-  result     <- compare_files_details(comparator)
+  comparator <- vrf_comparator(file1, file2)
+  result     <- vrf_details(comparator)
 
   expect_equal(result, "File(s) not available; unable to compare")
 })
@@ -42,8 +42,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.bin")
   file2 <- testthat::test_path(base, "modified.bin")
 
-  comparator <- create_file_comparator(file1, file2)
-  result     <- compare_files_details(comparator)
+  comparator <- vrf_comparator(file1, file2)
+  result     <- vrf_details(comparator)
 
   expect_equal(result, paste(
     "Binary file without applicable comparator; unable to compare details"

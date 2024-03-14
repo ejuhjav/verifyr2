@@ -10,8 +10,8 @@
 #' @examples
 #'
 #' # The normal way for creating a comparator would be to call the generic
-#' # factory method verifyr2::create_file_comparator, but if needed, an
-#' # explicit comparator can be instantiated directly as well.
+#' # factory method verifyr2::vrf_comparator, but if needed, an explicit
+#' # comparator can be instantiated directly as well.
 #' comparator <- new("RtfFileComparator")
 #'
 #' @export
@@ -37,17 +37,19 @@ setClass("RtfFileComparator", contains = "TxtFileComparator", slots = list(file1
 #'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
 #' @param ...        additional parameters
+#'
+#' @keywords internal
 
-setMethod("compare_files_get_contents", "RtfFileComparator", function(comparator, file, omit, options, ...) {
+setMethod("vrf_contents", "RtfFileComparator", function(comparator, file, omit, options, ...) {
   if (!is.null(options) &&
         "rtf" %in% names(options) &&
         "mode" %in% names(options$rtf) &&
         "raw" == options$rtf$mode) {
     return(callNextMethod(comparator, file, omit, options, ...))
   } else {
-    return(compare_files_get_contents_inner(comparator,
-                                            striprtf::read_rtf(file = file),
-                                            omit,
-                                            options, ...))
+    return(vrf_contents_inner(comparator,
+                              striprtf::read_rtf(file = file),
+                              omit,
+                              options, ...))
   }
 })

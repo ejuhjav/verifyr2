@@ -26,24 +26,24 @@ such option would be to use the "devtools" package:
 instantiating a new comparator instance for every comparison:
 
 ``` bash
-> verifyr2::compare_files_summary(verifyr2::create_file_comparator(file1, file2), omit = omit}
-> verifyr2::compare_files_details(verifyr2::create_file_comparator(file1, file2), omit = omit)
+> verifyr2::vrf_summary(verifyr2::vrf_comparator(file1, file2), omit = omit}
+> verifyr2::vrf_details(verifyr2::vrf_comparator(file1, file2), omit = omit)
 ```
 
 instantiating a comparator instance and using that same for both comparison of same files
 
 ``` bash
-> comparator <- verifyr2::create_file_comparator(file1, file2)
-> verifyr2::compare_files_summary(comparator, omit = omit)
-> verifyr2::compare_files_details(comparator, omit = omit)
+> comparator <- verifyr2::vrf_comparator(file1, file2)
+> verifyr2::vrf_summary(comparator, omit = omit)
+> verifyr2::vrf_details(comparator, omit = omit)
 ```
 
 instantiating an explicit comparator manually when comparing files of single specific type
 
 ``` bash
 > comparator <- new("RtfFileComparator")
-> verifyr2::compare_files_summary(comparator, file1, file2, omit = omit)
-> verifyr2::compare_files_summary(comparator, file3, file4, omit = omit)
+> verifyr2::vrf_summary(comparator, file1, file2, omit = omit)
+> verifyr2::vrf_details(comparator, file3, file4, omit = omit)
 ```
 
 ## Adding support to additional file types
@@ -62,11 +62,11 @@ implementation for rtf file comparison is an example of how to do this (see sour
 
 setClass("RtfFileComparator", contains = "TxtFileComparator", slots = list(file1 = "ANY", file2 = "ANY"))
 
-setMethod("compare_files_get_contents", "RtfFileComparator", function(comparator, file, omit, options, ...) {
+setMethod("vrf_contents", "RtfFileComparator", function(comparator, file, omit, options, ...) {
   if (!is.null(options) &&  "rtf" %in% names(options) && "mode" %in% names(options$rtf) && "raw" == options$rtf$mode) {
     return(callNextMethod(comparator, file, omit, options, ...))
   } else {
-    return(compare_files_get_contents_inner(comparator, striprtf::read_rtf(file = file), omit, options, ...))
+    return(vrf_contents_inner(comparator, striprtf::read_rtf(file = file), omit, options, ...))
   }
 })
 ```
