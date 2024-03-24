@@ -30,11 +30,10 @@ setClass("TxtFileComparator",
 #' @param omit       all lines containing the omit string will be excluded from
 #'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
-#' @param ...        additional parameters
 #'
 #' @keywords internal
 
-setMethod("vrf_summary_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options, ...) {
+setMethod("vrf_summary_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options) {
 
   file1_contents_list <- vrf_contents(comparator, file1, omit, options)
   file2_contents_list <- vrf_contents(comparator, file2, omit, options)
@@ -74,11 +73,10 @@ setMethod("vrf_summary_inner", "TxtFileComparator", function(comparator, file1, 
 #' @param omit       all lines containing the omit string will be excluded from
 #'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
-#' @param ...        additional parameters
 #'
 #' @keywords internal
 
-setMethod("vrf_details_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options, ...) {
+setMethod("vrf_details_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options) {
 
   file1_contents_list <- vrf_contents(comparator, file1, omit, options)
   file2_contents_list <- vrf_contents(comparator, file2, omit, options)
@@ -88,8 +86,8 @@ setMethod("vrf_details_inner", "TxtFileComparator", function(comparator, file1, 
 
   context <- 2
   if (!is.null(options) &&
-        "details" %in% names(options) &&
-        "mode" %in% names(options$details) &&
+        !is.null(options$details) &&
+        !is.null(options$details$mode) &&
         "full" == options$details$mode) {
     context <- -1
   }
@@ -118,25 +116,24 @@ setMethod("vrf_details_inner", "TxtFileComparator", function(comparator, file1, 
 #' only by the comparator classes in the processing and shouldn't be called
 #' directly by the user.
 #'
-#' @param comparator    comparator instance used for the comparison
-#' @param file_contents first file to compare
-#' @param omit          all lines containing the omit string will be excluded
-#'                      from the comparison (detaulf = NULL)
-#' @param options       additional comparator parameters
-#' @param ...           additional parameters
+#' @param comparator comparator instance used for the comparison
+#' @param contents   file contents
+#' @param omit       all lines containing the omit string will be excluded
+#'                   from the comparison (detaulf = NULL)
+#' @param options    additional comparator parameters
 #'
 #' @keywords internal
 
-setMethod("vrf_contents_inner", "TxtFileComparator", function(comparator, file_contents, omit, options, ...) {
-  file_contents_omit <- file_contents
+setMethod("vrf_contents_inner", "TxtFileComparator", function(comparator, contents, omit, options) {
+  contents_omit <- contents
 
   if (!is.null(omit) && "" != paste0(omit)) {
-    file_contents_omit <- stringr::str_subset(string = file_contents,
-                                              pattern = paste0(omit),
-                                              negate = TRUE)
+    contents_omit <- stringr::str_subset(string = contents,
+                                         pattern = paste0(omit),
+                                         negate = TRUE)
   }
 
-  return(list(file_contents, file_contents_omit))
+  return(list(contents, contents_omit))
 })
 
 #' Custom finalizer method for diffobj html content finalizing. This method is

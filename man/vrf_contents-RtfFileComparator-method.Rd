@@ -10,7 +10,7 @@ more specialized comparator classes. This method is intended to be called
 only by the comparator classes in the processing and shouldn't be called
 directly by the user.}
 \usage{
-\S4method{vrf_contents}{RtfFileComparator}(comparator, file, omit, options, ...)
+\S4method{vrf_contents}{RtfFileComparator}(comparator, file, omit, options)
 }
 \arguments{
 \item{comparator}{comparator instance used for the comparison}
@@ -21,8 +21,6 @@ directly by the user.}
 the comparison (detaulf = NULL)}
 
 \item{options}{additional comparator parameters}
-
-\item{...}{additional parameters}
 }
 \description{
 For RtfComparator, the file contents are returned based on the mode

@@ -9,7 +9,7 @@ rows matching the omit string excluded. This method is intended to be called
 only by the comparator classes in the processing and shouldn't be called
 directly by the user.}
 \usage{
-vrf_contents(comparator, file, omit, options, ...)
+vrf_contents(comparator, file, omit, options)
 }
 \arguments{
 \item{comparator}{comparator instance used for the comparison}
@@ -20,8 +20,6 @@ vrf_contents(comparator, file, omit, options, ...)
 the comparison (detaulf = NULL)}
 
 \item{options}{additional comparator parameters}
-
-\item{...}{additional parameters}
 }
 \description{
 Generic for getting the single file contents for the comparison. The method

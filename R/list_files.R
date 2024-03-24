@@ -12,11 +12,11 @@
 #'
 #' @examples
 #'
-#' file1 <- paste0(fs::path_package("/extdata/base_files/file2_additional_rows.rtf",
-#'                                  package = "verifyr2"))
+#' path1 <- "/extdata/base_files/file2_additional_rows.rtf"
+#' file1 <- paste0(fs::path_package(path1, package = "verifyr2"))
 #'
-#' file2 <- paste0(fs::path_package("/extdata/compare_files/file3_changed_rows.rtf",
-#'                                  package = "verifyr2"))
+#' path2 <- "/extdata/compare_files/file3_changed_rows.rtf"
+#' file2 <- paste0(fs::path_package(path2, package = "verifyr2"))
 #'
 #' verifyr2::list_files(file1, file2)
 #'

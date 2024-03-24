@@ -53,9 +53,8 @@ setMethod("initialize", signature = "FileComparator", definition = function(.Obj
 #' @param file2      second file to compare. NULL if using same values as for
 #'                   comparison creation
 #' @param omit       all lines containing the omit string will be excluded from
-#'                    the comparison (detaulf = NULL)
+#'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
-#' @param ...        additional parameters
 #'
 #' @examples
 #'
@@ -79,7 +78,7 @@ setMethod("initialize", signature = "FileComparator", definition = function(.Obj
 #'
 #' @export
 
-setGeneric("vrf_summary", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL, ...) standardGeneric("vrf_summary"))
+setGeneric("vrf_summary", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL) standardGeneric("vrf_summary"))
 
 #' Generic for comparing the file details with the given comparator instance.
 #'
@@ -91,7 +90,6 @@ setGeneric("vrf_summary", function(comparator, file1 = NULL, file2 = NULL, omit 
 #' @param omit       all lines containing the omit string will be excluded from
 #'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
-#' @param ...        additional parameters
 #'
 #' @examples
 #'
@@ -115,7 +113,7 @@ setGeneric("vrf_summary", function(comparator, file1 = NULL, file2 = NULL, omit 
 #'
 #' @export
 
-setGeneric("vrf_details", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL, ...) standardGeneric("vrf_details"))
+setGeneric("vrf_details", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL) standardGeneric("vrf_details"))
 
 #' Generic for comparing the inner part for the summary query. This method can
 #' be overwritten by more specialized comparator classes. This method is
@@ -128,11 +126,10 @@ setGeneric("vrf_details", function(comparator, file1 = NULL, file2 = NULL, omit 
 #' @param omit       all lines containing the omit string will be excluded from
 #'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
-#' @param ...        additional parameters
 #'
 #' @keywords internal
 
-setGeneric("vrf_summary_inner", function(comparator, file1, file2, omit, options = NULL, ...) standardGeneric("vrf_summary_inner"))
+setGeneric("vrf_summary_inner", function(comparator, file1, file2, omit, options) standardGeneric("vrf_summary_inner"))
 
 #' Generic for comparing the inner part for the details query. This method can
 #' be overwritten by more specialized comparator classes. This method is
@@ -145,11 +142,10 @@ setGeneric("vrf_summary_inner", function(comparator, file1, file2, omit, options
 #' @param omit       all lines containing the omit string will be excluded from
 #'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
-#' @param ...        additional parameters
 #'
 #' @keywords internal
 
-setGeneric("vrf_details_inner", function(comparator, file1, file2, omit, options = NULL, ...) standardGeneric("vrf_details_inner"))
+setGeneric("vrf_details_inner", function(comparator, file1, file2, omit, options) standardGeneric("vrf_details_inner"))
 
 #' Method for comparing the file summary with the given comparator instance.
 #'
@@ -161,9 +157,8 @@ setGeneric("vrf_details_inner", function(comparator, file1, file2, omit, options
 #' @param omit       all lines containing the omit string will be excluded from
 #'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
-#' @param ...        additional parameters
 
-setMethod("vrf_summary", "FileComparator", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL, ...) {
+setMethod("vrf_summary", "FileComparator", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL) {
   file1 <- ifelse(!is.null(file1), file1, comparator@file1)
   file2 <- ifelse(!is.null(file2), file2, comparator@file2)
 
@@ -172,7 +167,7 @@ setMethod("vrf_summary", "FileComparator", function(comparator, file1 = NULL, fi
   }
 
   tryCatch({
-    vrf_summary_inner(comparator, file1, file2, omit, options, ...)
+    vrf_summary_inner(comparator, file1, file2, omit, options)
   }, error = function(e) {
     return(paste0("Error reading file contents: ", conditionMessage(e)))
   })
@@ -188,9 +183,8 @@ setMethod("vrf_summary", "FileComparator", function(comparator, file1 = NULL, fi
 #' @param omit       all lines containing the omit string will be excluded from
 #'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
-#' @param ...        additional parameters
 
-setMethod("vrf_details", "FileComparator", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL, ...) {
+setMethod("vrf_details", "FileComparator", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL) {
   file1 <- ifelse(!is.null(file1), file1, comparator@file1)
   file2 <- ifelse(!is.null(file2), file2, comparator@file2)
 
@@ -199,7 +193,7 @@ setMethod("vrf_details", "FileComparator", function(comparator, file1 = NULL, fi
   }
 
   tryCatch({
-    vrf_details_inner(comparator, file1, file2, omit, options, ...)
+    vrf_details_inner(comparator, file1, file2, omit, options)
   }, error = function(e) {
     return(paste0("Error reading file contents: ", conditionMessage(e)))
   })
@@ -209,7 +203,6 @@ setMethod("vrf_details", "FileComparator", function(comparator, file1 = NULL, fi
 #'
 #' @param file1 first file to compare
 #' @param file2 second file to compare
-#' @param ...   additional parameters
 #'
 #' @examples
 #'
@@ -241,7 +234,7 @@ setMethod("vrf_details", "FileComparator", function(comparator, file1 = NULL, fi
 #'
 #' @export
 
-vrf_comparator <- function(file1, file2, ...) {
+vrf_comparator <- function(file1, file2) {
   if (!file.exists(file1) || !file.exists(file2)) {
     return(new("BinaryFileComparator", file1 = file1, file2 = file2))
   }

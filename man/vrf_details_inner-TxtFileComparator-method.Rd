@@ -7,7 +7,7 @@ be overwritten by more specialized comparator classes. This method is
 intended to be called only by the comparator classes in the processing and
 shouldn't be called directly by the user.}
 \usage{
-\S4method{vrf_details_inner}{TxtFileComparator}(comparator, file1, file2, omit, options = NULL, ...)
+\S4method{vrf_details_inner}{TxtFileComparator}(comparator, file1, file2, omit, options)
 }
 \arguments{
 \item{comparator}{comparator instance used for the comparison}
@@ -20,8 +20,6 @@ shouldn't be called directly by the user.}
 the comparison (detaulf = NULL)}
 
 \item{options}{additional comparator parameters}
-
-\item{...}{additional parameters}
 }
 \description{
 Method for comparing the inner part for the details query. This method can

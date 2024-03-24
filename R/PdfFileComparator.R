@@ -36,17 +36,13 @@ setClass("PdfFileComparator",
 #' @param omit       all lines containing the omit string will be excluded from
 #'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
-#' @param ...        additional parameters
 #'
 #' @keywords internal
 
-setMethod("vrf_contents", "PdfFileComparator", function(comparator, file, omit, options, ...) {
+setMethod("vrf_contents", "PdfFileComparator", function(comparator, file, omit, options) {
   content <- pdftools::pdf_text(file)
   content <- paste(content, collapse = "")
   content <- strsplit(content, "\n")[[1]]
 
-  return(vrf_contents_inner(comparator,
-                            content,
-                            omit,
-                            options, ...))
+  return(vrf_contents_inner(comparator, content, omit, options))
 })

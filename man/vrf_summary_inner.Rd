@@ -7,7 +7,7 @@ be overwritten by more specialized comparator classes. This method is
 intended to be called only by the comparator classes in the processing and
 shouldn't be called directly by the user.}
 \usage{
-vrf_summary_inner(comparator, file1, file2, omit, options = NULL, ...)
+vrf_summary_inner(comparator, file1, file2, omit, options)
 }
 \arguments{
 \item{comparator}{comparator instance used for the comparison}
@@ -20,8 +20,6 @@ vrf_summary_inner(comparator, file1, file2, omit, options = NULL, ...)
 the comparison (detaulf = NULL)}
 
 \item{options}{additional comparator parameters}
-
-\item{...}{additional parameters}
 }
 \description{
 Generic for comparing the inner part for the summary query. This method can

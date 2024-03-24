@@ -11,7 +11,7 @@ row_index    <- NULL
 # Custom input functions
 # ==============================================================================
 
-custom_folder_input <- function(input_id, label, value = "", ...) {
+vrf_folder_input <- function(input_id, label, value = "", ...) {
   label_class  <- "control-label"
   input_class  <- "shiny-input-text form-control shiny-bound-input"
   folder_value <- system.file(value, package = "verifyr2")
@@ -33,7 +33,7 @@ custom_folder_input <- function(input_id, label, value = "", ...) {
   )
 }
 
-custom_file_input <- function(input_id, label, value = "", ...) {
+vrf_file_input <- function(input_id, label, value = "", ...) {
   label_class  <- "control-label"
   input_class  <- "shiny-input-text form-control shiny-bound-input"
   file_value <- system.file(value, package = "verifyr2")
@@ -68,13 +68,13 @@ search_container <- function() {
         shiny::tabPanel("Compare folder contents", value = "tabs_folder",
           shiny::fluidRow(
             shiny::column(6,
-              custom_folder_input("folder1",
-                                  "Folder 1",
-                                  "/extdata/base_files"),
+              vrf_folder_input("folder1",
+                               "Folder 1",
+                               "/extdata/base_files"),
 
-              custom_folder_input("folder2",
-                                  "Folder 2",
-                                  "/extdata/compare_files"),
+              vrf_folder_input("folder2",
+                               "Folder 2",
+                               "/extdata/compare_files"),
             ),
             shiny::column(6,
               shiny::textInput("omit_rows",
@@ -89,13 +89,13 @@ search_container <- function() {
         shiny::tabPanel("Compare specific files", value = "tabs_file",
           shiny::fluidRow(
             shiny::column(6,
-              custom_file_input("file1",
-                                "File 1",
-                                "/extdata/base_files/file2_additional_rows.rtf"),
+              vrf_file_input("file1",
+                             "File 1",
+                             "/extdata/base_files/file2_additional_rows.rtf"),
 
-              custom_file_input("file2",
-                                "File 2",
-                                "/extdata/compare_files/file3_changed_rows.rtf"),
+              vrf_file_input("file2",
+                             "File 2",
+                             "/extdata/compare_files/file3_changed_rows.rtf"),
             ),
             shiny::column(6,
               shiny::textInput("omit_file_rows",
@@ -108,7 +108,7 @@ search_container <- function() {
       shiny::fluidRow(
         shiny::column(12,
           shiny::actionButton("go", "Go"),
-          shiny::actionButton("config", "Configure"),
+          shiny::actionButton("configure", "Configure"),
         ),
       ),
     ),
@@ -175,42 +175,42 @@ ui <- shiny::fluidPage(
 # Server helper functions
 # ==============================================================================
 
-update_download_links <- function(output, sel_row, file1_link, file2_link) {
+update_download_links <- function(output, row, file1_link, file2_link) {
   file1_link("")
   file2_link("")
 
-  if (!is.na(sel_row$file1)) {
-    filename <- basename(sel_row$file1)
-    file1_link(paste0("Open ", sel_row$file1))
+  if (!is.na(row$file1)) {
+    filename <- basename(row$file1)
+    file1_link(paste0("Open ", row$file1))
     output$file1_link <- shiny::downloadHandler(
       filename = function() {
         paste0("old_", filename)
       },
       content = function(file) {
-        file.copy(paste0(sel_row$file1), file)
+        file.copy(paste0(row$file1), file)
       }
     )
   }
 
-  if (!is.na(sel_row$file2)) {
-    filename <- basename(sel_row$file2)
-    file2_link(paste0("Open ", sel_row$file2))
+  if (!is.na(row$file2)) {
+    filename <- basename(row$file2)
+    file2_link(paste0("Open ", row$file2))
     output$file2_link <- shiny::downloadHandler(
       filename = function() {
         paste0("new_", filename)
       },
       content = function(file) {
-        file.copy(paste0(sel_row$file2), file)
+        file.copy(paste0(row$file2), file)
       }
     )
   }
 }
 
-update_details_comparison <- function(input, output, session, configuration, sel_row) {
-  file1 <- paste0(sel_row[1])
-  file2 <- paste0(sel_row[2])
+update_details_comparison <- function(input, output, session, config, row) {
+  file1 <- paste0(row[1])
+  file2 <- paste0(row[2])
 
-  options1 <- configuration$config
+  options1 <- config$configuration
   options1$details$mode <- "full"
   comparator <- verifyr2::vrf_comparator(file1, file2)
 
@@ -224,7 +224,7 @@ update_details_comparison <- function(input, output, session, configuration, sel
     )
   })
 
-  options2 <- configuration$config
+  options2 <- config$configuration
   options2$details$mode <- "summary"
 
   output$details_out_summary <- shiny::renderUI({
@@ -237,7 +237,7 @@ update_details_comparison <- function(input, output, session, configuration, sel
     )
   })
 
-  if (configuration$config$details$mode == "summary") {
+  if (config$configuration$details$mode == "summary") {
     shiny::updateTabsetPanel(session,
                              "details_tabs",
                              selected = "tabs_details_summary")
@@ -322,7 +322,7 @@ server <- function(input, output, session) {
   default2 <- paste0("Click on a row in the summary comparison result to view",
                      "the side-by-side details comparison.")
 
-  configuration <- shiny::reactiveValues(config = as.list(config_json))
+  config <- shiny::reactiveValues(configuration = as.list(config_json))
   summary_text  <- shiny::reactiveVal(default1)
   details_text  <- shiny::reactiveVal(default2)
   file1_link <- shiny::reactiveVal("")
@@ -419,18 +419,18 @@ server <- function(input, output, session) {
     shiny::updateTextAreaInput(session, "details_out_comments", value = "")
   })
 
-  shiny::observeEvent(input$config, {
+  shiny::observeEvent(input$configure, {
     shiny::showModal(shiny::modalDialog(
       shiny::tags$h2("Comparison configuration"),
       shiny::selectInput("rtf_mode",
                          "RTF comparison mode",
                          choices = c("raw", "content"),
-                         selected = configuration$config$rtf$mode),
+                         selected = config$configuration$rtf$mode),
 
       shiny::selectInput("details_mode",
                          "Details comparison mode",
                          choices = c("full", "summary"),
-                         selected = configuration$config$details$mode),
+                         selected = config$configuration$details$mode),
 
       shiny::p(paste0("The default configuration values can be",
                       "initialized in the inst/config.json file.")),
@@ -444,8 +444,8 @@ server <- function(input, output, session) {
 
   shiny::observeEvent(input$submit, {
     shiny::removeModal()
-    configuration$config$rtf$mode <- input$rtf_mode
-    configuration$config$details$mode <- input$details_mode
+    config$configuration$rtf$mode <- input$rtf_mode
+    config$configuration$details$mode <- input$details_mode
   })
 
   summary_verify <- shiny::reactive({
@@ -453,7 +453,7 @@ server <- function(input, output, session) {
     dt_file_list <<- tibble::tibble(list_of_files()) %>%
       dplyr::mutate(omitted = input$omit_rows) %>%
       dplyr::rowwise() %>%
-      dplyr::mutate(comparison = verifyr2::vrf_summary(verifyr2::vrf_comparator(file1, file2), omit = omitted, options = configuration$config)) %>% # nolint
+      dplyr::mutate(comparison = verifyr2::vrf_summary(verifyr2::vrf_comparator(file1, file2), omit = omitted, options = config$configuration)) %>% # nolint
       dplyr::mutate(comments = "no") %>%
       dplyr::mutate(comments_details = "")
   })
@@ -479,14 +479,14 @@ server <- function(input, output, session) {
     set_visibility("details_tabs", TRUE)
 
     row_index <<- new_row_index
-    sel_row <- summary_verify()[new_row_index, ]
+    row <- summary_verify()[new_row_index, ]
 
     # list side-by-side comparison
     set_reactive_text("details_text", "")
-    update_details_comparison(input, output, session, configuration, sel_row)
+    update_details_comparison(input, output, session, config, row)
 
     # set up the file download links for the compared files
-    update_download_links(output, sel_row, file1_link, file2_link)
+    update_download_links(output, row, file1_link, file2_link)
   })
 
   set_reactive_text <- function(reactive_id, text, class = "") {

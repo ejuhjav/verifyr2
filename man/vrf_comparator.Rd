@@ -4,14 +4,12 @@
 \alias{vrf_comparator}
 \title{Factory method for creating comparator instance based on the given two files.}
 \usage{
-vrf_comparator(file1, file2, ...)
+vrf_comparator(file1, file2)
 }
 \arguments{
 \item{file1}{first file to compare}
 
 \item{file2}{second file to compare}
-
-\item{...}{additional parameters}
 }
 \description{
 Factory method for creating comparator instance based on the given two files.

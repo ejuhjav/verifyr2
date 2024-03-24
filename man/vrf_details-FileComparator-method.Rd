@@ -9,8 +9,7 @@
   file1 = NULL,
   file2 = NULL,
   omit = NULL,
-  options = NULL,
-  ...
+  options = NULL
 )
 }
 \arguments{
@@ -26,8 +25,6 @@ comparison creation}
 the comparison (detaulf = NULL)}
 
 \item{options}{additional comparator parameters}
-
-\item{...}{additional parameters}
 }
 \description{
 Method for comparing the file details with the given comparator instance.
