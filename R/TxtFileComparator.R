@@ -17,7 +17,7 @@
 
 setClass("TxtFileComparator",
          contains = "BinaryFileComparator",
-         lots = list(file1 = "ANY", file2 = "ANY"))
+         slots = list(file1 = "ANY", file2 = "ANY"))
 
 #' Method for comparing the inner part for the details query. This method can be
 #' overwritten by more specialized comparator classes. This method is intended
