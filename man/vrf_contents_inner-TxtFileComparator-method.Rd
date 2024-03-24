@@ -10,19 +10,17 @@ more specialized comparator classes. This method is intended to be called
 only by the comparator classes in the processing and shouldn't be called
 directly by the user.}
 \usage{
-\S4method{vrf_contents_inner}{TxtFileComparator}(comparator, file_contents, omit, options, ...)
+\S4method{vrf_contents_inner}{TxtFileComparator}(comparator, contents, omit, options)
 }
 \arguments{
 \item{comparator}{comparator instance used for the comparison}
 
-\item{file_contents}{first file to compare}
+\item{contents}{file contents}
 
 \item{omit}{all lines containing the omit string will be excluded
 from the comparison (detaulf = NULL)}
 
 \item{options}{additional comparator parameters}
-
-\item{...}{additional parameters}
 }
 \description{
 Generic for getting the inner part for the file contents query. The method

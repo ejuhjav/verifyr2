@@ -38,20 +38,17 @@ setClass("RtfFileComparator",
 #' @param omit       all lines containing the omit string will be excluded from
 #'                   the comparison (detaulf = NULL)
 #' @param options    additional comparator parameters
-#' @param ...        additional parameters
 #'
 #' @keywords internal
 
-setMethod("vrf_contents", "RtfFileComparator", function(comparator, file, omit, options, ...) {
+setMethod("vrf_contents", "RtfFileComparator", function(comparator, file, omit, options) {
   if (!is.null(options) &&
-        "rtf" %in% names(options) &&
-        "mode" %in% names(options$rtf) &&
+        !is.null(options$rtf) &&
+        !is.null(options$rtf$mode) &&
         "raw" == options$rtf$mode) {
-    return(callNextMethod(comparator, file, omit, options, ...))
+    return(callNextMethod(comparator, file, omit, options))
   } else {
-    return(vrf_contents_inner(comparator,
-                              striprtf::read_rtf(file = file),
-                              omit,
-                              options, ...))
+    contents <- striprtf::read_rtf(file = file)
+    return(vrf_contents_inner(comparator, contents, omit, options))
   }
 })
