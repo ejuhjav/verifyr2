@@ -85,10 +85,7 @@ setMethod("vrf_details_inner", "TxtFileComparator", function(comparator, file1, 
   file2_contents_whole <- file2_contents_list[[1]]
 
   context <- 2
-  if (!is.null(options) &&
-        !is.null(options$details) &&
-        !is.null(options$details$mode) &&
-        "full" == options$details$mode) {
+  if ("full" == get_nested(options, "details", "mode")) {
     context <- -1
   }
 

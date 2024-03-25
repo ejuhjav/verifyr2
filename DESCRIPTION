@@ -33,6 +33,7 @@ Collate:
     'TxtFileComparator.R'
     'PdfFileComparator.R'
     'RtfFileComparator.R'
+    'get_nested.R'
     'list_files.R'
     'list_folder_files.R'
     'run_example.R'
