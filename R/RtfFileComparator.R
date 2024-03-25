@@ -42,10 +42,7 @@ setClass("RtfFileComparator",
 #' @keywords internal
 
 setMethod("vrf_contents", "RtfFileComparator", function(comparator, file, omit, options) {
-  if (!is.null(options) &&
-        !is.null(options$rtf) &&
-        !is.null(options$rtf$mode) &&
-        "raw" == options$rtf$mode) {
+  if ("raw" == get_nested(options, "rtf", "mode")) {
     return(callNextMethod(comparator, file, omit, options))
   } else {
     contents <- striprtf::read_rtf(file = file)
