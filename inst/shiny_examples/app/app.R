@@ -13,7 +13,7 @@ row_index    <- NULL
 
 vrf_folder_input <- function(input_id, label, value = "", ...) {
   label_class  <- "control-label"
-  input_class  <- "shiny-input-text form-control shiny-bound-input"
+  input_class  <- "shiny-input-text form-control"
   folder_value <- system.file(value, package = "verifyr2")
 
   shiny::div(class = "form-group form-group-custom shiny-input-container",
@@ -35,7 +35,7 @@ vrf_folder_input <- function(input_id, label, value = "", ...) {
 
 vrf_file_input <- function(input_id, label, value = "", ...) {
   label_class  <- "control-label"
-  input_class  <- "shiny-input-text form-control shiny-bound-input"
+  input_class  <- "shiny-input-text form-control"
   file_value <- system.file(value, package = "verifyr2")
 
   shiny::div(class = "form-group form-group-custom shiny-input-container",
