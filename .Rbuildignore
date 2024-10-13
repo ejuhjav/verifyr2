@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 .RData
 .lintr
+^LICENSE\.md$
