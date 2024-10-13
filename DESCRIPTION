@@ -2,7 +2,7 @@ Package: verifyr2
 Type: Package
 Title: Compare and verify file output changes
 Description: A package for file comparison algorithms and example shiny app for the comparison usage example.
-Version: 0.0.2.0
+Version: 0.9.0
 License: MIT + file LICENSE
 Author: Juha Javanainen
 Maintainer: Juha Javanainen <ejuhjav@gmail.com>
