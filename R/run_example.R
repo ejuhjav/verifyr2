@@ -3,10 +3,6 @@
 #' \code{verifyr2::run_example} returns simple Shiny App where user can see how
 #' the verifyr2 functions work
 #'
-#' @usage
-#'
-#' verifyr2::run_example()
-#'
 #' @export
 
 run_example <- function() {
