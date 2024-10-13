@@ -9,20 +9,20 @@ Maintainer: Juha Javanainen <ejuhjav@gmail.com>
 Imports:
     diffobj,
     dplyr,
-    DT,
-    fs,
-    jsonlite,
     magrittr,
     methods,
     mime,
     pdftools,
     shiny,
-    shinyjs,
-    shinyFiles,
     stringr,
     striprtf,
     tibble
 Suggests: 
+    DT,
+    fs,
+    jsonlite,
+    shinyjs,
+    shinyFiles,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Encoding: UTF-8
