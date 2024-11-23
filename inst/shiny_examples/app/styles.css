@@ -28,8 +28,19 @@
     margin-bottom: 20px;
 }
 
-#summary_out td:hover {
-    cursor: pointer;
+#summary_out tr td{
+    -webkit-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+
+#summary_out tr.row_highlighted td {
+    background-color: #ddd !important;
+}
+
+.process_button, .process_button:focus, .process_button:hover {
+    background-color: #337ab7;
+    color: #fff;
 }
 
 #comparison_comments_container {

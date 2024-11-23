@@ -2,7 +2,6 @@
 #'
 #' \code{verifyr2::run_example} returns simple Shiny App where user can see how
 #' the verifyr2 functions work
-#'
 
 dt_file_list <- NULL
 row_index    <- NULL
@@ -161,9 +160,21 @@ details_container <- function() {
   )
 }
 
+javascript_additions <- function() {
+  shiny::tags$head(
+    shiny::tags$script(htmltools::HTML("
+      Shiny.addCustomMessageHandler('highlightRow', function(message) {
+        $('.dataTable tr').removeClass('row_highlighted');
+        $('.dataTable tr:nth-child(' + message.row_id + ')').addClass('row_highlighted');
+      });
+    "))
+  )
+}
+
 ui <- shiny::fluidPage(
   shinyjs::useShinyjs(),
   shiny::includeCSS("styles.css"),
+  javascript_additions(),
   search_container(),
   shiny::fluidRow(
     summary_container(),
@@ -217,9 +228,18 @@ update_details_comparison <- function(input, output, session, config, row) {
   output$details_out_full <- shiny::renderUI({
     shiny::HTML(
       as.character(
-        verifyr2::vrf_details(comparator,
-                              omit = input$omit_rows,
-                              options = options1)
+        shiny::withProgress(
+          message = "Processing comparison details...",
+          value = 0,
+          {
+            details <- verifyr2::vrf_details(comparator,
+                                             omit = input$omit_rows,
+                                             options = options1)
+
+            shiny::incProgress(1)
+            details
+          }
+        )
       )
     )
   })
@@ -230,9 +250,18 @@ update_details_comparison <- function(input, output, session, config, row) {
   output$details_out_summary <- shiny::renderUI({
     shiny::HTML(
       as.character(
-        verifyr2::vrf_details(comparator,
-                              omit = input$omit_rows,
-                              options = options2)
+        shiny::withProgress(
+          message = "Processing comparison details...",
+          value = 0,
+          {
+            details <- verifyr2::vrf_details(comparator,
+                                             omit = input$omit_rows,
+                                             options = options2)
+
+            shiny::incProgress(1)
+            details
+          }
+        )
       )
     )
   })
@@ -323,8 +352,8 @@ server <- function(input, output, session) {
                      "the side-by-side details comparison.")
 
   config <- shiny::reactiveValues(configuration = as.list(config_json))
-  summary_text  <- shiny::reactiveVal(default1)
-  details_text  <- shiny::reactiveVal(default2)
+  summary_text <- shiny::reactiveVal(default1)
+  details_text <- shiny::reactiveVal(default2)
   file1_link <- shiny::reactiveVal("")
   file2_link <- shiny::reactiveVal("")
 
@@ -350,10 +379,25 @@ server <- function(input, output, session) {
 
   output$summary_out <- DT::renderDataTable({
     shiny::req(summary_verify())
-    options <- list(columnDefs = list(list(visible = FALSE,
-                                           targets = c("comments_details"))))
+    dt_file_list <- summary_verify()
 
-    DT::datatable(summary_verify(), selection = "single", options = options)
+    options <- list(
+      columnDefs = list(
+        list(visible = FALSE, targets = c("comments_details")),
+        list(orderable = FALSE, targets = c("process_button"))
+      )
+    )
+
+    colnames <- c(
+      names(dt_file_list)[-ncol(dt_file_list)],
+      "Actions"
+    )
+
+    DT::datatable(dt_file_list,
+                  selection = "none",
+                  escape = FALSE,
+                  options = options,
+                  colnames = colnames)
   })
 
   # ============================================================================
@@ -401,7 +445,12 @@ server <- function(input, output, session) {
     dt_file_list <<- dt_file_list
 
     DT::replaceData(dt_proxy, dt_file_list)
-    DT::selectRows(dt_proxy, row_index)
+    shinyjs::delay(100, {
+      session$sendCustomMessage(
+        "highlightRow",
+        list(row_id = row_index)
+      )
+    })
   })
 
   shiny::observeEvent(input$clear_comments, {
@@ -412,7 +461,12 @@ server <- function(input, output, session) {
         dt_file_list <<- dt_file_list
 
         DT::replaceData(dt_proxy, dt_file_list)
-        DT::selectRows(dt_proxy, row_index)
+        shinyjs::delay(100, {
+          session$sendCustomMessage(
+            "highlightRow",
+            list(row_id = row_index)
+          )
+        })
       }
     }
 
@@ -450,12 +504,59 @@ server <- function(input, output, session) {
 
   summary_verify <- shiny::reactive({
     shiny::req(list_of_files())
-    dt_file_list <<- tibble::tibble(list_of_files()) %>%
-      dplyr::mutate(omitted = input$omit_rows) %>%
-      dplyr::rowwise() %>%
-      dplyr::mutate(comparison = verifyr2::vrf_summary(verifyr2::vrf_comparator(file1, file2), omit = omitted, options = config$configuration)) %>% # nolint
-      dplyr::mutate(comments = "no") %>%
-      dplyr::mutate(comments_details = "")
+
+    dt_file_list <- tibble::tibble(list_of_files()) %>%
+      dplyr::mutate(
+        omitted = input$omit_rows,
+        comparison = NA_character_,
+        comments = "no",
+        comments_details = "",
+        process_button = purrr::pmap_chr(
+          .l = list(row_id = dplyr::row_number()),
+          .f = function(row_id) {
+            as.character(
+              shiny::actionButton(
+                inputId = paste0("process_", row_id),
+                label = "Compare",
+                class = "process_button",
+                onclick = sprintf("Shiny.setInputValue('process_row', %d)", row_id)
+              )
+            )
+          }
+        )
+      )
+
+    shiny::withProgress(
+      message = "Processing comparison summaries...",
+      value = 0,
+      {
+        dt_file_list <- dt_file_list %>%
+          dplyr::mutate(
+            comparison = purrr::pmap_chr(
+              .l = list(
+                file1 = dt_file_list$file1,
+                file2 = dt_file_list$file2,
+                omitted = dt_file_list$omitted
+              ),
+              .f = function(file1, file2, omitted) {
+
+                # Process a single row
+                result <- verifyr2::vrf_summary(
+                  verifyr2::vrf_comparator(file1, file2),
+                  omit = omitted,
+                  options = config$configuration
+                )
+
+                # Update progress
+                shiny::incProgress(1 / nrow(dt_file_list), detail = file1)
+                result
+              }
+            )
+          )
+      }
+    )
+
+    dt_file_list
   })
 
   shiny::observe({
@@ -463,9 +564,8 @@ server <- function(input, output, session) {
     update_folder_selections(input, session, roots)
     update_file_selections(input, session, roots)
 
-    # handle changes related to selecting a comparison row
-    shiny::req(input$summary_out_rows_selected)
-    new_row_index <- input$summary_out_rows_selected
+    shiny::req(input$process_row)
+    new_row_index <- input$process_row
 
     # clear/initialize comparison specific comment value when selecting a row
     if (!is.null(row_index) && row_index != new_row_index) {
@@ -487,6 +587,12 @@ server <- function(input, output, session) {
 
     # set up the file download links for the compared files
     update_download_links(output, row, file1_link, file2_link)
+
+    # set the compared row as highlighted in the table
+    session$sendCustomMessage(
+      "highlightRow",
+      list(row_id = new_row_index)
+    )
   })
 
   set_reactive_text <- function(reactive_id, text, class = "") {
