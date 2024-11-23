@@ -4,8 +4,10 @@ Title: Compare and verify file output changes
 Description: A package for file comparison algorithms and example shiny app for the comparison usage example.
 Version: 0.9.0
 License: MIT + file LICENSE
-Author: Juha Javanainen
-Maintainer: Juha Javanainen <ejuhjav@gmail.com>
+Authors@R: c(
+    person("Juha", "Javanainen", email = "ejuhjav@gmail.com", role = c("aut", "cre")),
+    person("Tiina", "Kirsilä", email = "tiina.kirsila@gmail.com", role = "ctb"),
+    person("Anna", "Wiksten", email = "a.s.wiksten@gmail.com", role = "ctb"))
 Imports:
     diffobj,
     dplyr,
