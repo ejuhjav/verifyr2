@@ -1,4 +1,8 @@
 
+<div align="center">
+  <img src="./assets/verifyr2.png" alt="Project Logo" width="200">
+</div>
+
 # verifyr2
 
 Verifyr2 is an R package for extendable file comparison classes and methods including an
