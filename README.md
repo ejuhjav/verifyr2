@@ -75,6 +75,7 @@ setMethod("vrf_contents", "PdfFileComparator", function(comparator, file, omit, 
 
   return(vrf_contents_inner(comparator, content, omit, options))
 })
+```
 
 ## Credits
 
