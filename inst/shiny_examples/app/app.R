@@ -177,10 +177,17 @@ javascript_additions <- function() {
   )
 }
 
+page_icon <- function() {
+  shiny::tags$head(
+    shiny::tags$link(rel = "icon", type = "image/x-icon", href = "verifyr2.ico")
+  )
+}
+
 ui <- shiny::fluidPage(
   shinyjs::useShinyjs(),
   shiny::includeCSS("styles.css"),
   javascript_additions(),
+  page_icon(),
   search_container(),
   shiny::fluidRow(
     summary_container(),
