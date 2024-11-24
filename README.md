@@ -55,25 +55,26 @@ instantiating an explicit comparator manually when comparing files of single spe
 The file comparison logic is implemented with a generic structure that supports easy addition of
 new comparison logic for different file types. In most cases, this will simply require an implementation
 of a new file comparator with the file extension name and implementing the file contents getter. The included
-implementation for rtf file comparison is an example of how to do this (see source file for full documentation).
+implementation for pdf file comparison is an example of how to do this (see source file for full documentation).
 
 ``` bash
-#' RtfFileComparator.R
+#' PdfFileComparator.R
 #'
 #' @include TxtFileComparator.R
 #'
 #' @export
 
-setClass("RtfFileComparator", contains = "TxtFileComparator", slots = list(file1 = "ANY", file2 = "ANY"))
+setClass("PdfFileComparator",
+         contains = "TxtFileComparator",
+         slots = list(file1 = "ANY", file2 = "ANY"))
 
-setMethod("vrf_contents", "RtfFileComparator", function(comparator, file, omit, options, ...) {
-  if (!is.null(options) &&  "rtf" %in% names(options) && "mode" %in% names(options$rtf) && "raw" == options$rtf$mode) {
-    return(callNextMethod(comparator, file, omit, options, ...))
-  } else {
-    return(vrf_contents_inner(comparator, striprtf::read_rtf(file = file), omit, options, ...))
-  }
+setMethod("vrf_contents", "PdfFileComparator", function(comparator, file, omit, options) {
+  content <- pdftools::pdf_text(file)
+  content <- paste(content, collapse = "")
+  content <- strsplit(content, "\n")[[1]]
+
+  return(vrf_contents_inner(comparator, content, omit, options))
 })
-```
 
 ## Credits
 
