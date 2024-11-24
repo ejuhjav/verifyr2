@@ -143,6 +143,7 @@ details_container <- function() {
                             shiny::textOutput("file2_link_output")),
       ),
     ),
+    shiny::htmlOutput("details_out_generic"),
     shiny::tabsetPanel(id = "details_tabs",
       shiny::tabPanel("Summary contents", value = "tabs_details_summary",
         shiny::htmlOutput("details_out_summary"),
@@ -248,56 +249,101 @@ update_details_comparison <- function(input, output, session, config, row, row_i
   options1$details$mode <- "full"
   comparator <- verifyr2::vrf_comparator(file1, file2)
 
-  output$details_out_full <- shiny::renderUI({
-    shiny::HTML(
-      as.character(
-        shiny::withProgress(
-          message = "Processing comparison details...",
-          value = 0,
-          {
-            details <- verifyr2::get_nested(dt_details_list, as.character(row_index), "full")
+  if (verifyr2::vrf_supports_summary_and_full(comparator)) {
+    set_visibility("details_tabs", TRUE)
+    output$details_out_generic <- shiny::renderUI({
+      shiny::HTML("")
+    })
 
-            if (is.character(details) && "NA" == details) {
-              details <- verifyr2::vrf_details(comparator,
-                                               omit = input$omit_rows,
-                                               options = options1)
+    output$details_out_full <- shiny::renderUI({
+      shiny::HTML(
+        as.character(
+          shiny::withProgress(
+            message = "Processing comparison details...",
+            value = 0,
+            {
+              details <- verifyr2::get_nested(dt_details_list, as.character(row_index), "full")
 
-              shiny::incProgress(1)
-              store_details(as.character(row_index), "full", details)
+              if (is.character(details) && "NA" == details) {
+                details <- verifyr2::vrf_details(comparator,
+                                                 omit = input$omit_rows,
+                                                 options = options1)
+
+                shiny::incProgress(1)
+                store_details(as.character(row_index), "full", details)
+              }
+              details
             }
-            details
-          }
+          )
         )
       )
-    )
-  })
+    })
 
-  options2 <- config$configuration
-  options2$details$mode <- "summary"
+    options2 <- config$configuration
+    options2$details$mode <- "summary"
 
-  output$details_out_summary <- shiny::renderUI({
-    shiny::HTML(
-      as.character(
-        shiny::withProgress(
-          message = "Processing comparison details...",
-          value = 0,
-          {
-            details <- verifyr2::get_nested(dt_details_list, as.character(row_index), "summary")
+    output$details_out_summary <- shiny::renderUI({
+      shiny::HTML(
+        as.character(
+          shiny::withProgress(
+            message = "Processing comparison details...",
+            value = 0,
+            {
+              details <- verifyr2::get_nested(dt_details_list, as.character(row_index), "summary")
 
-            if (is.character(details) && "NA" == details) {
-              details <- verifyr2::vrf_details(comparator,
-                                               omit = input$omit_rows,
-                                               options = options2)
+              if (is.character(details) && "NA" == details) {
+                details <- verifyr2::vrf_details(comparator,
+                                                 omit = input$omit_rows,
+                                                 options = options2)
 
-              shiny::incProgress(1)
-              store_details(as.character(row_index), "summary", details)
+                shiny::incProgress(1)
+                store_details(as.character(row_index), "summary", details)
+              }
+              details
             }
-            details
-          }
+          )
         )
       )
-    )
-  })
+    })
+  } else {
+    output$details_out_summary <- shiny::renderUI({
+      shiny::HTML("")
+    })
+    output$details_out_full <- shiny::renderUI({
+      shiny::HTML("")
+    })
+    set_visibility("details_tabs", FALSE)
+
+    options3 <- config$configuration
+    options3$details$mode <- NULL
+
+    output$details_out_generic <- shiny::renderUI({
+      result <- verifyr2::vrf_details(
+        comparator,
+        omit = input$omit_rows,
+        options = options3
+      )
+
+      tags$div(
+        style = "text-align: center; padding-top: 20px;",
+        tags$div(
+          style = "display: inline-block; width: 30%; margin: 5px;",
+          tags$h3("Image 1"),
+          tags$img(src = result$image1, alt = "Image1", style = "width: 100%; padding: 10px; border: 1px solid #ccc;")
+        ),
+        tags$div(
+          style = "display: inline-block; width: 30%; margin: 5px;",
+          tags$h3("Image 2"),
+          tags$img(src = result$image2, alt = "Image2", style = "width: 100%; padding: 10px; border: 1px solid #ccc;")
+        ),
+        tags$div(
+          style = "display: inline-block; width: 30%; margin: 5px;",
+          tags$h3("Difference"),
+          tags$img(src = result$image3, alt = "Difference Image", style = "width: 100%; padding: 10px; border: 1px solid #ccc;")
+        )
+      )
+    })
+  }
 }
 
 update_folder_selections <- function(input, session, roots) {
@@ -333,8 +379,11 @@ update_file_selections <- function(input, session, roots) {
 }
 
 set_visibility <- function(id, visible) {
-  visible_text <- ifelse(visible, "show()", "hide()")
-  shinyjs::runjs(paste0("$('#", id, "').", visible_text))
+  if (visible) {
+    shinyjs::runjs(paste0("$('#", id, "').removeClass('custom_hidden').addClass('custom_visible')"))
+  } else {
+    shinyjs::runjs(paste0("$('#", id, "').removeClass('custom_visible').addClass('custom_hidden')"))
+  }
 }
 
 # ==============================================================================

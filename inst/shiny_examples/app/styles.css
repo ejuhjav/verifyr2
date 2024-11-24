@@ -1,3 +1,11 @@
+.custom_hidden {
+    display: none !important;
+}
+
+.custom_visible {
+    display: block !important;
+}
+
 .container-fluid {
     padding: 20px !important;
 }

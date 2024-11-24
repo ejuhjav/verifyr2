@@ -9,8 +9,10 @@ Authors@R: c(
     person("Tiina", "Kirsilä", email = "tiina.kirsila@gmail.com", role = "ctb"),
     person("Anna", "Wiksten", email = "a.s.wiksten@gmail.com", role = "ctb"))
 Imports:
+    base64enc,
     diffobj,
     dplyr,
+    magick,
     magrittr,
     methods,
     mime,
@@ -32,6 +34,7 @@ RoxygenNote: 7.3.2
 Collate: 
     'FileComparator.R'
     'BinaryFileComparator.R'
+    'ImgFileComparator.R'
     'TxtFileComparator.R'
     'PdfFileComparator.R'
     'RtfFileComparator.R'
