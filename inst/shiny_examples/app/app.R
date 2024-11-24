@@ -3,8 +3,14 @@
 #' \code{verifyr2::run_example} returns simple Shiny App where user can see how
 #' the verifyr2 functions work
 
+# the datatable contents with summary comparisons and comments
 dt_file_list <- NULL
-row_index    <- NULL
+
+# executed details comparison values for quick access
+dt_details_list <- list()
+
+# currently selected datatable row index
+row_index <- NULL
 
 # ==============================================================================
 # Custom input functions
@@ -217,7 +223,17 @@ update_download_links <- function(output, row, file1_link, file2_link) {
   }
 }
 
-update_details_comparison <- function(input, output, session, config, row) {
+# helper method for storing details comparison into global list
+store_details <- function(row_index, mode, details) {
+  if ("NA" == verifyr2::get_nested(dt_details_list, row_index)) {
+    dt_details_list[[row_index]] <- list()
+  }
+
+  dt_details_list[[row_index]][[mode]] <- details
+  dt_details_list <<- dt_details_list
+}
+
+update_details_comparison <- function(input, output, session, config, row, row_index) {
   file1 <- paste0(row[1])
   file2 <- paste0(row[2])
 
@@ -232,11 +248,16 @@ update_details_comparison <- function(input, output, session, config, row) {
           message = "Processing comparison details...",
           value = 0,
           {
-            details <- verifyr2::vrf_details(comparator,
-                                             omit = input$omit_rows,
-                                             options = options1)
+            details <- verifyr2::get_nested(dt_details_list, as.character(row_index), "full")
 
-            shiny::incProgress(1)
+            if (is.character(details) && "NA" == details) {
+              details <- verifyr2::vrf_details(comparator,
+                                               omit = input$omit_rows,
+                                               options = options1)
+
+              shiny::incProgress(1)
+              store_details(as.character(row_index), "full", details)
+            }
             details
           }
         )
@@ -254,27 +275,22 @@ update_details_comparison <- function(input, output, session, config, row) {
           message = "Processing comparison details...",
           value = 0,
           {
-            details <- verifyr2::vrf_details(comparator,
-                                             omit = input$omit_rows,
-                                             options = options2)
+            details <- verifyr2::get_nested(dt_details_list, as.character(row_index), "summary")
 
-            shiny::incProgress(1)
+            if (is.character(details) && "NA" == details) {
+              details <- verifyr2::vrf_details(comparator,
+                                               omit = input$omit_rows,
+                                               options = options2)
+
+              shiny::incProgress(1)
+              store_details(as.character(row_index), "summary", details)
+            }
             details
           }
         )
       )
     )
   })
-
-  if (config$configuration$details$mode == "summary") {
-    shiny::updateTabsetPanel(session,
-                             "details_tabs",
-                             selected = "tabs_details_summary")
-  } else {
-    shiny::updateTabsetPanel(session,
-                             "details_tabs",
-                             selected = "tabs_details_full")
-  }
 }
 
 update_folder_selections <- function(input, session, roots) {
@@ -405,6 +421,8 @@ server <- function(input, output, session) {
   # ============================================================================
 
   list_of_files <- shiny::eventReactive(input$go, {
+    dt_details_list <<- list()
+
     if (input$compare_tabs == "tabs_folder") {
       if (file.exists(input$folder1) && file.exists(input$folder2)) {
         set_visibility("comparison_comments_container", FALSE)
@@ -583,7 +601,7 @@ server <- function(input, output, session) {
 
     # list side-by-side comparison
     set_reactive_text("details_text", "")
-    update_details_comparison(input, output, session, config, row)
+    update_details_comparison(input, output, session, config, row, new_row_index)
 
     # set up the file download links for the compared files
     update_download_links(output, row, file1_link, file2_link)
