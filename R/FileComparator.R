@@ -115,6 +115,15 @@ setGeneric("vrf_summary", function(comparator, file1 = NULL, file2 = NULL, omit 
 
 setGeneric("vrf_details", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL) standardGeneric("vrf_details"))
 
+#' Generic for getting information whether the comparator supports both summary
+#' and full details comparisons.
+#'
+#' @param comparator comparator instance used for the comparison
+#'
+#' @export
+
+setGeneric("vrf_supports_summary_and_full", function(comparator) standardGeneric("vrf_supports_summary_and_full"))
+
 #' Generic for comparing the inner part for the summary query. This method can
 #' be overwritten by more specialized comparator classes. This method is
 #' intended to be called only by the comparator classes in the processing and
@@ -199,6 +208,16 @@ setMethod("vrf_details", "FileComparator", function(comparator, file1 = NULL, fi
   })
 })
 
+#' Method for getting information whether the comparator supports both summary
+#' and full details comparisons. This method can be overwritten by
+#' more specialized comparator classes.
+#'
+#' @param comparator comparator instance used for the comparison
+
+setMethod("vrf_supports_summary_and_full", "FileComparator", function(comparator) {
+  return(TRUE)
+})
+
 #' Factory method for creating comparator instance based on the given two files.
 #'
 #' @param file1 first file to compare
@@ -240,6 +259,11 @@ vrf_comparator <- function(file1, file2) {
   }
 
   file_extension  <- tools::toTitleCase(tools::file_ext(file1))
+
+  if (file_extension %in% list("Jpg", "Jpeg", "Png")) {
+    file_extension <- "Img"
+  }
+
   comparator_name <- paste0(file_extension, "FileComparator")
 
   if (isClass(comparator_name)) {
