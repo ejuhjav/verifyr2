@@ -324,22 +324,22 @@ update_details_comparison <- function(input, output, session, config, row, row_i
         options = options3
       )
 
-      tags$div(
+      shiny::tags$div(
         style = "text-align: center; padding-top: 20px;",
-        tags$div(
+        shiny::tags$div(
           style = "display: inline-block; width: 30%; margin: 5px;",
-          tags$h3("Image 1"),
-          tags$img(src = result$image1, alt = "Image1", style = "width: 100%; padding: 10px; border: 1px solid #ccc;")
+          shiny::tags$h3("Image 1"),
+          shiny::tags$img(src = result$image1, alt = "Image1", style = "width: 100%; padding: 10px; border: 1px solid #ccc;")
         ),
-        tags$div(
+        shiny::tags$div(
           style = "display: inline-block; width: 30%; margin: 5px;",
-          tags$h3("Image 2"),
-          tags$img(src = result$image2, alt = "Image2", style = "width: 100%; padding: 10px; border: 1px solid #ccc;")
+          shiny::tags$h3("Image 2"),
+          shiny::tags$img(src = result$image2, alt = "Image2", style = "width: 100%; padding: 10px; border: 1px solid #ccc;")
         ),
-        tags$div(
+        shiny::tags$div(
           style = "display: inline-block; width: 30%; margin: 5px;",
-          tags$h3("Difference"),
-          tags$img(src = result$image3, alt = "Difference Image", style = "width: 100%; padding: 10px; border: 1px solid #ccc;")
+          shiny::tags$h3("Difference"),
+          shiny::tags$img(src = result$image3, alt = "Difference Image", style = "width: 100%; padding: 10px; border: 1px solid #ccc;")
         )
       )
     })
