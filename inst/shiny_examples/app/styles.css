@@ -83,3 +83,66 @@ div.diffobj-container.light.rgb span.diffobj-word.ignore span.diffobj-word-highl
     background-color: #ccc;
 }
 
+div.custom-img-diffobj-container {
+    padding: 9.5px;
+    margin: 20px 0 10px;
+    font-size: 1.2em;
+    line-height: 1.42857143;
+    color: #333;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+div.custom-img-diffobj-container > div {
+    background-color: #eeeeee;
+    border-left: 1px solid #888888;
+}
+
+.custom-img-diffobj-image {
+    background-color: #fff;
+}
+
+.custom-img-diffobj-image span {
+
+
+}
+
+.custom-img-diffobj-image span:nth-child(1) {
+    padding: 0 0.2em;
+}
+
+.custom-img-diffobj-image span:nth-child(2) {
+    font-weight: 700;
+}
+
+.custom-img-diffobj-image.custom-img-diffobj-image-1 {
+    background-color: #ffefef;
+}
+
+.custom-img-diffobj-image.custom-img-diffobj-image-2 {
+    background-color: #efffef;
+}
+
+.custom-img-diffobj-image.custom-img-diffobj-image-1 span:nth-child(1) {
+    background-color: #f8c2c2;
+}
+
+.custom-img-diffobj-image.custom-img-diffobj-image-2 span:nth-child(1) {
+    background-color: #a6f3a6;
+}
+
+.custom-img-diffobj-image.custom-img-diffobj-image-3 span:nth-child(1) {
+    background-color: #ddd;
+}
+
+.custom-img-diffobj-image span:nth-child(1) {
+    font-weight: 700;
+    margin-left: 5px;
+}
+
+.custom-img-diffobj-image-display {
+    margin-left: 13px;
+    background-color: #eeeeee;
+    border-left: 1px solid #888888;
+}

@@ -325,21 +325,40 @@ update_details_comparison <- function(input, output, session, config, row, row_i
       )
 
       shiny::tags$div(
-        style = "text-align: center; padding-top: 20px;",
+        style = "padding: 9.5px; display: flex;",
+        class = "custom-img-diffobj-container",
         shiny::tags$div(
-          style = "display: inline-block; width: 30%; margin: 5px;",
-          shiny::tags$h3("Image 1"),
-          shiny::tags$img(src = result$image1, alt = "Image1", style = "width: 100%; padding: 10px; border: 1px solid #ccc;")
+          style = "display: inline-block; flex: 0 0 33.3333%;",
+          shiny::tags$div(
+            class = "custom-img-diffobj-image custom-img-diffobj-image-1",
+            shiny::tags$span("Image version 1")
+          ),
+          shiny::tags$div(
+            class = "custom-img-diffobj-image-display",
+            shiny::tags$img(src = result$image1, alt = "Image1", style = "width: 100%;")
+          )
         ),
         shiny::tags$div(
-          style = "display: inline-block; width: 30%; margin: 5px;",
-          shiny::tags$h3("Image 2"),
-          shiny::tags$img(src = result$image2, alt = "Image2", style = "width: 100%; padding: 10px; border: 1px solid #ccc;")
+          style = "display: inline-block; flex: 0 0 33.3333%;",
+          shiny::tags$div(
+            class = "custom-img-diffobj-image custom-img-diffobj-image-2",
+            shiny::tags$span("Image version 2")
+          ),
+          shiny::tags$div(
+            class = "custom-img-diffobj-image-display",
+            shiny::tags$img(src = result$image2, alt = "Image2", style = "width: 100%;")
+          )
         ),
         shiny::tags$div(
-          style = "display: inline-block; width: 30%; margin: 5px;",
-          shiny::tags$h3("Difference"),
-          shiny::tags$img(src = result$image3, alt = "Difference Image", style = "width: 100%; padding: 10px; border: 1px solid #ccc;")
+          style = "display: inline-block; flex: 0 0 33.3333%;",
+          shiny::tags$div(
+            class = "custom-img-diffobj-image custom-img-diffobj-image-3",
+            shiny::tags$span("Image difference")
+          ),
+          shiny::tags$div(
+            class = "custom-img-diffobj-image-display",
+            shiny::tags$img(src = result$image3, alt = "Difference Image", style = "width: 100%;")
+          )
         )
       )
     })
