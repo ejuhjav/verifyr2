@@ -20,7 +20,9 @@ setClass(
   contains = "BinaryFileComparator",
   slots = list(
     file1 = "ANY",
-    file2 = "ANY"
+    file2 = "ANY",
+    image1_raw = "ANY",
+    image2_raw = "ANY"
   )
 )
 
@@ -39,11 +41,11 @@ setClass(
 #' @keywords internal
 
 setMethod("vrf_details_inner", "ImgFileComparator", function(comparator, file1, file2, omit, options) {
-  #if (is.null(comparator@image1_raw) || is.null(comparator@image2_raw)) {
+  if (is.null(comparator@image1_raw) || is.null(comparator@image2_raw)) {
     return(vrf_details_inner_from_files(comparator, file1, file2))
-  #}
+  }
 
-  #return(vrf_details_inner_from_bin(comparator, comparator@image1_raw, comparator@image2_raw))
+  return(vrf_details_inner_from_bin(comparator, comparator@image1_raw, comparator@image2_raw))
 })
 
 #' Method for comparing the inner part for the details query with the file names
@@ -83,8 +85,8 @@ vrf_details_inner_from_images <- function(comparator, image1, image2) {
   image1_raw <- magick::image_write(image1, format = "png")
   image2_raw <- magick::image_write(image2, format = "png")
 
-  #comparator@image1_raw <- image1_raw
-  #comparator@image2_raw <- image2_raw
+  comparator@image1_raw <- image1_raw
+  comparator@image2_raw <- image2_raw
 
   return(vrf_details_inner_from_bin(comparator, image1_raw, image2_raw))
 }
