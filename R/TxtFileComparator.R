@@ -109,8 +109,7 @@ setMethod("vrf_details_inner", "TxtFileComparator", function(comparator, file1, 
     type = "text",
     contents = diff_print
   )
-
-  return(result)
+  return(list(result))
 })
 
 

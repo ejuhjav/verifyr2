@@ -107,7 +107,7 @@ setMethod("vrf_details_inner", "BinaryFileComparator", function(comparator, file
     type = "text",
     contents = "Binary file without applicable comparator; unable to compare details"
   )
-  return(result)
+  return(list(result))
 })
 
 #' Method for getting the single file contents for the comparison. The method

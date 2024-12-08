@@ -202,7 +202,7 @@ setMethod("vrf_details", "FileComparator", function(comparator, file1 = NULL, fi
       type = "text",
       contents = "File(s) not available; unable to compare"
     )
-    return(result)
+    return(list(result))
   }
 
   tryCatch({
@@ -212,7 +212,7 @@ setMethod("vrf_details", "FileComparator", function(comparator, file1 = NULL, fi
       type = "text",
       contents = paste0("Error reading file contents: ", conditionMessage(e))
     )
-    return(result)
+    return(list(result))
   })
 })
 

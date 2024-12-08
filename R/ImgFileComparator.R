@@ -68,5 +68,5 @@ setMethod("vrf_details_inner", "ImgFileComparator", function(comparator, file1, 
       image3 = paste0("data:image/png;base64,", image_diff_base64)
     )
   )
-  return(result)
+  return(list(result))
 })

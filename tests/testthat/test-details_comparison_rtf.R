@@ -14,7 +14,7 @@ test_that(paste(
 
   options    <- list("rtf" = list("mode" = "raw"))
   comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_details(comparator, options = options)
+  result     <- vrf_details(comparator, options = options)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(result$contents, "File(s) not available; unable to compare")
@@ -29,7 +29,7 @@ test_that(paste(
 
   options    <- list("rtf" = list("mode" = "content"))
   comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_details(comparator, options = options)
+  result     <- vrf_details(comparator, options = options)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(result$contents, "File(s) not available; unable to compare")
@@ -48,7 +48,7 @@ test_that(paste(
 
   options    <- list("rtf" = list("mode" = "content"))
   comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_details(comparator, options = options)
+  result     <- vrf_details(comparator, options = options)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
@@ -63,7 +63,7 @@ test_that(paste(
 
   options    <- list("rtf" = list("mode" = "content"))
   comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_details(comparator, options = options)
+  result     <- vrf_details(comparator, options = options)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
@@ -78,7 +78,7 @@ test_that(paste(
 
   options    <- list("rtf" = list("mode" = "raw"))
   comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_details(comparator, options = options)
+  result     <- vrf_details(comparator, options = options)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
