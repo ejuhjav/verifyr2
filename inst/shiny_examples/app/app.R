@@ -306,7 +306,7 @@ update_details_comparison <- function(input, output, session, config, row, row_i
     }
   )
 
-  for (instance in details) { 
+  for (instance in details) {
     if ("text" == instance$type) {
       set_visibility("details_tabs", TRUE)
       output$details_out_generic <- shiny::renderUI({
