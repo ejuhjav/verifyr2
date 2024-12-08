@@ -15,7 +15,8 @@ test_that(paste(
   comparator <- vrf_comparator(file1, file2)
   result     <- vrf_details(comparator)
 
-  expect_equal(result, "File(s) not available; unable to compare")
+  expect_equal(result$type, "text")
+  expect_equal(result$contents, "File(s) not available; unable to compare")
 })
 
 test_that(paste(
@@ -28,7 +29,8 @@ test_that(paste(
   comparator <- vrf_comparator(file1, file2)
   result     <- vrf_details(comparator)
 
-  expect_equal(result, "File(s) not available; unable to compare")
+  expect_equal(result$type, "text")
+  expect_equal(result$contents, "File(s) not available; unable to compare")
 })
 
 ################################################################################
@@ -43,12 +45,14 @@ test_that(paste(
 
   comparator <- vrf_comparator(file1, file2)
   result     <- vrf_details(comparator)
+  contents   <- result$contents
 
-  expect_equal(typeof(result), "list")
-  expect_equal(names(result), c("image1", "image2", "image3"))
-  expect_equal(result$image1, result$image2)
-  expect_false(isTRUE(all.equal(result$image1, result$image3)))
-  expect_false(isTRUE(all.equal(result$image2, result$image3)))
+  expect_equal(result$type, "image")
+  expect_equal(typeof(contents), "list")
+  expect_equal(names(contents), c("image1", "image2", "image3"))
+  expect_equal(contents$image1, contents$image2)
+  expect_false(isTRUE(all.equal(contents$image1, contents$image3)))
+  expect_false(isTRUE(all.equal(contents$image2, contents$image3)))
 })
 
 test_that(paste(
@@ -59,10 +63,12 @@ test_that(paste(
 
   comparator <- vrf_comparator(file1, file2)
   result     <- vrf_details(comparator)
+  contents   <- result$contents
 
-  expect_equal(typeof(result), "list")
-  expect_equal(names(result), c("image1", "image2", "image3"))
-  expect_false(isTRUE(all.equal(result$image1, result$image2)))
-  expect_false(isTRUE(all.equal(result$image1, result$image3)))
-  expect_false(isTRUE(all.equal(result$image2, result$image3)))
+  expect_equal(result$type, "image")
+  expect_equal(typeof(contents), "list")
+  expect_equal(names(contents), c("image1", "image2", "image3"))
+  expect_false(isTRUE(all.equal(contents$image1, contents$image2)))
+  expect_false(isTRUE(all.equal(contents$image1, contents$image3)))
+  expect_false(isTRUE(all.equal(contents$image2, contents$image3)))
 })

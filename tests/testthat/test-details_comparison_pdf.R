@@ -15,7 +15,8 @@ test_that(paste(
   comparator <- vrf_comparator(file1, file2)
   result     <- vrf_details(comparator)
 
-  expect_equal(result, "File(s) not available; unable to compare")
+  expect_equal(result$type, "text")
+  expect_equal(result$contents, "File(s) not available; unable to compare")
 })
 
 test_that(paste(
@@ -28,7 +29,8 @@ test_that(paste(
   comparator <- vrf_comparator(file1, file2)
   result     <- vrf_details(comparator)
 
-  expect_equal(result, "File(s) not available; unable to compare")
+  expect_equal(result$type, "text")
+  expect_equal(result$contents, "File(s) not available; unable to compare")
 })
 
 ################################################################################
@@ -44,7 +46,8 @@ test_that(paste(
   comparator <- vrf_comparator(file1, file2)
   result     <- vrf_details(comparator)
 
-  expect_equal(typeof(result), "S4")
+  expect_equal(result$type, "text")
+  expect_equal(typeof(result$contents), "S4")
 })
 
 test_that(paste(
@@ -56,5 +59,6 @@ test_that(paste(
   comparator <- vrf_comparator(file1, file2)
   result     <- vrf_details(comparator)
 
-  expect_equal(typeof(result), "S4")
+  expect_equal(result$type, "text")
+  expect_equal(typeof(result$contents), "S4")
 })

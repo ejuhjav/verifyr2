@@ -42,6 +42,30 @@ setClass("RtfFileComparator",
 #' @keywords internal
 
 setMethod("vrf_contents", "RtfFileComparator", function(comparator, file, omit, options) {
+
+  rtf_content <- readLines(file, warn = FALSE)
+  rtf_content <- paste(rtf_content, collapse = "\n")
+
+  # regexp for finding the png pictures from the raw RTF content.
+  base64_pattern <- "\\\\pict\\\\pngblip[^{]+([A-Za-z0-9+/=]+)"
+  base64_strings <- stringr::str_extract_all(rtf_content, base64_pattern)[[1]]
+
+  if (length(base64_strings) > 0) {
+    # extract the encoded image string between the start and end tags
+    split_parts <- strsplit(base64_strings[1], " ")[[1]]
+    base64_data_with_braces <- split_parts[2]
+    base64_data <- strsplit(base64_data_with_braces, "}")[[1]][1]
+
+    if (!is.na(base64_data) && nchar(base64_data) > 0) {
+      bin_data <- hex2raw(base64_data)
+      image <- magick::image_read(bin_data)
+
+      # Save the image as a PNG file - for testing, to be removed later on.
+      output_file <- "output_image.png"
+      magick::image_write(image, output_file)
+    }
+  }
+
   if ("raw" == get_nested(options, "rtf", "mode")) {
     return(callNextMethod(comparator, file, omit, options))
   } else {
@@ -49,3 +73,18 @@ setMethod("vrf_contents", "RtfFileComparator", function(comparator, file, omit, 
     return(vrf_contents_inner(comparator, contents, omit, options))
   }
 })
+
+hex2raw <- function(hex) {
+  hex <- gsub("[^0-9a-fA-F]", "", hex)
+  if (length(hex) == 1) {
+    if (nchar(hex) < 2 || nchar(hex) %% 2 != 0) {
+      stop("hex is not a valid hexadecimal representation")
+    }
+    hex <- strsplit(hex, character(0))[[1]]
+    hex <- paste(hex[c(TRUE, FALSE)], hex[c(FALSE, TRUE)], sep = "")
+  }
+  if (!all(vapply(X = hex, FUN = nchar, FUN.VALUE = integer(1)) == 2)) {
+    stop("hex is not a valid hexadecimal representation")
+  }
+  as.raw(as.hexmode(hex))
+}

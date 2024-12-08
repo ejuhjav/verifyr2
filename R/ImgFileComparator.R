@@ -60,7 +60,13 @@ setMethod("vrf_details_inner", "ImgFileComparator", function(comparator, file1, 
   image_diff_raw <- magick::image_write(highlighted_diff, format = "png")
   image_diff_base64 <- base64enc::base64encode(image_diff_raw)
 
-  return(list(image1 = paste0("data:image/png;base64,", image1_base64),
-              image2 = paste0("data:image/png;base64,", image2_base64),
-              image3 = paste0("data:image/png;base64,", image_diff_base64)))
+  result <- list(
+    type = "image",
+    contents = list(
+      image1 = paste0("data:image/png;base64,", image1_base64),
+      image2 = paste0("data:image/png;base64,", image2_base64),
+      image3 = paste0("data:image/png;base64,", image_diff_base64)
+    )
+  )
+  return(result)
 })

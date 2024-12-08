@@ -93,15 +93,24 @@ setMethod("vrf_details_inner", "TxtFileComparator", function(comparator, file1, 
     my_finalizer(x, x.chr, omit)
   }
 
-  style <- diffobj::StyleHtmlLightRgb(html.output = "diff.w.style",
-                                      finalizer = my_equalizer_with_omit)
+  style <- diffobj::StyleHtmlLightRgb(
+    html.output = "diff.w.style",
+    finalizer = my_equalizer_with_omit
+  )
 
-  diff_print <- diffobj::diffPrint(file1_contents_whole,
-                                   file2_contents_whole,
-                                   context = context,
-                                   style = style)
+  diff_print <- diffobj::diffPrint(
+    file1_contents_whole,
+    file2_contents_whole,
+    context = context,
+    style = style
+  )
 
-  return(diff_print)
+  result <- list(
+    type = "text",
+    contents = diff_print
+  )
+
+  return(result)
 })
 
 

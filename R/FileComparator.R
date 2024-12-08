@@ -198,13 +198,21 @@ setMethod("vrf_details", "FileComparator", function(comparator, file1 = NULL, fi
   file2 <- ifelse(!is.null(file2), file2, comparator@file2)
 
   if (!file.exists(file1) || !file.exists(file2)) {
-    return("File(s) not available; unable to compare")
+    result <- list(
+      type = "text",
+      contents = "File(s) not available; unable to compare"
+    )
+    return(result)
   }
 
   tryCatch({
     vrf_details_inner(comparator, file1, file2, omit, options)
   }, error = function(e) {
-    return(paste0("Error reading file contents: ", conditionMessage(e)))
+    result <- list(
+      type = "text",
+      contents = paste0("Error reading file contents: ", conditionMessage(e))
+    )
+    return(result)
   })
 })
 

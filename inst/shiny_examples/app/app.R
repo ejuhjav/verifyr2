@@ -272,7 +272,7 @@ update_details_comparison <- function(input, output, session, config, row, row_i
                 shiny::incProgress(1)
                 store_details(as.character(row_index), "full", details)
               }
-              details
+              details$content
             }
           )
         )
@@ -299,7 +299,7 @@ update_details_comparison <- function(input, output, session, config, row, row_i
                 shiny::incProgress(1)
                 store_details(as.character(row_index), "summary", details)
               }
-              details
+              details$contents
             }
           )
         )
@@ -324,6 +324,8 @@ update_details_comparison <- function(input, output, session, config, row, row_i
         options = options3
       )
 
+      contents <- result$contents
+
       shiny::tags$div(
         style = "padding: 9.5px; display: flex;",
         class = "custom-img-diffobj-container",
@@ -335,7 +337,7 @@ update_details_comparison <- function(input, output, session, config, row, row_i
           ),
           shiny::tags$div(
             class = "custom-img-diffobj-image-display",
-            shiny::tags$img(src = result$image1, alt = "Image1", style = "width: 100%;")
+            shiny::tags$img(src = contents$image1, alt = "Image1", style = "width: 100%;")
           )
         ),
         shiny::tags$div(
@@ -346,7 +348,7 @@ update_details_comparison <- function(input, output, session, config, row, row_i
           ),
           shiny::tags$div(
             class = "custom-img-diffobj-image-display",
-            shiny::tags$img(src = result$image2, alt = "Image2", style = "width: 100%;")
+            shiny::tags$img(src = contents$image2, alt = "Image2", style = "width: 100%;")
           )
         ),
         shiny::tags$div(
@@ -357,7 +359,7 @@ update_details_comparison <- function(input, output, session, config, row, row_i
           ),
           shiny::tags$div(
             class = "custom-img-diffobj-image-display",
-            shiny::tags$img(src = result$image3, alt = "Difference Image", style = "width: 100%;")
+            shiny::tags$img(src = contents$image3, alt = "Difference Image", style = "width: 100%;")
           )
         )
       )
