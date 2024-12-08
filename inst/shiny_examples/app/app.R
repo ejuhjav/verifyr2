@@ -272,7 +272,7 @@ update_details_comparison <- function(input, output, session, config, row, row_i
                 shiny::incProgress(1)
                 store_details(as.character(row_index), "full", details)
               }
-              details$content
+              details[[1]]$content
             }
           )
         )
@@ -299,7 +299,7 @@ update_details_comparison <- function(input, output, session, config, row, row_i
                 shiny::incProgress(1)
                 store_details(as.character(row_index), "summary", details)
               }
-              details$contents
+              details[[1]]$contents
             }
           )
         )
@@ -324,7 +324,7 @@ update_details_comparison <- function(input, output, session, config, row, row_i
         options = options3
       )
 
-      contents <- result$contents
+      contents <- result[[1]]$contents
 
       shiny::tags$div(
         style = "padding: 9.5px; display: flex;",
