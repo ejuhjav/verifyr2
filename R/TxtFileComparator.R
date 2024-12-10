@@ -60,14 +60,19 @@ setMethod("vrf_summary_inner", "TxtFileComparator", function(comparator, file1, 
     result <- paste0("File content has changes in ", count, " place(s).")
   }
 
+  # Generate additional summary string based on embedded image differences
+  # if applicable.
   if (3 == length(file1_contents_list) && 3 == length(file2_contents_list)) {
     result_images <- "No differences in embedded images."
-    file1_contents_images = file1_contents_list[[3]]
-    file2_contents_images = file2_contents_list[[3]]
+    file1_contents_images <- file1_contents_list[[3]]
+    file2_contents_images <- file2_contents_list[[3]]
 
     if (length(file1_contents_images) != length(file2_contents_images)) {
+      # Number of found embedded images differs between the files.
       result_images <- "Different amount of embedded images."
     } else {
+      # Number of found embedded images is the same; calculate how many of the embedded
+      # images has changed (based on raw file data) compared to total count.
       matches <- 0
       total <- length(file1_contents_images)
 
@@ -136,23 +141,24 @@ setMethod("vrf_details_inner", "TxtFileComparator", function(comparator, file1, 
     )
   )
 
+  # Append the possible extended images into the result list if applicable.
+  # List of images is included in the fileX_contents_lists if found from
+  # content getter.
   if (3 == length(file1_contents_list) && 3 == length(file2_contents_list)) {
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-    file1_contents_images = file1_contents_list[[3]]
-    file2_contents_images = file2_contents_list[[3]]
+    file1_contents_images <- file1_contents_list[[3]]
+    file2_contents_images <- file2_contents_list[[3]]
 
-    print(length(file1_contents_images))
-    print(length(file2_contents_images))
-
+    # Only display the differences if there is the same amount of images found
+    # from the compared files. Otherwise it would require additional logic to
+    # decide which files should be compared with each others (which is something
+    # that could be developed further with size etc comparisons).
     if (length(file1_contents_images) == length(file2_contents_images)) {
-      print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
       for (index in 1:length(file1_contents_images)) {
-        print("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
-        #print(file1_contents_list[3])
-
+        # Manually create a ImgFileComparator instance for every embedded image
+        # found and call the details comparison based on existing bin data.
         comparator <- new("ImgFileComparator")
         result <- append(result, vrf_details_inner_from_bin(
-          comparator,                                                        
+          comparator,
           file1_contents_images[[index]],
           file2_contents_images[[index]]
         ))

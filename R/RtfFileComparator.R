@@ -52,7 +52,7 @@ setMethod("vrf_contents", "RtfFileComparator", function(comparator, file, omit, 
   # In raw mode we call directly the TxtFileComparator implementation of the vrf_contents
   if ("raw" == get_nested(options, "rtf", "mode")) {
     return(callNextMethod(comparator, file, omit, options))
-  } 
+  }
 
   # In content mode, we get the rtf text contents and the possible embedded images
   # 1. Read the RTF file contents
