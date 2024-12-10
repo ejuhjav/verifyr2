@@ -73,20 +73,23 @@ setMethod("vrf_contents", "RtfFileComparator", function(comparator, file, omit, 
     base64_data <- strsplit(base64_data_with_braces, "}")[[1]][1]
 
     if (!is.na(base64_data) && nchar(base64_data) > 0) {
-      bin_data <- hex2bin(base64_data)
-      result <- append(result, list(bin_data))
+      if (2 == length(result)) {
+        result[[3]] <- list()
+      }
+      raw_data <- hex2raw(base64_data)
+      result[[3]] <- c(result[[3]], list(raw_data))
     }
   }
   return(result)
 })
 
-#' Internal helper method for converting a hex string to raw binary vector.
+#' Internal helper method for converting a hex string to raw vector.
 #'
-#' @param hex_string hexadecimal string to be converted to raw binary vector
+#' @param hex_string hexadecimal string to be converted to raw vector
 #'
 #' @keywords internal
 
-hex2bin <- function(hex_string) {
+hex2raw <- function(hex_string) {
   # Remove non-hex characters
   hex_string <- gsub("[^0-9a-fA-F]", "", hex_string)
 

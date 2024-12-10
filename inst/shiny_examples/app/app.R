@@ -351,45 +351,49 @@ update_details_comparison <- function(input, output, session, config, row, row_i
       #})
       #set_visibility("details_tabs", FALSE)
 
-      output$details_out_generic <- shiny::renderUI({
+      details_out_generic_addition <- shiny::tags$div(
+        style = "padding: 9.5px; display: flex;",
+        class = "custom-img-diffobj-container",
         shiny::tags$div(
-          style = "padding: 9.5px; display: flex;",
-          class = "custom-img-diffobj-container",
+          style = "display: inline-block; flex: 0 0 33.3333%;",
           shiny::tags$div(
-            style = "display: inline-block; flex: 0 0 33.3333%;",
-            shiny::tags$div(
-              class = "custom-img-diffobj-image custom-img-diffobj-image-1",
-              shiny::tags$span("Image version 1")
-            ),
-            shiny::tags$div(
-              class = "custom-img-diffobj-image-display",
-              shiny::tags$img(src = instance_data$content$image1, alt = "Image1", style = "width: 100%;")
-            )
+            class = "custom-img-diffobj-image custom-img-diffobj-image-1",
+            shiny::tags$span("Image version 1")
           ),
           shiny::tags$div(
-            style = "display: inline-block; flex: 0 0 33.3333%;",
-            shiny::tags$div(
-              class = "custom-img-diffobj-image custom-img-diffobj-image-2",
-              shiny::tags$span("Image version 2")
-            ),
-            shiny::tags$div(
-              class = "custom-img-diffobj-image-display",
-              shiny::tags$img(src = instance_data$content$image2, alt = "Image2", style = "width: 100%;")
-            )
+            class = "custom-img-diffobj-image-display",
+            shiny::tags$img(src = instance_data$content$image1, alt = "Image1", style = "width: 100%;")
+          )
+        ),
+        shiny::tags$div(
+          style = "display: inline-block; flex: 0 0 33.3333%;",
+          shiny::tags$div(
+            class = "custom-img-diffobj-image custom-img-diffobj-image-2",
+            shiny::tags$span("Image version 2")
           ),
           shiny::tags$div(
-            style = "display: inline-block; flex: 0 0 33.3333%;",
-            shiny::tags$div(
-              class = "custom-img-diffobj-image custom-img-diffobj-image-3",
-              shiny::tags$span("Image difference")
-            ),
-            shiny::tags$div(
-              class = "custom-img-diffobj-image-display",
-              shiny::tags$img(src = instance_data$content$image3, alt = "Difference Image", style = "width: 100%;")
-            )
+            class = "custom-img-diffobj-image-display",
+            shiny::tags$img(src = instance_data$content$image2, alt = "Image2", style = "width: 100%;")
+          )
+        ),
+        shiny::tags$div(
+          style = "display: inline-block; flex: 0 0 33.3333%;",
+          shiny::tags$div(
+            class = "custom-img-diffobj-image custom-img-diffobj-image-3",
+            shiny::tags$span("Image difference")
+          ),
+          shiny::tags$div(
+            class = "custom-img-diffobj-image-display",
+            shiny::tags$img(src = instance_data$content$image3, alt = "Difference Image", style = "width: 100%;")
           )
         )
-      })
+      )
+
+      insertUI(
+        selector = "#details_out_generic",
+        where = "beforeEnd",
+        ui = details_out_generic_addition
+      )
     }
   })
 }

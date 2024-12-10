@@ -62,8 +62,8 @@ setMethod("vrf_summary_inner", "TxtFileComparator", function(comparator, file1, 
 
   if (3 == length(file1_contents_list) && 3 == length(file2_contents_list)) {
     result_images <- "No differences in embedded images."
-    file1_contents_images = file1_contents_list[3]
-    file2_contents_images = file2_contents_list[3]
+    file1_contents_images = file1_contents_list[[3]]
+    file2_contents_images = file2_contents_list[[3]]
 
     if (length(file1_contents_images) != length(file2_contents_images)) {
       result_images <- "Different amount of embedded images."
@@ -138,13 +138,17 @@ setMethod("vrf_details_inner", "TxtFileComparator", function(comparator, file1, 
 
   if (3 == length(file1_contents_list) && 3 == length(file2_contents_list)) {
     print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-    file1_contents_images = file1_contents_list[3]
-    file2_contents_images = file2_contents_list[3]
+    file1_contents_images = file1_contents_list[[3]]
+    file2_contents_images = file2_contents_list[[3]]
+
+    print(length(file1_contents_images))
+    print(length(file2_contents_images))
 
     if (length(file1_contents_images) == length(file2_contents_images)) {
       print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
       for (index in 1:length(file1_contents_images)) {
         print("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
+        #print(file1_contents_list[3])
 
         comparator <- new("ImgFileComparator")
         result <- append(result, vrf_details_inner_from_bin(
@@ -152,7 +156,6 @@ setMethod("vrf_details_inner", "TxtFileComparator", function(comparator, file1, 
           file1_contents_images[[index]],
           file2_contents_images[[index]]
         ))
-        print(length(result))
       }
     }
   }
