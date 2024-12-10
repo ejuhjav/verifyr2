@@ -179,7 +179,6 @@ details_container <- function() {
         ),
       ),
     ),
-    shiny::htmlOutput("details_out_generic"),
     shiny::tabsetPanel(id = "details_tabs",
       shiny::tabPanel("Summary contents", value = "tabs_details_summary",
         shiny::htmlOutput("details_out_summary"),
@@ -188,6 +187,7 @@ details_container <- function() {
         shiny::htmlOutput("details_out_full"),
       ),
     ),
+    shiny::htmlOutput("details_out_generic"),
     shiny::textOutput("details_text_output"),
     shiny::fluidRow(
       id = "comparison_comments_container",
@@ -306,18 +306,23 @@ update_details_comparison <- function(input, output, session, config, row, row_i
     }
   )
 
-  for (instance in details) {
-    if ("text" == instance$type) {
-      set_visibility("details_tabs", TRUE)
-      output$details_out_generic <- shiny::renderUI({
-        shiny::HTML("")
-      })
+  lapply(seq_along(details), function(index) {
+    instance_data <- details[[index]]
+
+    if ("text" == instance_data$type) {
+      print("------------------")
+      print("------------------")
+      print("------------------")
+      #set_visibility("details_tabs", TRUE)
+      #output$details_out_generic <- shiny::renderUI({
+        #shiny::HTML("")
+      #})
 
       if ("full" == current_mode()) {
         output$details_out_full <- shiny::renderUI({
           shiny::HTML(
             as.character(
-              instance$content
+              instance_data$content
             )
           )
         })
@@ -325,25 +330,28 @@ update_details_comparison <- function(input, output, session, config, row, row_i
         output$details_out_summary <- shiny::renderUI({
           shiny::HTML(
             as.character(
-              instance$content
+              instance_data$content
             )
           )
         })
       }
     }
 
-    if ("image" == instance$type) {
-      output$details_out_summary <- shiny::renderUI({
-        shiny::HTML("")
-      })
-      output$details_out_full <- shiny::renderUI({
-        shiny::HTML("")
-      })
-      set_visibility("details_tabs", FALSE)
+    if ("image" == instance_data$type) {
+      print("............................")
+      print("............................")
+      print("............................")
+      print("............................")
+      print("............................")
+      #output$details_out_summary <- shiny::renderUI({
+        #shiny::HTML("")
+      #})
+      #output$details_out_full <- shiny::renderUI({
+        #shiny::HTML("")
+      #})
+      #set_visibility("details_tabs", FALSE)
 
       output$details_out_generic <- shiny::renderUI({
-        contents <- instance$contents
-
         shiny::tags$div(
           style = "padding: 9.5px; display: flex;",
           class = "custom-img-diffobj-container",
@@ -355,7 +363,7 @@ update_details_comparison <- function(input, output, session, config, row, row_i
             ),
             shiny::tags$div(
               class = "custom-img-diffobj-image-display",
-              shiny::tags$img(src = contents$image1, alt = "Image1", style = "width: 100%;")
+              shiny::tags$img(src = instance_data$content$image1, alt = "Image1", style = "width: 100%;")
             )
           ),
           shiny::tags$div(
@@ -366,7 +374,7 @@ update_details_comparison <- function(input, output, session, config, row, row_i
             ),
             shiny::tags$div(
               class = "custom-img-diffobj-image-display",
-              shiny::tags$img(src = contents$image2, alt = "Image2", style = "width: 100%;")
+              shiny::tags$img(src = instance_data$content$image2, alt = "Image2", style = "width: 100%;")
             )
           ),
           shiny::tags$div(
@@ -377,13 +385,13 @@ update_details_comparison <- function(input, output, session, config, row, row_i
             ),
             shiny::tags$div(
               class = "custom-img-diffobj-image-display",
-              shiny::tags$img(src = contents$image3, alt = "Difference Image", style = "width: 100%;")
+              shiny::tags$img(src = instance_data$content$image3, alt = "Difference Image", style = "width: 100%;")
             )
           )
         )
       })
     }
-  }
+  })
 }
 
 update_folder_selections <- function(input, session, roots) {

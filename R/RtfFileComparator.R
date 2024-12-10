@@ -16,9 +16,15 @@
 #'
 #' @export
 
-setClass("RtfFileComparator",
-         contains = "TxtFileComparator",
-         slots = list(file1 = "ANY", file2 = "ANY"))
+setClass(
+  "RtfFileComparator",
+  contains = "TxtFileComparator",
+  slots = list(
+    file1 = "ANY",
+    file2 = "ANY",
+    child_comparators = "ANY"
+  )
+)
 
 #' Method for getting the single file contents for the comparison. The method
 #' returns the file contents in two separate vectors inside a list. The first
@@ -43,6 +49,17 @@ setClass("RtfFileComparator",
 
 setMethod("vrf_contents", "RtfFileComparator", function(comparator, file, omit, options) {
 
+  # In raw mode we call directly the TxtFileComparator implementation of the vrf_contents
+  if ("raw" == get_nested(options, "rtf", "mode")) {
+    return(callNextMethod(comparator, file, omit, options))
+  } 
+
+  # In content mode, we get the rtf text contents and the possible embedded images
+  # 1. Read the RTF file contents
+  contents <- striprtf::read_rtf(file = file)
+  result   <- vrf_contents_inner(comparator, contents, omit, options)
+
+  # 2. Read the RTF file embedded images
   rtf_content <- readLines(file, warn = FALSE)
   rtf_content <- paste(rtf_content, collapse = "\n")
 
@@ -51,40 +68,39 @@ setMethod("vrf_contents", "RtfFileComparator", function(comparator, file, omit, 
   base64_strings <- stringr::str_extract_all(rtf_content, base64_pattern)[[1]]
 
   if (length(base64_strings) > 0) {
-    # extract the encoded image string between the start and end tags
     split_parts <- strsplit(base64_strings[1], " ")[[1]]
     base64_data_with_braces <- split_parts[2]
     base64_data <- strsplit(base64_data_with_braces, "}")[[1]][1]
 
     if (!is.na(base64_data) && nchar(base64_data) > 0) {
-      bin_data <- hex2raw(base64_data)
-      image <- magick::image_read(bin_data)
-
-      # Save the image as a PNG file - for testing, to be removed later on.
-      output_file <- "output_image.png"
-      magick::image_write(image, output_file)
+      bin_data <- hex2bin(base64_data)
+      result <- append(result, list(bin_data))
     }
   }
-
-  if ("raw" == get_nested(options, "rtf", "mode")) {
-    return(callNextMethod(comparator, file, omit, options))
-  } else {
-    contents <- striprtf::read_rtf(file = file)
-    return(vrf_contents_inner(comparator, contents, omit, options))
-  }
+  return(result)
 })
 
-hex2raw <- function(hex) {
-  hex <- gsub("[^0-9a-fA-F]", "", hex)
-  if (length(hex) == 1) {
-    if (nchar(hex) < 2 || nchar(hex) %% 2 != 0) {
-      stop("hex is not a valid hexadecimal representation")
-    }
-    hex <- strsplit(hex, character(0))[[1]]
-    hex <- paste(hex[c(TRUE, FALSE)], hex[c(FALSE, TRUE)], sep = "")
+#' Internal helper method for converting a hex string to raw binary vector.
+#'
+#' @param hex_string hexadecimal string to be converted to raw binary vector
+#'
+#' @keywords internal
+
+hex2bin <- function(hex_string) {
+  # Remove non-hex characters
+  hex_string <- gsub("[^0-9a-fA-F]", "", hex_string)
+
+  # check that the input string is a hex string
+  if (nchar(hex_string) %% 2 != 0 || nchar(hex_string) < 2) {
+    stop("input string isn't a hex string")
   }
-  if (!all(vapply(X = hex, FUN = nchar, FUN.VALUE = integer(1)) == 2)) {
-    stop("hex is not a valid hexadecimal representation")
-  }
-  as.raw(as.hexmode(hex))
+
+  # Generate start and end indices
+  start_indices <- seq(1, nchar(hex_string), 2)
+  end_indices <- seq(2, nchar(hex_string), 2)
+
+  # Extract byte-sized chunks
+  bytes <- substring(hex_string, start_indices, end_indices)
+
+  as.raw(as.hexmode(bytes))
 }

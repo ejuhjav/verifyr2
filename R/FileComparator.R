@@ -175,11 +175,11 @@ setMethod("vrf_summary", "FileComparator", function(comparator, file1 = NULL, fi
     return("File(s) not available; unable to compare")
   }
 
-  tryCatch({
+  #tryCatch({
     vrf_summary_inner(comparator, file1, file2, omit, options)
-  }, error = function(e) {
-    return(paste0("Error reading file contents: ", conditionMessage(e)))
-  })
+  #}, error = function(e) {
+    #return(paste0("Error reading file contents: ", conditionMessage(e)))
+  #})
 })
 
 #' Method for comparing the file details with the given comparator instance.

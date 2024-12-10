@@ -104,7 +104,15 @@ vrf_details_inner_from_images <- function(comparator, image1, image2) {
 #'
 #' @keywords internal
 
-vrf_details_inner_from_bin <- function(comparator, image1_raw, image2_raw) {
+setGeneric(
+  "vrf_details_inner_from_bin",
+  function(comparator, image1_raw, image2_raw) {
+    standardGeneric("vrf_details_inner_from_bin")
+  }
+)
+
+#vrf_details_inner_from_bin <- function(comparator, image1_raw, image2_raw) {
+setMethod("vrf_details_inner_from_bin", "ImgFileComparator", function(comparator, image1_raw, image2_raw) {
   image3_base64 <- NULL
 
   if (!identical(image1_raw, image2_raw)) {
@@ -130,4 +138,4 @@ vrf_details_inner_from_bin <- function(comparator, image1_raw, image2_raw) {
   )
 
   return(list(result))
-}
+})

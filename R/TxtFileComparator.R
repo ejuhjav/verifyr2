@@ -41,25 +41,49 @@ setMethod("vrf_summary_inner", "TxtFileComparator", function(comparator, file1, 
   file1_contents_omit <- file1_contents_list[[2]]
   file2_contents_omit <- file2_contents_list[[2]]
 
-  difference <- all.equal(file1_contents_omit, file2_contents_omit)
-  result     <- "File content comparison failed!"
-  pattern    <- "Lengths \\((\\d+), (\\d+)\\) differ \\(string compare on first"
+  difference    <- all.equal(file1_contents_omit, file2_contents_omit)
+  result        <- "File content comparison failed!"
+  result_images <- ""
+  pattern       <- "Lengths \\((\\d+), (\\d+)\\) differ \\(string compare on first"
 
   if (typeof(difference) == "logical") {
     # all.equal returns logical vector if there are no differences
-    result <- "No differences"
+    result <- "No differences."
   } else if (length(difference) >= 1 && grepl(pattern, difference[1])) {
     # all.equal returns length 1/2 vector with first element comtaining text
     #  matching the pattern
-    result <- "Different number of lines in compared content"
+    result <- "Different number of lines in compared content."
   } else if (length(difference) == 1) {
     # all.equal returns length 1 vector if the number of rows are the same but
     # there are differences
     count  <- as.numeric(gsub("[^[:digit:].]", "", difference))
-    result <- paste0("File content has changes in ", count, " place(s)")
+    result <- paste0("File content has changes in ", count, " place(s).")
   }
 
-  return(result)
+  if (3 == length(file1_contents_list) && 3 == length(file2_contents_list)) {
+    result_images <- "No differences in embedded images."
+    file1_contents_images = file1_contents_list[3]
+    file2_contents_images = file2_contents_list[3]
+
+    if (length(file1_contents_images) != length(file2_contents_images)) {
+      result_images <- "Different amount of embedded images."
+    } else {
+      matches <- 0
+      total <- length(file1_contents_images)
+
+      for (index in 1:length(file1_contents_images)) {
+        if (identical(file1_contents_images[[index]], file2_contents_images[[index]])) {
+          matches <- matches + 1
+        }
+      }
+
+      if (matches != length(file1_contents_images)) {
+        result_images <- paste0(total - matches, "/", total, " embedded images have differences.")
+      }
+    }
+  }
+
+  return(paste0(result, " ", result_images))
 })
 
 #' Method for comparing the inner part for the details query. This method can
@@ -106,10 +130,34 @@ setMethod("vrf_details_inner", "TxtFileComparator", function(comparator, file1, 
   )
 
   result <- list(
-    type = "text",
-    contents = diff_print
+    list(
+      type = "text",
+      contents = diff_print
+    )
   )
-  return(list(result))
+
+  if (3 == length(file1_contents_list) && 3 == length(file2_contents_list)) {
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    file1_contents_images = file1_contents_list[3]
+    file2_contents_images = file2_contents_list[3]
+
+    if (length(file1_contents_images) == length(file2_contents_images)) {
+      print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+      for (index in 1:length(file1_contents_images)) {
+        print("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
+
+        comparator <- new("ImgFileComparator")
+        result <- append(result, vrf_details_inner_from_bin(
+          comparator,                                                        
+          file1_contents_images[[index]],
+          file2_contents_images[[index]]
+        ))
+        print(length(result))
+      }
+    }
+  }
+
+  return(result)
 })
 
 
