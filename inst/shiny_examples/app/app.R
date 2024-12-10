@@ -286,6 +286,10 @@ update_details_comparison <- function(input, output, session, config, row, row_i
   options <- config$configuration
   options$details$mode <- current_mode()
 
+  output$details_out_generic <- shiny::renderUI({
+    shiny::HTML("")
+  })
+
   shiny::withProgress(
     message = "Processing comparison details...",
     value = 0,
