@@ -41,13 +41,21 @@ setClass(
   "FileComparator",
   slots = list(
     file1 = "ANY",
-    file2 = "ANY"
+    file2 = "ANY",
+    .file1_contents_list = "ANY",
+    .file2_contents_list = "ANY",
+    .summary_comparison = "ANY",
+    .details_comparison = "ANY"
   )
 )
 
 setMethod("initialize", signature = "FileComparator", definition = function(.Object, file1 = NULL, file2 = NULL) {
   .Object@file1 <- file1
   .Object@file2 <- file2
+  .Object@.file1_contents_list <- NULL
+  .Object@.file2_contents_list <- NULL
+  .Object@.summary_comparison <- NULL
+  .Object@.details_comparison <- NULL
   .Object
 })
 
@@ -121,15 +129,6 @@ setGeneric("vrf_summary", function(comparator, file1 = NULL, file2 = NULL, omit 
 
 setGeneric("vrf_details", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL) standardGeneric("vrf_details"))
 
-#' Generic for getting information whether the comparator supports both summary
-#' and full details comparisons.
-#'
-#' @param comparator comparator instance used for the comparison
-#'
-#' @export
-
-setGeneric("vrf_supports_summary_and_full", function(comparator) standardGeneric("vrf_supports_summary_and_full"))
-
 #' Generic for comparing the inner part for the summary query. This method can
 #' be overwritten by more specialized comparator classes. This method is
 #' intended to be called only by the comparator classes in the processing and
@@ -174,6 +173,10 @@ setGeneric("vrf_details_inner", function(comparator, file1, file2, omit, options
 #' @param options    additional comparator parameters
 
 setMethod("vrf_summary", "FileComparator", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL) {
+  if (!is.null(comparator@.summary_comparison)) {
+    return(comparator@.summary_comparison)
+  }
+
   file1 <- ifelse(!is.null(file1), file1, comparator@file1)
   file2 <- ifelse(!is.null(file2), file2, comparator@file2)
 
@@ -182,10 +185,13 @@ setMethod("vrf_summary", "FileComparator", function(comparator, file1 = NULL, fi
   }
 
   tryCatch({
-    vrf_summary_inner(comparator, file1, file2, omit, options)
+    result <- vrf_summary_inner(comparator, file1, file2, omit, options)
   }, error = function(e) {
-    return(paste0("Error reading file contents: ", conditionMessage(e)))
+    result <- paste0("Error reading file contents: ", conditionMessage(e))
   })
+
+  comparator@.summary_comparison <- result
+  return(result)
 })
 
 #' Method for comparing the file details with the given comparator instance.
@@ -200,36 +206,35 @@ setMethod("vrf_summary", "FileComparator", function(comparator, file1 = NULL, fi
 #' @param options    additional comparator parameters
 
 setMethod("vrf_details", "FileComparator", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL) {
+  if (!is.null(comparator@.details_comparison)) {
+    return(comparator@.details_comparison)
+  }
+
   file1 <- ifelse(!is.null(file1), file1, comparator@file1)
   file2 <- ifelse(!is.null(file2), file2, comparator@file2)
 
   if (!file.exists(file1) || !file.exists(file2)) {
     result <- list(
-      type = "text",
-      contents = "File(s) not available; unable to compare."
+      list(
+        type = "text",
+        contents = "File(s) not available; unable to compare."
+      )
     )
-    return(list(result))
+  } else {
+    tryCatch({
+      result <- vrf_details_inner(comparator, file1, file2, omit, options)
+    }, error = function(e) {
+      result <- list(
+        list(
+          type = "text",
+          contents = paste0("Error reading file contents: ", conditionMessage(e))
+        )
+      )
+    })
   }
 
-  tryCatch({
-    vrf_details_inner(comparator, file1, file2, omit, options)
-  }, error = function(e) {
-    result <- list(
-      type = "text",
-      contents = paste0("Error reading file contents: ", conditionMessage(e))
-    )
-    return(list(result))
-  })
-})
-
-#' Method for getting information whether the comparator supports both summary
-#' and full details comparisons. This method can be overwritten by
-#' more specialized comparator classes.
-#'
-#' @param comparator comparator instance used for the comparison
-
-setMethod("vrf_supports_summary_and_full", "FileComparator", function(comparator) {
-  return(TRUE)
+  comparator@.details_comparison <- result
+  return(result)
 })
 
 #' Factory method for creating comparator instance based on the given two files.

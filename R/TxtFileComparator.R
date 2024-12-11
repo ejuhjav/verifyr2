@@ -40,8 +40,18 @@ setClass(
 
 setMethod("vrf_summary_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options) {
 
-  file1_contents_list <- vrf_contents(comparator, file1, omit, options)
-  file2_contents_list <- vrf_contents(comparator, file2, omit, options)
+  file1_contents_list <- comparator@.file1_contents_list
+  file2_contents_list <- comparator@.file2_contents_list
+
+  if (is.null(file1_contents_list)) {
+    file1_contents_list <- vrf_contents(comparator, file1, omit, options)
+    comparator@.file1_contents_list <- file1_contents_list
+  }
+
+  if (is.null(file2_contents_list)) {
+    file2_contents_list <- vrf_contents(comparator, file2, omit, options)
+    comparator@.file2_contents_list <- file2_contents_list
+  }
 
   file1_contents_omit <- file1_contents_list[[2]]
   file2_contents_omit <- file2_contents_list[[2]]
@@ -113,8 +123,18 @@ setMethod("vrf_summary_inner", "TxtFileComparator", function(comparator, file1, 
 
 setMethod("vrf_details_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options) {
 
-  file1_contents_list <- vrf_contents(comparator, file1, omit, options)
-  file2_contents_list <- vrf_contents(comparator, file2, omit, options)
+  file1_contents_list <- comparator@.file1_contents_list
+  file2_contents_list <- comparator@.file2_contents_list
+
+  if (is.null(file1_contents_list)) {
+    file1_contents_list <- vrf_contents(comparator, file1, omit, options)
+    comparator@.file1_contents_list <- file1_contents_list
+  }
+
+  if (is.null(file2_contents_list)) {
+    file2_contents_list <- vrf_contents(comparator, file2, omit, options)
+    comparator@.file2_contents_list <- file2_contents_list
+  }
 
   file1_contents_whole <- file1_contents_list[[1]]
   file2_contents_whole <- file2_contents_list[[1]]
