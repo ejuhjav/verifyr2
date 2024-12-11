@@ -7,7 +7,7 @@
 dt_file_list <- NULL
 
 # executed details comparison values for quick access
-dt_details_list <- list()
+dt_comparators_list <- list()
 
 # currently selected datatable row index
 row_index <- NULL
@@ -269,14 +269,21 @@ update_download_links <- function(output, row, file1_link, file2_link) {
   }
 }
 
-# helper method for storing details comparison into global list
-store_details <- function(row_index, mode, details) {
-  if ("NA" == verifyr2::get_nested(dt_details_list, row_index)) {
-    dt_details_list[[row_index]] <- list()
+# Helper method for getting the comparator related to specific row index
+# or creating a new comparator instance if one is not found from local
+# storage.
+get_comparator <- function(row_index, file1, file2) {
+  row_index_str <- as.character(row_index)
+
+  if (row_index_str %in% names(dt_comparators_list)) {
+    return(dt_comparators_list[[row_index_str]])
   }
 
-  dt_details_list[[row_index]][[mode]] <- details
-  dt_details_list <<- dt_details_list
+  comparator <- verifyr2::vrf_comparator(file1, file2)
+  dt_comparators_list[[row_index_str]] <- comparator
+  dt_comparators_list <<- dt_comparators_list
+
+  return(comparator)
 }
 
 update_details_comparison <- function(input, output, session, config, row, row_index) {
@@ -294,19 +301,14 @@ update_details_comparison <- function(input, output, session, config, row, row_i
     message = "Processing comparison details...",
     value = 0,
     {
-      comparator <- verifyr2::vrf_comparator(file1, file2)
-      details <- verifyr2::get_nested(dt_details_list, as.character(row_index), current_mode())
+      comparator <- get_comparator(row_index, file1, file2)
+      details <- verifyr2::vrf_details(
+        comparator,
+        omit = input$omit_rows,
+        options = options
+      )
 
-      if (is.character(details) && "NA" == details) {
-        details <- verifyr2::vrf_details(
-          comparator,
-          omit = input$omit_rows,
-          options = options
-        )
-
-        shiny::incProgress(1)
-        store_details(as.character(row_index), current_mode(), details)
-      }
+      shiny::incProgress(1)
     }
   )
 
@@ -543,7 +545,7 @@ server <- function(input, output, session) {
   # ============================================================================
 
   list_of_files <- shiny::eventReactive(input$go, {
-    dt_details_list <<- list()
+    dt_comparators_list <<- list()
 
     if (input$compare_tabs == "tabs_folder") {
       if (file.exists(input$folder1) && file.exists(input$folder2)) {
@@ -715,15 +717,16 @@ server <- function(input, output, session) {
           dplyr::mutate(
             comparison = purrr::pmap_chr(
               .l = list(
-                file1   = dt_file_list$file1,
-                file2   = dt_file_list$file2,
-                omitted = dt_file_list$omitted
+                file1     = dt_file_list$file1,
+                file2     = dt_file_list$file2,
+                omitted   = dt_file_list$omitted,
+                row_index = seq_along(dt_file_list$file1)
               ),
-              .f = function(file1, file2, omitted) {
-
+              .f = function(file1, file2, omitted, row_index) {
                 # Process a single row
+                comparator <- get_comparator(row_index, file1, file2)
                 result <- verifyr2::vrf_summary(
-                  verifyr2::vrf_comparator(file1, file2),
+                  comparator,
                   omit    = omitted,
                   options = config$configuration
                 )
