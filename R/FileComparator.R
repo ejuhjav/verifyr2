@@ -172,7 +172,7 @@ setMethod("vrf_summary", "FileComparator", function(comparator, file1 = NULL, fi
   file2 <- ifelse(!is.null(file2), file2, comparator@file2)
 
   if (!file.exists(file1) || !file.exists(file2)) {
-    return("File(s) not available; unable to compare")
+    return("File(s) not available; unable to compare.")
   }
 
   tryCatch({
@@ -200,7 +200,7 @@ setMethod("vrf_details", "FileComparator", function(comparator, file1 = NULL, fi
   if (!file.exists(file1) || !file.exists(file2)) {
     result <- list(
       type = "text",
-      contents = "File(s) not available; unable to compare"
+      contents = "File(s) not available; unable to compare."
     )
     return(list(result))
   }

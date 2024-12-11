@@ -6,7 +6,7 @@ base <- "test_outputs/rtf"
 ################################################################################
 
 test_that(paste(
-  "Returns 'File(s) not available; unable to compare'",
+  "Returns 'File(s) not available; unable to compare.'",
   "if both of the files do not exist (raw mode)"
 ), {
   file1 <- testthat::test_path(base, "nonexisting1.rtf")
@@ -17,11 +17,11 @@ test_that(paste(
   result     <- vrf_details(comparator, options = options)[[1]]
 
   expect_equal(result$type, "text")
-  expect_equal(result$contents, "File(s) not available; unable to compare")
+  expect_equal(result$contents, "File(s) not available; unable to compare.")
 })
 
 test_that(paste(
-  "Returns 'File(s) not available; unable to compare'",
+  "Returns 'File(s) not available; unable to compare.'",
   "if one file does not exist (content mode)"
 ), {
   file1 <- testthat::test_path(base, "base.rtf")
@@ -32,7 +32,7 @@ test_that(paste(
   result     <- vrf_details(comparator, options = options)[[1]]
 
   expect_equal(result$type, "text")
-  expect_equal(result$contents, "File(s) not available; unable to compare")
+  expect_equal(result$contents, "File(s) not available; unable to compare.")
 })
 
 ################################################################################

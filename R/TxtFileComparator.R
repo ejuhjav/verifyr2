@@ -86,9 +86,10 @@ setMethod("vrf_summary_inner", "TxtFileComparator", function(comparator, file1, 
         result_images <- paste0(total - matches, "/", total, " embedded images have differences.")
       }
     }
+    result <- paste0(result, " ", result_images)
   }
 
-  return(paste0(result, " ", result_images))
+  return(result)
 })
 
 #' Method for comparing the inner part for the details query. This method can

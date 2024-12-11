@@ -6,7 +6,7 @@ base <- "test_outputs/pdf"
 ################################################################################
 
 test_that(paste(
-  "Returns 'File(s) not available; unable to compare' ",
+  "Returns 'File(s) not available; unable to compare.' ",
   "if both of the files do not exist"
 ), {
   file1 <- testthat::test_path(base, "nonexisting1.pdf")
@@ -16,11 +16,11 @@ test_that(paste(
   result     <- vrf_details(comparator)[[1]]
 
   expect_equal(result$type, "text")
-  expect_equal(result$contents, "File(s) not available; unable to compare")
+  expect_equal(result$contents, "File(s) not available; unable to compare.")
 })
 
 test_that(paste(
-  "Returns 'File(s) not available; unable to compare' ",
+  "Returns 'File(s) not available; unable to compare.' ",
   "if one file does not exist"
 ), {
   file1 <- testthat::test_path(base, "base.pdf")
@@ -30,7 +30,7 @@ test_that(paste(
   result     <- vrf_details(comparator)[[1]]
 
   expect_equal(result$type, "text")
-  expect_equal(result$contents, "File(s) not available; unable to compare")
+  expect_equal(result$contents, "File(s) not available; unable to compare.")
 })
 
 ################################################################################
@@ -38,7 +38,7 @@ test_that(paste(
 ################################################################################
 
 test_that(paste(
-  "Returns S4 comparison object for two files with same content"
+  "Returns S4 comparison object for two files with same content."
 ), {
   file1 <- testthat::test_path(base, "base.pdf")
   file2 <- testthat::test_path(base, "copy.pdf")

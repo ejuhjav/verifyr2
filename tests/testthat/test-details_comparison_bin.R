@@ -6,7 +6,7 @@ base <- "test_outputs/bin"
 ################################################################################
 
 test_that(paste(
-  "'File(s) not available; unable to compare' ",
+  "'File(s) not available; unable to compare.' ",
   "returned if both of the files do not exist"
 ), {
   file1 <- testthat::test_path(base, "nonexisting1.bin")
@@ -16,11 +16,11 @@ test_that(paste(
   result     <- vrf_details(comparator)[[1]]
 
   expect_equal(result$type, "text")
-  expect_equal(result$contents, "File(s) not available; unable to compare")
+  expect_equal(result$contents, "File(s) not available; unable to compare.")
 })
 
 test_that(paste(
-  "'File(s) not available; unable to compare' ",
+  "'File(s) not available; unable to compare.' ",
   "returned if one file does not exist"
 ), {
   file1 <- testthat::test_path(base, "base.bin")
@@ -30,7 +30,7 @@ test_that(paste(
   result     <- vrf_details(comparator)[[1]]
 
   expect_equal(result$type, "text")
-  expect_equal(result$contents, "File(s) not available; unable to compare")
+  expect_equal(result$contents, "File(s) not available; unable to compare.")
 })
 
 ################################################################################
@@ -38,7 +38,7 @@ test_that(paste(
 ################################################################################
 
 test_that(paste(
-  "'Binary file without applicable comparator; unable to compare details' ",
+  "'Binary file without applicable comparator; unable to compare details.' ",
   "returned for binary files details comparison"
 ), {
   file1 <- testthat::test_path(base, "base.bin")
@@ -49,6 +49,6 @@ test_that(paste(
 
   expect_equal(result$type, "text")
   expect_equal(result$contents, paste(
-    "Binary file without applicable comparator; unable to compare details"
+    "Binary file without applicable comparator; unable to compare details."
   ))
 })

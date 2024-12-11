@@ -72,7 +72,7 @@ setMethod("vrf_summary_inner", "BinaryFileComparator", function(comparator, file
   file_info2 <- file.info(file2)
 
   if (file_info1$size != file_info2$size) {
-    return("Different file sizes for compared files")
+    return("Different file sizes for compared files.")
   }
 
   file1_contents_list <- vrf_contents(comparator, file1, omit, options)
@@ -82,10 +82,10 @@ setMethod("vrf_summary_inner", "BinaryFileComparator", function(comparator, file
   file2_contents_omit <- file2_contents_list[[2]]
 
   if (!identical(file1_contents_omit, file2_contents_omit)) {
-    return("Different content in compared files")
+    return("Different content in compared files.")
   }
 
-  return("No differences")
+  return("No differences.")
 })
 
 #' Method for comparing the inner part for the details query. This method can be
@@ -105,7 +105,7 @@ setMethod("vrf_summary_inner", "BinaryFileComparator", function(comparator, file
 setMethod("vrf_details_inner", "BinaryFileComparator", function(comparator, file1, file2, omit, options) {
   result <- list(
     type = "text",
-    contents = "Binary file without applicable comparator; unable to compare details"
+    contents = "Binary file without applicable comparator; unable to compare details."
   )
   return(list(result))
 })
