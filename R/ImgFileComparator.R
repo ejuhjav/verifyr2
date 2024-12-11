@@ -48,49 +48,6 @@ setMethod("vrf_details_inner", "ImgFileComparator", function(comparator, file1, 
   return(vrf_details_inner_from_bin(comparator, comparator@image1_raw, comparator@image2_raw))
 })
 
-#' Method for comparing the inner part for the details query with the file names
-#' as the base arguments. This is a part of a group of image processing functions
-#' that work with different image abstractions (file, image, raw image). These
-#' methods are intended to improve the performance so that best suiting method
-#' version can be used depending on what data is available from the earlier
-#' method calls to the same comparator instance.
-#'
-#' @param comparator comparator instance used for the comparison
-#' @param file1      first file to compare
-#' @param file2      second file to compare
-#'
-#' @keywords internal
-
-vrf_details_inner_from_files <- function(comparator, file1, file2) {
-  image1 <- magick::image_read(file1)
-  image2 <- magick::image_read(file2)
-
-  return(vrf_details_inner_from_images(comparator, image1, image2))
-}
-
-#' Method for comparing the inner part for the details query with the image instances
-#' as the base arguments. This is a part of a group of image processing functions
-#' that work with different image abstractions (file, image, raw image). These
-#' methods are intended to improve the performance so that best suiting method
-#' version can be used depending on what data is available from the earlier
-#' method calls to the same comparator instance.
-#'
-#' @param comparator comparator instance used for the comparison
-#' @param image1     first image object (created with magick) to compare
-#' @param image2     second image object (created with magick) to compare
-#'
-#' @keywords internal
-
-vrf_details_inner_from_images <- function(comparator, image1, image2) {
-  image1_raw <- magick::image_write(image1, format = "png")
-  image2_raw <- magick::image_write(image2, format = "png")
-
-  comparator@image1_raw <- image1_raw
-  comparator@image2_raw <- image2_raw
-
-  return(vrf_details_inner_from_bin(comparator, image1_raw, image2_raw))
-}
-
 #' Method for comparing the inner part for the details query with the raw images
 #' as the base arguments. This is a part of a group of image processing functions
 #' that work with different image abstractions (file, image, raw image). These
@@ -139,3 +96,46 @@ setMethod("vrf_details_inner_from_bin", "ImgFileComparator", function(comparator
 
   return(list(result))
 })
+
+#' Method for comparing the inner part for the details query with the file names
+#' as the base arguments. This is a part of a group of image processing functions
+#' that work with different image abstractions (file, image, raw image). These
+#' methods are intended to improve the performance so that best suiting method
+#' version can be used depending on what data is available from the earlier
+#' method calls to the same comparator instance.
+#'
+#' @param comparator comparator instance used for the comparison
+#' @param file1      first file to compare
+#' @param file2      second file to compare
+#'
+#' @keywords internal
+
+vrf_details_inner_from_files <- function(comparator, file1, file2) {
+  image1 <- magick::image_read(file1)
+  image2 <- magick::image_read(file2)
+
+  return(vrf_details_inner_from_images(comparator, image1, image2))
+}
+
+#' Method for comparing the inner part for the details query with the image instances
+#' as the base arguments. This is a part of a group of image processing functions
+#' that work with different image abstractions (file, image, raw image). These
+#' methods are intended to improve the performance so that best suiting method
+#' version can be used depending on what data is available from the earlier
+#' method calls to the same comparator instance.
+#'
+#' @param comparator comparator instance used for the comparison
+#' @param image1     first image object (created with magick) to compare
+#' @param image2     second image object (created with magick) to compare
+#'
+#' @keywords internal
+
+vrf_details_inner_from_images <- function(comparator, image1, image2) {
+  image1_raw <- magick::image_write(image1, format = "png")
+  image2_raw <- magick::image_write(image2, format = "png")
+
+  comparator@image1_raw <- image1_raw
+  comparator@image2_raw <- image2_raw
+
+  return(vrf_details_inner_from_bin(comparator, image1_raw, image2_raw))
+}

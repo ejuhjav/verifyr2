@@ -21,8 +21,7 @@ setClass(
   contains = "TxtFileComparator",
   slots = list(
     file1 = "ANY",
-    file2 = "ANY",
-    child_comparators = "ANY"
+    file2 = "ANY"
   )
 )
 

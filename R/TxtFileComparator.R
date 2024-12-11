@@ -15,9 +15,14 @@
 #'
 #' @export
 
-setClass("TxtFileComparator",
-         contains = "BinaryFileComparator",
-         slots = list(file1 = "ANY", file2 = "ANY"))
+setClass(
+  "TxtFileComparator",
+  contains = "BinaryFileComparator",
+  slots = list(
+    file1 = "ANY",
+    file2 = "ANY"
+  )
+)
 
 #' Method for comparing the inner part for the details query. This method can be
 #' overwritten by more specialized comparator classes. This method is intended
@@ -191,9 +196,11 @@ setMethod("vrf_contents_inner", "TxtFileComparator", function(comparator, conten
   contents_omit <- contents
 
   if (!is.null(omit) && "" != paste0(omit)) {
-    contents_omit <- stringr::str_subset(string = contents,
-                                         pattern = paste0(omit),
-                                         negate = TRUE)
+    contents_omit <- stringr::str_subset(
+      string = contents,
+      pattern = paste0(omit),
+      negate = TRUE
+    )
   }
 
   return(list(contents, contents_omit))
@@ -222,46 +229,66 @@ my_finalizer <- function(x, x.chr, omit) {
         row <- split[[i]]
 
         # modifying maching row markup
-        row <- gsub("class='diffobj-match'",
-                    "class='ignore'",
-                    row)
+        row <- gsub(
+          "class='diffobj-match'",
+          "class='ignore'",
+          row
+        )
 
-        row <- gsub("<div class='diffobj-gutter'><div class='ignore'>&nbsp;",
-                    "<div class='diffobj-gutter'><div class='ignore'>x",
-                    row)
+        row <- gsub(
+          "<div class='diffobj-gutter'><div class='ignore'>&nbsp;",
+          "<div class='diffobj-gutter'><div class='ignore'>x",
+          row
+        )
 
         # modifying inserted row markup
-        row <- gsub("class='insert'",
-                    "class='ignore'",
-                    row)
+        row <- gsub(
+          "class='insert'",
+          "class='ignore'",
+          row
+        )
 
-        row <- gsub("class='diffobj-word insert'",
-                    "class='diffobj-word ignore'",
-                    row)
+        row <- gsub(
+          "class='diffobj-word insert'",
+          "class='diffobj-word ignore'",
+          row
+        )
 
-        row <- gsub("<div class='diffobj-gutter'><div class='ignore'>&gt;",
-                    "<div class='diffobj-gutter'><div class='ignore'>X",
-                    row)
+        row <- gsub(
+          "<div class='diffobj-gutter'><div class='ignore'>&gt;",
+          "<div class='diffobj-gutter'><div class='ignore'>X",
+          row
+        )
 
         # modifying deleted row markup
-        row <- gsub("class='delete'",
-                    "class='ignore'",
-                    row)
+        row <- gsub(
+          "class='delete'",
+          "class='ignore'",
+          row
+        )
 
-        row <- gsub("class='diffobj-word delete'",
-                    "class='diffobj-word ignore'",
-                    row)
+        row <- gsub(
+          "class='diffobj-word delete'",
+          "class='diffobj-word ignore'",
+          row
+        )
 
-        row <- gsub("<div class='diffobj-gutter'><div class='ignore'>&lt;",
-                    "<div class='diffobj-gutter'><div class='ignore'>X",
-                    row)
+        row <- gsub(
+          "<div class='diffobj-gutter'><div class='ignore'>&lt;",
+          "<div class='diffobj-gutter'><div class='ignore'>X",
+          row
+        )
 
         # highlight the ommitted part
-        row <- gsub(omit,
-                    paste0("<span class='diffobj-word-highlight ignore'>",
-                           omit,
-                           "</span>"),
-                    row)
+        row <- gsub(
+          omit,
+          paste0(
+            "<span class='diffobj-word-highlight ignore'>",
+            omit,
+            "</span>"
+          ),
+          row
+        )
 
         split[[i]] <- row
       }

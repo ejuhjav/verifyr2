@@ -37,7 +37,13 @@
 #' verifyr2::vrf_summary(comparator, file3, file4)
 #' verifyr2::vrf_summary(comparator, file5, file6)
 
-setClass("FileComparator", slots = list(file1 = "ANY", file2 = "ANY"))
+setClass(
+  "FileComparator",
+  slots = list(
+    file1 = "ANY",
+    file2 = "ANY"
+  )
+)
 
 setMethod("initialize", signature = "FileComparator", definition = function(.Object, file1 = NULL, file2 = NULL) {
   .Object@file1 <- file1
