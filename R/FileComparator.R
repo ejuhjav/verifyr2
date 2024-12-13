@@ -6,6 +6,14 @@
 #' comparator automatically for the compared files.
 #'
 #' @importFrom methods new isClass
+#'
+#' @field file1               local property for storing file1
+#' @field file2               local property for storing file2
+#' @field file1_contents_list local property for storing extracted file1 contents
+#' @field file2_contents_list local property for storing extracted file2 contents
+#' @field summary_comparison  local property for storing summary comparison result
+#' @field details_comparison  local property for storing details comparison result
+#'
 #' @examples
 #'
 #' # instantiating the compared files
@@ -36,268 +44,120 @@
 #' verifyr2::vrf_summary(comparator, file1, file2)
 #' verifyr2::vrf_summary(comparator, file3, file4)
 #' verifyr2::vrf_summary(comparator, file5, file6)
-
-setClass(
+#'
+#' @export
+#'
+FileComparator <- R6Class(
   "FileComparator",
-  slots = list(
-    file1 = "ANY",
-    file2 = "ANY",
-    .file1_contents_list = "ANY",
-    .file2_contents_list = "ANY",
-    .summary_comparison = "ANY",
-    .details_comparison = "ANY"
+  public <- list(
+    file1 = NULL,
+    file2 = NULL,
+    file1_contents_list = NULL,
+    file2_contents_list = NULL,
+    summary_comparison  = NULL,
+    details_comparison  = NULL,
+
+    #' @description
+    #' Initialize a FileComparator instance
+    #'
+    #' @param file1 First file to compare.
+    #' @param file2 Second file to compare.
+    #'
+    initialize = function(file1 = NULL, file2 = NULL) {
+      self$file1 <- file1
+      self$file2 <- file2
+    },
+
+    #' @description
+    #' Method for comparing the file summary information. This method is intended
+    #' to be implemented only this class level. For comparator specific rules,
+    #' the internal method vrf_summary_inner should be customized on lower
+    #' levels instead.
+    #'
+    #' @param omit    string pattern to omit from the comparison (default = NULL)
+    #' @param options additional comparator parameters
+    #'
+    vrf_summary = function(omit = NULL, options = NULL) {
+      if (!is.null(self$summary_comparison)) {
+        return(self$summary_comparison)
+      }
+
+      if (!file.exists(self$file1) || !file.exists(self$file2)) {
+        result <- "File(s) not available; unable to compare."
+      }
+
+      tryCatch({
+        result <- self$vrf_summary_inner(omit, options)
+      }, error = function(e) {
+        result <- paste0("Error reading file contents: ", conditionMessage(e))
+      })
+
+      self$summary_comparison <- result
+      return(result)
+    },
+
+    #' @description
+    #' Method for comparing the file details information. This method is intended
+    #' to be implemented only this class level. For comparator specific rules,
+    #' the internal method vrf_summary_inner should be customized on lower
+    #' levels instead.
+    #'
+    #' @param omit    string pattern to omit from the comparison (default = NULL)
+    #' @param options additional comparator parameters
+    #'
+    vrf_details = function(omit = NULL, options = NULL) {
+      if (!is.null(self$details_comparison)) {
+        return(self$details_comparison)
+      }
+
+      if (!file.exists(self$file1) || !file.exists(self$file2)) {
+        result <- list(
+          list(
+            type = "text",
+            contents = "File(s) not available; unable to compare."
+          )
+        )
+      } else {
+        tryCatch({
+          result <- self$vrf_details_inner(omit, options)
+        }, error = function(e) {
+          result <- list(
+            list(
+              type = "text",
+              contents = paste0("Error reading file contents: ", conditionMessage(e))
+            )
+          )
+        })
+      }
+
+      self$details_comparison <- result
+      return(result)
+    },
+
+    #' @description
+    #' "Abstract" method for comparing the inner part for the summary. This method
+    #' has to be overwritten by more specialized comparator classes. This method is
+    #' intended to be called only by the comparator classes in the processing and
+    #' shouldn't be called directly by the user.
+    #'
+    #' @param omit    string pattern to omit from the comparison (default = NULL)
+    #' @param options additional comparator parameters
+    #'
+    vrf_summary_inner = function(omit, options) {
+      stop("vrf_summary_inner must be implemented in a subclass.")
+    },
+
+    #' @description
+    #' "Abstract" method for comparing the inner part for the detailsThis method
+    #' has to be overwritten by more specialized comparator classes. This method is
+    #' intended to be called only by the comparator classes in the processing and
+    #' shouldn't be called directly by the user.
+    #'
+    #' @param omit    string pattern to omit from the comparison (default = NULL)
+    #' @param options additional comparator parameters
+    #'
+    vrf_details_inner = function(omit, options) {
+      stop("vrf_details_inner must be implemented in a subclass.")
+    }
   )
 )
-
-setMethod("initialize", signature = "FileComparator", definition = function(.Object, file1 = NULL, file2 = NULL) {
-  .Object@file1 <- file1
-  .Object@file2 <- file2
-  .Object@.file1_contents_list <- NULL
-  .Object@.file2_contents_list <- NULL
-  .Object@.summary_comparison <- NULL
-  .Object@.details_comparison <- NULL
-  .Object
-})
-
-#' Generic for comparing the file summary with the given comparator instance.
-#'
-#' @param comparator comparator instance used for the comparison
-#' @param file1      first file to compare. NULL if using same values as for
-#'                   comparison creation
-#' @param file2      second file to compare. NULL if using same values as for
-#'                   comparison creation
-#' @param omit       all lines containing the omit string will be excluded from
-#'                   the comparison (detaulf = NULL)
-#' @param options    additional comparator parameters
-#'
-#' @examples
-#'
-#' # instantiating the compared files
-#' file1 <- paste0(fs::path_package("/extdata/base_files/file1.rtf",
-#'                                  package = "verifyr2"))
-#'
-#' file2 <- paste0(fs::path_package("/extdata/compare_files/file1.rtf",
-#'                                  package = "verifyr2"))
-#'
-#' # invoking method directly with the comparator using the files stored in the
-#' # comparator itself. Note that if the comprator was manually created without
-#' # files, this will return 'no files found'.
-#' comparator <- verifyr2::vrf_comparator(file1, file2)
-#' verifyr2::vrf_summary(comparator)
-#'
-#' # invoking method with explicitly given files when using single comparator
-#' # instance (when handling set of specific file types for example).
-#' comparator <- new("RtfFileComparator")
-#' verifyr2::vrf_summary(comparator, file1 = file1, file2 = file2)
-#'
-#' @export
-
-setGeneric("vrf_summary", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL) standardGeneric("vrf_summary"))
-
-#' Generic for comparing the file details with the given comparator instance.
-#'
-#' @param comparator comparator instance used for the comparison
-#' @param file1      first file to compare. NULL if using same values as for
-#'                   comparison creation
-#' @param file2      second file to compare. NULL if using same values as for
-#'                   comparison creation
-#' @param omit       all lines containing the omit string will be excluded from
-#'                   the comparison (detaulf = NULL)
-#' @param options    additional comparator parameters
-#'
-#' @examples
-#'
-#' # instantiating the compared files
-#' file1 <- paste0(fs::path_package("/extdata/base_files/file1.rtf",
-#'                                  package = "verifyr2"))
-#'
-#' file2 <- paste0(fs::path_package("/extdata/compare_files/file1.rtf",
-#'                                  package = "verifyr2"))
-#'
-#' # invoking method directly with the comparator using the files stored in the
-#' # comparator itself. Note that if the comprator was manually created without
-#' # files, this will return 'no files found'.
-#' comparator <- verifyr2::vrf_comparator(file1, file2)
-#' verifyr2::vrf_details(comparator)
-#'
-#' # invoking method with explicitly given files when using single comparator
-#' # instance (when handling set of specific file types for example).
-#' comparator <- new("RtfFileComparator")
-#' verifyr2::vrf_details(comparator, file1 = file1, file2 = file2)
-#'
-#' @export
-
-setGeneric("vrf_details", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL) standardGeneric("vrf_details"))
-
-#' Generic for comparing the inner part for the summary query. This method can
-#' be overwritten by more specialized comparator classes. This method is
-#' intended to be called only by the comparator classes in the processing and
-#' shouldn't be called directly by the user.
-#'
-#' @param comparator comparator instance used for the comparison
-#' @param file1      first file to compare
-#' @param file2      second file to compare
-#' @param omit       all lines containing the omit string will be excluded from
-#'                   the comparison (detaulf = NULL)
-#' @param options    additional comparator parameters
-#'
-#' @keywords internal
-
-setGeneric("vrf_summary_inner", function(comparator, file1, file2, omit, options) standardGeneric("vrf_summary_inner"))
-
-#' Generic for comparing the inner part for the details query. This method can
-#' be overwritten by more specialized comparator classes. This method is
-#' intended to be called only by the comparator classes in the processing and
-#' shouldn't be called directly by the user.
-#'
-#' @param comparator comparator instance used for the comparison
-#' @param file1      first file to compare
-#' @param file2      second file to compare
-#' @param omit       all lines containing the omit string will be excluded from
-#'                   the comparison (detaulf = NULL)
-#' @param options    additional comparator parameters
-#'
-#' @keywords internal
-
-setGeneric("vrf_details_inner", function(comparator, file1, file2, omit, options) standardGeneric("vrf_details_inner"))
-
-#' Method for comparing the file summary with the given comparator instance.
-#'
-#' @param comparator comparator instance used for the comparison
-#' @param file1      first file to compare. NULL if using same values as for
-#'                   comparison creation
-#' @param file2      second file to compare. NULL if using same values as for
-#'                   comparison creation
-#' @param omit       all lines containing the omit string will be excluded from
-#'                   the comparison (detaulf = NULL)
-#' @param options    additional comparator parameters
-
-setMethod("vrf_summary", "FileComparator", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL) {
-  if (!is.null(comparator@.summary_comparison)) {
-    return(comparator@.summary_comparison)
-  }
-
-  file1 <- ifelse(!is.null(file1), file1, comparator@file1)
-  file2 <- ifelse(!is.null(file2), file2, comparator@file2)
-
-  if (!file.exists(file1) || !file.exists(file2)) {
-    return("File(s) not available; unable to compare.")
-  }
-
-  tryCatch({
-    result <- vrf_summary_inner(comparator, file1, file2, omit, options)
-  }, error = function(e) {
-    result <- paste0("Error reading file contents: ", conditionMessage(e))
-  })
-
-  comparator@.summary_comparison <- result
-  return(result)
-})
-
-#' Method for comparing the file details with the given comparator instance.
-#'
-#' @param comparator comparator instance used for the comparison
-#' @param file1      first file to compare. NULL if using same values as for
-#'                   comparison creation
-#' @param file2      second file to compare. NULL if using same values as for
-#'                   comparison creation
-#' @param omit       all lines containing the omit string will be excluded from
-#'                   the comparison (detaulf = NULL)
-#' @param options    additional comparator parameters
-
-setMethod("vrf_details", "FileComparator", function(comparator, file1 = NULL, file2 = NULL, omit = NULL, options = NULL) {
-  if (!is.null(comparator@.details_comparison)) {
-    return(comparator@.details_comparison)
-  }
-
-  file1 <- ifelse(!is.null(file1), file1, comparator@file1)
-  file2 <- ifelse(!is.null(file2), file2, comparator@file2)
-
-  if (!file.exists(file1) || !file.exists(file2)) {
-    result <- list(
-      list(
-        type = "text",
-        contents = "File(s) not available; unable to compare."
-      )
-    )
-  } else {
-    tryCatch({
-      result <- vrf_details_inner(comparator, file1, file2, omit, options)
-    }, error = function(e) {
-      result <- list(
-        list(
-          type = "text",
-          contents = paste0("Error reading file contents: ", conditionMessage(e))
-        )
-      )
-    })
-  }
-
-  comparator@.details_comparison <- result
-  return(result)
-})
-
-#' Factory method for creating comparator instance based on the given two files.
-#'
-#' @param file1 first file to compare
-#' @param file2 second file to compare
-#'
-#' @examples
-#'
-#' # instantiating the compared files
-#' file1 <- paste0(fs::path_package("/extdata/base_files/file1.rtf",
-#'                                  package = "verifyr2"))
-#'
-#' file2 <- paste0(fs::path_package("/extdata/compare_files/file1.rtf",
-#'                                  package = "verifyr2"))
-#'
-#' file3 <- file1
-#' file4 <- file2
-#'
-#' # instantiating a new comparator instance for every comparison:
-#' verifyr2::vrf_summary(verifyr2::vrf_comparator(file1, file2))
-#' verifyr2::vrf_details(verifyr2::vrf_comparator(file1, file2))
-#'
-#' # instantiating a comparator instance and using that same for both
-#' # comparison of same files
-#' comparator <- verifyr2::vrf_comparator(file1, file2)
-#' verifyr2::vrf_summary(comparator)
-#' verifyr2::vrf_details(comparator)
-#'
-#' # instantiating an explicit comparator manually when comparing files of
-#' # single specific type
-#' comparator <- new("RtfFileComparator")
-#' verifyr2::vrf_summary(comparator, file1, file2)
-#' verifyr2::vrf_summary(comparator, file3, file4)
-#'
-#' @export
-
-vrf_comparator <- function(file1, file2) {
-  if (!file.exists(file1) || !file.exists(file2)) {
-    return(new("BinaryFileComparator", file1 = file1, file2 = file2))
-  }
-
-  file_extension  <- tools::toTitleCase(tools::file_ext(file1))
-
-  if (file_extension %in% list("Jpg", "Jpeg", "Png")) {
-    file_extension <- "Img"
-  }
-
-  comparator_name <- paste0(file_extension, "FileComparator")
-
-  if (isClass(comparator_name)) {
-    # dedicated comparator class used.
-    return(new(comparator_name, file1 = file1, file2 = file2))
-  } else {
-    # generic comparator class used based on the file contents (text/binary).
-    # guess_type returns incorrectly application/octet-string for lst files so
-    # handle those separately
-    mime_type <- mime::guess_type(file1)
-
-    if (startsWith(mime_type, "text/") || grepl(file_extension, c("Lst"))) {
-      return(new("TxtFileComparator", file1 = file1, file2 = file2))
-    } else {
-      return(new("BinaryFileComparator", file1 = file1, file2 = file2))
-    }
-  }
-}

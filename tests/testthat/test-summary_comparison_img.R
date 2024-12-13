@@ -12,8 +12,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "nonexisting1.jpg")
   file2 <- testthat::test_path(base, "nonexisting2.jpg")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -25,8 +25,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.jpeg")
   file2 <- testthat::test_path(base, "nonexisting.jpeg")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -41,8 +41,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.png")
   file2 <- testthat::test_path(base, "copy.png")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "No differences.")
 })
@@ -53,8 +53,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.jpg")
   file2 <- testthat::test_path(base, "modified1.jpg")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "Different file sizes for compared files.")
 })

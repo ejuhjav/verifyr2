@@ -279,7 +279,7 @@ get_comparator <- function(row_index, file1, file2) {
     return(dt_comparators_list[[row_index_str]])
   }
 
-  comparator <- verifyr2::vrf_comparator(file1, file2)
+  comparator <- verifyr2::create_comparator(file1, file2)
   dt_comparators_list[[row_index_str]] <- comparator
   dt_comparators_list <<- dt_comparators_list
 
@@ -293,6 +293,17 @@ update_details_comparison <- function(input, output, session, config, row, row_i
   options <- config$configuration
   options$details$mode <- current_mode()
 
+  # empty and hide the display elements by default before redrawing the contents
+  set_visibility("details_tabs", FALSE)
+
+  output$details_out_summary <- shiny::renderUI({
+    shiny::HTML("")
+  })
+
+  output$details_out_full <- shiny::renderUI({
+    shiny::HTML("")
+  })
+
   output$details_out_generic <- shiny::renderUI({
     shiny::HTML("")
   })
@@ -302,8 +313,7 @@ update_details_comparison <- function(input, output, session, config, row, row_i
     value = 0,
     {
       comparator <- get_comparator(row_index, file1, file2)
-      details <- verifyr2::vrf_details(
-        comparator,
+      details <- comparator$vrf_details(
         omit = input$omit_rows,
         options = options
       )
@@ -316,13 +326,7 @@ update_details_comparison <- function(input, output, session, config, row, row_i
     instance_data <- details[[index]]
 
     if ("text" == instance_data$type) {
-      print("------------------")
-      print("------------------")
-      print("------------------")
-      #set_visibility("details_tabs", TRUE)
-      #output$details_out_generic <- shiny::renderUI({
-        #shiny::HTML("")
-      #})
+      set_visibility("details_tabs", TRUE)
 
       if ("full" == current_mode()) {
         output$details_out_full <- shiny::renderUI({
@@ -344,19 +348,6 @@ update_details_comparison <- function(input, output, session, config, row, row_i
     }
 
     if ("image" == instance_data$type) {
-      print("............................")
-      print("............................")
-      print("............................")
-      print("............................")
-      print("............................")
-      #output$details_out_summary <- shiny::renderUI({
-        #shiny::HTML("")
-      #})
-      #output$details_out_full <- shiny::renderUI({
-        #shiny::HTML("")
-      #})
-      #set_visibility("details_tabs", FALSE)
-
       details_out_generic_addition <- shiny::tags$div(
         style = "padding: 9.5px; display: flex;",
         class = "custom-img-diffobj-container",
@@ -395,7 +386,7 @@ update_details_comparison <- function(input, output, session, config, row, row_i
         )
       )
 
-      insertUI(
+      shiny::insertUI(
         selector = "#details_out_generic",
         where = "beforeEnd",
         ui = details_out_generic_addition
@@ -725,8 +716,7 @@ server <- function(input, output, session) {
               .f = function(file1, file2, omitted, row_index) {
                 # Process a single row
                 comparator <- get_comparator(row_index, file1, file2)
-                result <- verifyr2::vrf_summary(
-                  comparator,
+                result <- comparator$vrf_summary(
                   omit    = omitted,
                   options = config$configuration
                 )

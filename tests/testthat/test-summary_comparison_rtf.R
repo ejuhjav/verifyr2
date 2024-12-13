@@ -14,8 +14,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting2.rtf")
 
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -29,8 +29,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -47,8 +47,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "copy.rtf")
 
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "No differences.")
 })
@@ -62,8 +62,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_one_row_content.rtf")
 
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -77,8 +77,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_one_row_footer.rtf")
 
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -92,8 +92,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "base.rtf")
 
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "File content has changes in 3 place(s).")
 })
@@ -107,8 +107,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "changes_one_row_footer.rtf")
 
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "File content has changes in 1 place(s).")
 })
@@ -122,8 +122,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "base.rtf")
 
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "File content has changes in 4 place(s).")
 })
@@ -137,8 +137,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "changes_two_rows_footer.rtf")
 
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "File content has changes in 2 place(s).")
 })
@@ -156,8 +156,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "copy.rtf")
 
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "Nothing", options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "Nothing", options = options)
 
   expect_equal(result, "No differences.")
 })
@@ -172,8 +172,8 @@ test_that(paste(
 
   omit       <- "Additional Row"
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = omit, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = omit, options = options)
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -188,8 +188,8 @@ test_that(paste(
 
   omit       <- "Additional footer row"
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = omit, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = omit, options = options)
 
   expect_equal(result, "No differences.")
 })
@@ -204,8 +204,8 @@ test_that(paste(
 
   omit       <- "Additional Row"
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = omit, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = omit, options = options)
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -220,8 +220,8 @@ test_that(paste(
 
   omit       <- "Additional Row 1"
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = omit, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = omit, options = options)
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -236,8 +236,8 @@ test_that(paste(
 
   omit       <- "Additional footer row"
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = omit, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = omit, options = options)
 
   expect_equal(result, "No differences.")
 })
@@ -252,8 +252,8 @@ test_that(paste(
 
   omit       <- "Additional footer row 1"
   options    <- list("rtf" = list("mode" = "raw"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = omit, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = omit, options = options)
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -269,8 +269,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "base.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "No differences.")
 })
@@ -283,8 +283,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_one_row_content.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -296,8 +296,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "addition_one_row_content.rtf")
   file2 <- testthat::test_path(base, "base.rtf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -310,8 +310,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_one_row_footer.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "No differences.")
 })
@@ -323,8 +323,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_one_row_footer.rtf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "No differences.")
 })
@@ -337,8 +337,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "base.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "File content has changes in 1 place(s).")
 })
@@ -351,8 +351,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "changes_one_row_footer.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "No differences.")
 })
@@ -365,8 +365,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "base.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "File content has changes in 2 place(s).")
 })
@@ -379,8 +379,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "changes_two_rows_footer.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "No differences.")
 })
@@ -398,8 +398,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "copy.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "Nothing", options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "Nothing", options = options)
 
   expect_equal(result, "No differences.")
 })
@@ -413,8 +413,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "changes_one_row_content.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "setosa", options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "setosa", options = options)
 
   expect_equal(result, "No differences.")
 })
@@ -428,8 +428,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_one_row_content.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "setosa", options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "setosa", options = options)
 
   expect_equal(result, "No differences.")
 })
@@ -443,8 +443,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_two_rows_content.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "unknown", options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "unknown", options = options)
 
   expect_equal(result, "No differences.")
 })
@@ -458,8 +458,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_two_rows_content.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "unknown1", options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "unknown1", options = options)
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -473,8 +473,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "changes_two_rows_content.rtf")
 
   options    <- list("rtf" = list("mode" = "content"))
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "setosa", options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "setosa", options = options)
 
   expect_equal(result, "File content has changes in 1 place(s).")
 })

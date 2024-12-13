@@ -12,8 +12,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "nonexisting1.txt")
   file2 <- testthat::test_path(base, "nonexisting2.txt")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -25,8 +25,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "nonexisting.txt")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -41,8 +41,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "copy.txt")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "No differences.")
 })
@@ -54,8 +54,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "addition_one_row.txt")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -67,8 +67,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "changes_one_row.txt")
   file2 <- testthat::test_path(base, "base.txt")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "File content has changes in 1 place(s).")
 })
@@ -80,8 +80,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "changes_two_rows.txt")
   file2 <- testthat::test_path(base, "base.txt")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "File content has changes in 2 place(s).")
 })
@@ -97,8 +97,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "copy.txt")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "Nothing")
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "Nothing")
 
   expect_equal(result, "No differences.")
 })
@@ -110,8 +110,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "changes_one_row.txt")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "Line 2")
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "Line 2")
 
   expect_equal(result, "No differences.")
 })
@@ -123,8 +123,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "addition_one_row.txt")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "Line 4")
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "Line 4")
 
   expect_equal(result, "No differences.")
 })
@@ -136,8 +136,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "addition_two_rows.txt")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "Line 4")
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "Line 4")
 
   expect_equal(result, "No differences.")
 })
@@ -149,8 +149,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "addition_two_rows.txt")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "Line 41")
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "Line 41")
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -162,8 +162,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "changes_two_rows.txt")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "Line 2")
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "Line 2")
 
   expect_equal(result, "File content has changes in 1 place(s).")
 })

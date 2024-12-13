@@ -10,8 +10,8 @@ test_that(paste(
   file1 <- testthat::test_path("test_outputs/bin/nonexisting1.bin")
   file2 <- testthat::test_path("test_outputs/bin/nonexisting2.bin")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -23,8 +23,8 @@ test_that(paste(
   file1 <- testthat::test_path("test_outputs/bin/base.bin")
   file2 <- testthat::test_path("test_outputs/bin/nonexisting.bin")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -39,8 +39,8 @@ test_that(paste(
   file1 <- testthat::test_path("test_outputs/bin/base.bin")
   file2 <- testthat::test_path("test_outputs/bin/copy.bin")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "No differences.")
 })
@@ -52,8 +52,8 @@ test_that(paste(
   file1 <- testthat::test_path("test_outputs/bin/base.bin")
   file2 <- testthat::test_path("test_outputs/bin/modified.bin")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "Different file sizes for compared files.")
 })
@@ -65,8 +65,8 @@ test_that(paste(
   file1 <- testthat::test_path("test_outputs/bin/base.bin")
   file2 <- testthat::test_path("test_outputs/bin/modified_same_size.bin")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "Different content in compared files.")
 })

@@ -12,8 +12,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "nonexisting1.pdf")
   file2 <- testthat::test_path(base, "nonexisting2.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -25,8 +25,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.pdf")
   file2 <- testthat::test_path(base, "nonexisting.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -42,8 +42,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.pdf")
   file2 <- testthat::test_path(base, "copy.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "No differences.")
 })
@@ -55,8 +55,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "two_pages.pdf")
   file2 <- testthat::test_path(base, "two_pages_copy.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "No differences.")
 })
@@ -69,8 +69,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.pdf")
   file2 <- testthat::test_path(base, "addition_one_row.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -83,8 +83,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "two_pages.pdf")
   file2 <- testthat::test_path(base, "two_pages_addition_one_row.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -97,8 +97,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "changes_one_row.pdf")
   file2 <- testthat::test_path(base, "base.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "File content has changes in 1 place(s).")
 })
@@ -111,8 +111,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "two_pages_changes_one_row.pdf")
   file2 <- testthat::test_path(base, "two_pages.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "File content has changes in 1 place(s).")
 })
@@ -125,8 +125,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "two_pages_changes_two_rows.pdf")
   file2 <- testthat::test_path(base, "two_pages.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "File content has changes in 2 place(s).")
 })
@@ -143,8 +143,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.pdf")
   file2 <- testthat::test_path(base, "copy.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "Nothing")
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "Nothing")
 
   expect_equal(result, "No differences.")
 })
@@ -157,8 +157,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "two_pages.pdf")
   file2 <- testthat::test_path(base, "two_pages_copy.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "Nothing.")
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "Nothing.")
 
   expect_equal(result, "No differences.")
 })
@@ -171,8 +171,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.pdf")
   file2 <- testthat::test_path(base, "changes_one_row.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "simple example pdf")
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "simple example pdf")
 
   expect_equal(result, "No differences.")
 })
@@ -185,8 +185,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "two_pages.pdf")
   file2 <- testthat::test_path(base, "two_pages_changes_one_row.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "two paged example pdf")
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "two paged example pdf")
 
   expect_equal(result, "No differences.")
 })
@@ -199,8 +199,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.pdf")
   file2 <- testthat::test_path(base, "addition_one_row.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "one additional row")
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "one additional row")
 
   expect_equal(result, "No differences.")
 })
@@ -213,8 +213,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "two_pages.pdf")
   file2 <- testthat::test_path(base, "two_pages_addition_one_row.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "additional row")
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "additional row")
 
   expect_equal(result, "No differences.")
 })
@@ -228,8 +228,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_two_rows.pdf")
 
   omit       <- "additional row"
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = omit, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = omit, options = options)
 
   expect_equal(result, "No differences.")
 })
@@ -243,8 +243,8 @@ test_that(paste(
   file2 <- testthat::test_path(base, "two_pages_addition_two_rows.pdf")
 
   omit       <- "additional row"
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = omit, options = options)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = omit, options = options)
 
   expect_equal(result, "No differences.")
 })
@@ -257,8 +257,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.pdf")
   file2 <- testthat::test_path(base, "addition_two_rows.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "one additional row")
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "one additional row")
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -271,8 +271,8 @@ test_that(paste(
   file1 <- testthat::test_path(base, "two_pages.pdf")
   file2 <- testthat::test_path(base, "two_pages_addition_two_rows.pdf")
 
-  comparator <- vrf_comparator(file1, file2)
-  result     <- vrf_summary(comparator, omit = "one additional row")
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(omit = "one additional row")
 
   expect_equal(result, "Different number of lines in compared content.")
 })

@@ -14,217 +14,200 @@
 #' comparator <- new("TxtFileComparator")
 #'
 #' @export
-
-setClass(
+#'
+TxtFileComparator <- R6Class(
   "TxtFileComparator",
-  contains = "BinaryFileComparator",
-  slots = list(
-    file1 = "ANY",
-    file2 = "ANY"
-  )
-)
+  inherit = BinaryFileComparator,
+  public = list(
 
-#' Method for comparing the inner part for the details query. This method can be
-#' overwritten by more specialized comparator classes. This method is intended
-#' to be called only by the comparator classes in the processing and shouldn't
-#' be called directly by the user.
-#'
-#' @param comparator comparator instance used for the comparison.
-#' @param file1      first file to compare
-#' @param file2      second file to compare
-#' @param omit       all lines containing the omit string will be excluded from
-#'                   the comparison (detaulf = NULL)
-#' @param options    additional comparator parameters
-#'
-#' @keywords internal
+    #' @description
+    #' Method for comparing the inner part for the details query. This method can be
+    #' overwritten by more specialized comparator classes. This method is intended
+    #' to be called only by the comparator classes in the processing and shouldn't
+    #' be called directly by the user.
+    #'
+    #' @param omit    string pattern to omit from the comparison
+    #' @param options additional comparator parameters
+    #'
+    vrf_summary_inner = function(omit, options) {
+      file1_contents_list <- self$file1_contents_list
+      file2_contents_list <- self$file2_contents_list
 
-setMethod("vrf_summary_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options) {
+      if (is.null(file1_contents_list)) {
+        file1_contents_list <- self$vrf_contents(self$file1, omit, options)
+        self$file1_contents_list <- file1_contents_list
+      }
 
-  file1_contents_list <- comparator@.file1_contents_list
-  file2_contents_list <- comparator@.file2_contents_list
+      if (is.null(file2_contents_list)) {
+        file2_contents_list <- self$vrf_contents(self$file2, omit, options)
+        self$file2_contents_list <- file2_contents_list
+      }
 
-  if (is.null(file1_contents_list)) {
-    file1_contents_list <- vrf_contents(comparator, file1, omit, options)
-    comparator@.file1_contents_list <- file1_contents_list
-  }
+      file1_contents_omit <- file1_contents_list[[2]]
+      file2_contents_omit <- file2_contents_list[[2]]
 
-  if (is.null(file2_contents_list)) {
-    file2_contents_list <- vrf_contents(comparator, file2, omit, options)
-    comparator@.file2_contents_list <- file2_contents_list
-  }
+      difference    <- all.equal(file1_contents_omit, file2_contents_omit)
+      result        <- "File content comparison failed!"
+      result_images <- ""
+      pattern       <- "Lengths \\((\\d+), (\\d+)\\) differ \\(string compare on first"
 
-  file1_contents_omit <- file1_contents_list[[2]]
-  file2_contents_omit <- file2_contents_list[[2]]
+      if (typeof(difference) == "logical") {
+        # all.equal returns logical vector if there are no differences
+        result <- "No differences."
+      } else if (length(difference) >= 1 && grepl(pattern, difference[1])) {
+        # all.equal returns length 1/2 vector with first element comtaining text
+        #  matching the pattern
+        result <- "Different number of lines in compared content."
+      } else if (length(difference) == 1) {
+        # all.equal returns length 1 vector if the number of rows are the same but
+        # there are differences
+        count  <- as.numeric(gsub("[^[:digit:].]", "", difference))
+        result <- paste0("File content has changes in ", count, " place(s).")
+      }
 
-  difference    <- all.equal(file1_contents_omit, file2_contents_omit)
-  result        <- "File content comparison failed!"
-  result_images <- ""
-  pattern       <- "Lengths \\((\\d+), (\\d+)\\) differ \\(string compare on first"
+      # Generate additional summary string based on embedded image differences
+      # if applicable.
+      if (3 == length(file1_contents_list) && 3 == length(file2_contents_list)) {
+        result_images <- "No differences in embedded images."
+        file1_contents_images <- file1_contents_list[[3]]
+        file2_contents_images <- file2_contents_list[[3]]
 
-  if (typeof(difference) == "logical") {
-    # all.equal returns logical vector if there are no differences
-    result <- "No differences."
-  } else if (length(difference) >= 1 && grepl(pattern, difference[1])) {
-    # all.equal returns length 1/2 vector with first element comtaining text
-    #  matching the pattern
-    result <- "Different number of lines in compared content."
-  } else if (length(difference) == 1) {
-    # all.equal returns length 1 vector if the number of rows are the same but
-    # there are differences
-    count  <- as.numeric(gsub("[^[:digit:].]", "", difference))
-    result <- paste0("File content has changes in ", count, " place(s).")
-  }
+        if (length(file1_contents_images) != length(file2_contents_images)) {
+          # Number of found embedded images differs between the files.
+          result_images <- "Different amount of embedded images."
+        } else {
+          # Number of found embedded images is the same; calculate how many of the embedded
+          # images has changed (based on raw file data) compared to total count.
+          matches <- 0
+          total <- length(file1_contents_images)
 
-  # Generate additional summary string based on embedded image differences
-  # if applicable.
-  if (3 == length(file1_contents_list) && 3 == length(file2_contents_list)) {
-    result_images <- "No differences in embedded images."
-    file1_contents_images <- file1_contents_list[[3]]
-    file2_contents_images <- file2_contents_list[[3]]
+          for (index in seq_along(file1_contents_images)) {
+            if (identical(file1_contents_images[[index]], file2_contents_images[[index]])) {
+              matches <- matches + 1
+            }
+          }
 
-    if (length(file1_contents_images) != length(file2_contents_images)) {
-      # Number of found embedded images differs between the files.
-      result_images <- "Different amount of embedded images."
-    } else {
-      # Number of found embedded images is the same; calculate how many of the embedded
-      # images has changed (based on raw file data) compared to total count.
-      matches <- 0
-      total <- length(file1_contents_images)
+          if (matches != length(file1_contents_images)) {
+            result_images <- paste0(total - matches, "/", total, " embedded images have differences.")
+          }
+        }
+        result <- paste0(result, " ", result_images)
+      }
 
-      for (index in 1:length(file1_contents_images)) {
-        if (identical(file1_contents_images[[index]], file2_contents_images[[index]])) {
-          matches <- matches + 1
+      return(result)
+    },
+
+    #' @description
+    #' Method for comparing the inner part for the details query. This method can
+    #' be overwritten by more specialized comparator classes. This method is
+    #' intended to be called only by the comparator classes in the processing and
+    #' shouldn't be called directly by the user.
+    #'
+    #' @param omit    string pattern to omit from the comparison
+    #' @param options additional comparator parameters
+    #'
+    vrf_details_inner = function(omit, options) {
+      file1_contents_list <- self$file1_contents_list
+      file2_contents_list <- self$file2_contents_list
+
+      if (is.null(file1_contents_list)) {
+        file1_contents_list <- self$vrf_contents(self$file1, omit, options)
+        self$file1_contents_list <- file1_contents_list
+      }
+
+      if (is.null(file2_contents_list)) {
+        file2_contents_list <- self$vrf_contents(self$file2, omit, options)
+        self$file2_contents_list <- file2_contents_list
+      }
+
+      file1_contents_whole <- file1_contents_list[[1]]
+      file2_contents_whole <- file2_contents_list[[1]]
+
+      context <- 2
+      if ("full" == get_nested(options, "details", "mode")) {
+        context <- -1
+      }
+
+      my_equalizer_with_omit <- function(x, x.chr) {
+        my_finalizer(x, x.chr, omit)
+      }
+
+      style <- diffobj::StyleHtmlLightRgb(
+        html.output = "diff.w.style",
+        finalizer = my_equalizer_with_omit
+      )
+
+      diff_print <- diffobj::diffPrint(
+        file1_contents_whole,
+        file2_contents_whole,
+        context = context,
+        style = style
+      )
+
+      result <- list(
+        list(
+          type = "text",
+          contents = diff_print
+        )
+      )
+
+      # Append the possible extended images into the result list if applicable.
+      # List of images is included in the fileX_contents_lists if found from
+      # content getter.
+      if (3 == length(file1_contents_list) && 3 == length(file2_contents_list)) {
+        file1_contents_images <- file1_contents_list[[3]]
+        file2_contents_images <- file2_contents_list[[3]]
+
+        # Only display the differences if there is the same amount of images found
+        # from the compared files. Otherwise it would require additional logic to
+        # decide which files should be compared with each others (which is something
+        # that could be developed further with size etc comparisons).
+        if (length(file1_contents_images) == length(file2_contents_images)) {
+          for (index in seq_along(file1_contents_images)) {
+            # Manually create a ImgFileComparator instance for every embedded image
+            # found and call the details comparison based on existing bin data.
+            comparator <- ImgFileComparator$new(
+              NULL,
+              NULL,
+              file1_contents_images[[index]],
+              file2_contents_images[[index]]
+            )
+            result <- append(result, comparator$vrf_details_inner(omit, options))
+          }
         }
       }
 
-      if (matches != length(file1_contents_images)) {
-        result_images <- paste0(total - matches, "/", total, " embedded images have differences.")
+      return(result)
+    },
+
+    #' @description
+    #' Method for getting the inner part for the file contents query. The method
+    #' returns the file contents in two separate vectors inside a list. The first
+    #' vector is the file contents and the second one is the file contents with the
+    #' rows matching the omit string excluded. This method can be overwritten by
+    #' more specialized comparator classes. This method is intended to be called
+    #' only by the comparator classes in the processing and shouldn't be called
+    #' directly by the user.
+    #'
+    #' @param contents file contents
+    #' @param omit    string pattern to omit from the comparison
+    #' @param options  additional comparator parameters
+    #'
+    vrf_contents_inner = function(contents, omit, options) {
+      contents_omit <- contents
+
+      if (!is.null(omit) && "" != paste0(omit)) {
+        contents_omit <- stringr::str_subset(
+          string = contents,
+          pattern = paste0(omit),
+          negate = TRUE
+        )
       }
+
+      return(list(contents, contents_omit))
     }
-    result <- paste0(result, " ", result_images)
-  }
-
-  return(result)
-})
-
-#' Method for comparing the inner part for the details query. This method can
-#' be overwritten by more specialized comparator classes. This method is
-#' intended to be called only by the comparator classes in the processing and
-#' shouldn't be called directly by the user.
-#'
-#' @param comparator comparator instance used for the comparison
-#' @param file1      first file to compare
-#' @param file2      second file to compare
-#' @param omit       all lines containing the omit string will be excluded from
-#'                   the comparison (detaulf = NULL)
-#' @param options    additional comparator parameters
-#'
-#' @keywords internal
-
-setMethod("vrf_details_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options) {
-
-  file1_contents_list <- comparator@.file1_contents_list
-  file2_contents_list <- comparator@.file2_contents_list
-
-  if (is.null(file1_contents_list)) {
-    file1_contents_list <- vrf_contents(comparator, file1, omit, options)
-    comparator@.file1_contents_list <- file1_contents_list
-  }
-
-  if (is.null(file2_contents_list)) {
-    file2_contents_list <- vrf_contents(comparator, file2, omit, options)
-    comparator@.file2_contents_list <- file2_contents_list
-  }
-
-  file1_contents_whole <- file1_contents_list[[1]]
-  file2_contents_whole <- file2_contents_list[[1]]
-
-  context <- 2
-  if ("full" == get_nested(options, "details", "mode")) {
-    context <- -1
-  }
-
-  my_equalizer_with_omit <- function(x, x.chr) {
-    my_finalizer(x, x.chr, omit)
-  }
-
-  style <- diffobj::StyleHtmlLightRgb(
-    html.output = "diff.w.style",
-    finalizer = my_equalizer_with_omit
   )
-
-  diff_print <- diffobj::diffPrint(
-    file1_contents_whole,
-    file2_contents_whole,
-    context = context,
-    style = style
-  )
-
-  result <- list(
-    list(
-      type = "text",
-      contents = diff_print
-    )
-  )
-
-  # Append the possible extended images into the result list if applicable.
-  # List of images is included in the fileX_contents_lists if found from
-  # content getter.
-  if (3 == length(file1_contents_list) && 3 == length(file2_contents_list)) {
-    file1_contents_images <- file1_contents_list[[3]]
-    file2_contents_images <- file2_contents_list[[3]]
-
-    # Only display the differences if there is the same amount of images found
-    # from the compared files. Otherwise it would require additional logic to
-    # decide which files should be compared with each others (which is something
-    # that could be developed further with size etc comparisons).
-    if (length(file1_contents_images) == length(file2_contents_images)) {
-      for (index in 1:length(file1_contents_images)) {
-        # Manually create a ImgFileComparator instance for every embedded image
-        # found and call the details comparison based on existing bin data.
-        comparator <- new("ImgFileComparator")
-        result <- append(result, vrf_details_inner_from_bin(
-          comparator,
-          file1_contents_images[[index]],
-          file2_contents_images[[index]]
-        ))
-      }
-    }
-  }
-
-  return(result)
-})
-
-
-#' Generic for getting the inner part for the file contents query. The method
-#' returns the file contents in two separate vectors inside a list. The first
-#' vector is the file contents and the second one is the file contents with the
-#' rows matching the omit string excluded. This method can be overwritten by
-#' more specialized comparator classes. This method is intended to be called
-#' only by the comparator classes in the processing and shouldn't be called
-#' directly by the user.
-#'
-#' @param comparator comparator instance used for the comparison
-#' @param contents   file contents
-#' @param omit       all lines containing the omit string will be excluded
-#'                   from the comparison (detaulf = NULL)
-#' @param options    additional comparator parameters
-#'
-#' @keywords internal
-
-setMethod("vrf_contents_inner", "TxtFileComparator", function(comparator, contents, omit, options) {
-  contents_omit <- contents
-
-  if (!is.null(omit) && "" != paste0(omit)) {
-    contents_omit <- stringr::str_subset(
-      string = contents,
-      pattern = paste0(omit),
-      negate = TRUE
-    )
-  }
-
-  return(list(contents, contents_omit))
-})
+)
 
 #' Custom finalizer method for diffobj html content finalizing. This method is
 #' used to modify the diff html output so that omitted rows have their own
