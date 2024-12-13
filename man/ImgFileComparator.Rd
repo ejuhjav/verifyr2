@@ -16,9 +16,25 @@ part for the comparison.
 \examples{
 
 # The normal way for creating a comparator would be to call the generic
-# factory method verifyr2::vrf_comparator, but if needed, an explicit
-# comparator can be instantiated directly as well.
-comparator <- new("ImgFileComparator")
+# factory method verifyr2::create_comparator that will automatically create
+# the correct comparator instance based on the file types.
+
+file1 <- 'my_file1.jpg'
+file1 <- 'my_file2.jpg'
+comparator <- verifyr::create_comparator(file1, file2)
+
+# If needed, an explicit comparator can be created as well.
+
+file1 <- 'my_file1.png'
+file1 <- 'my_file2.png'
+comparator <- ImgFileComparator$new(file1, file2)
+
+# This comparator has also second explicit creation method that is used
+# by the library for processing embedded image contents.
+
+image1_raw <- 'raw hex vector data'
+image2_raw <- 'raw hex vector data'
+comparator <- ImgFileComparator$new(NULL, NULL, image1_raw, image2_raw)
 
 }
 \section{Super classes}{
