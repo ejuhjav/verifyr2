@@ -70,6 +70,21 @@ test_that(paste(
 })
 
 test_that(paste(
+  "Returns S4 comparison object for two files with differences in content",
+  "and in embedded images (content mode)"
+), {
+  file1 <- testthat::test_path(base, "base_with_image.rtf")
+  file2 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
+
+  options    <- list("rtf" = list("mode" = "content"))
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_details(options = options)[[1]]
+
+  expect_equal(result$type, "text")
+  expect_equal(typeof(result$contents), "S4")
+})
+
+test_that(paste(
   "Returns S4 comparison object for two files with differences in footer",
   "(raw mode)"
 ), {
