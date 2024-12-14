@@ -17,6 +17,7 @@ Imports:
     methods,
     mime,
     pdftools,
+    R6,
     shiny,
     stringr,
     striprtf,

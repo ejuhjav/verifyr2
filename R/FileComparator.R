@@ -5,7 +5,7 @@
 #' be instantiated - doing that and calling the comparison methods will lead to
 #' error.
 #'
-#' @importFrom methods new isClass
+#' @importFrom R6 R6Class
 #'
 #' @field file1               local property for storing file1
 #' @field file2               local property for storing file2
