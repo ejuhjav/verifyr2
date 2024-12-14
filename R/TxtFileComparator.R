@@ -4,6 +4,8 @@
 #' This comparator contains the methods for doing basic comparisons on raw text
 #' contents.
 #'
+#' @import stringr
+#'
 #' @include BinaryFileComparator.R
 #'
 #' @examples
@@ -13,13 +15,13 @@
 #' # the correct comparator instance based on the file types.
 #'
 #' file1 <- 'my_file1.txt'
-#' file1 <- 'my_file2.txt'
-#' comparator <- verifyr::create_comparator(file1, file2)
+#' file2 <- 'my_file2.txt'
+#' comparator <- verifyr2::create_comparator(file1, file2)
 #'
 #' # If needed, an explicit comparator can be created as well.
 #'
 #' file1 <- 'my_file1.lst'
-#' file1 <- 'my_file2.lst'
+#' file2 <- 'my_file2.lst'
 #' comparator <- TxtFileComparator$new(file1, file2)
 #'
 #' @export

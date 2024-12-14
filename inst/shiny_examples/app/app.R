@@ -81,6 +81,23 @@ vrf_file_input <- function(input_id, label, value = "", ...) {
 # Interface definition
 # ==============================================================================
 
+javascript_additions <- function() {
+  shiny::tags$head(
+    shiny::tags$script(htmltools::HTML("
+      Shiny.addCustomMessageHandler('highlightRow', function(message) {
+        $('.dataTable tr').removeClass('row_highlighted');
+        $('.dataTable tr:nth-child(' + message.row_id + ')').addClass('row_highlighted');
+      });
+    "))
+  )
+}
+
+page_icon <- function() {
+  shiny::tags$head(
+    shiny::tags$link(rel = "icon", type = "image/x-icon", href = "verifyr2.ico")
+  )
+}
+
 search_container <- function() {
   shiny::div(
     shiny::headerPanel("File content comparison"),
@@ -202,23 +219,6 @@ details_container <- function() {
         shiny::actionButton("clear_comments", "Clear comments"),
       ),
     ),
-  )
-}
-
-javascript_additions <- function() {
-  shiny::tags$head(
-    shiny::tags$script(htmltools::HTML("
-      Shiny.addCustomMessageHandler('highlightRow', function(message) {
-        $('.dataTable tr').removeClass('row_highlighted');
-        $('.dataTable tr:nth-child(' + message.row_id + ')').addClass('row_highlighted');
-      });
-    "))
-  )
-}
-
-page_icon <- function() {
-  shiny::tags$head(
-    shiny::tags$link(rel = "icon", type = "image/x-icon", href = "verifyr2.ico")
   )
 }
 
@@ -427,12 +427,63 @@ update_file_selections <- function(input, session, roots) {
   }
 }
 
+update_list_files <- function(input, output, session) {
+  dt_comparators_list <<- list()
+
+  if (input$compare_tabs == "tabs_folder") {
+    if (file.exists(input$folder1) && file.exists(input$folder2)) {
+      set_visibility("comparison_comments_container", FALSE)
+      shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
+      set_reactive_text("summary_text", "")
+
+      verifyr2::list_folder_files(
+        input$folder1,
+        input$folder2,
+        input$file_name_pattern
+      )
+    } else {
+      set_reactive_text(
+        "summary_text",
+        paste0(
+          "No folder selected or",
+          "folders do not exist"
+        )
+      )
+      NULL
+    }
+  } else {
+    if (file.exists(input$file1) && file.exists(input$file2)) {
+      set_visibility("comparison_comments_container", FALSE)
+      shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
+      set_reactive_text("summary_text", "")
+
+      verifyr2::list_files(
+        input$file1,
+        input$file2
+      )
+    } else {
+      set_reactive_text(
+        "summary_text",
+        paste0(
+          "No files selected or",
+          "files do not exist"
+        )
+      )
+      NULL
+    }
+  }
+}
+
 set_visibility <- function(id, visible) {
   if (visible) {
     shinyjs::runjs(paste0("$('#", id, "').removeClass('custom_hidden').addClass('custom_visible')"))
   } else {
     shinyjs::runjs(paste0("$('#", id, "').removeClass('custom_visible').addClass('custom_hidden')"))
   }
+}
+
+set_reactive_text <- function(reactive_id, text, class = "") {
+  do.call(reactive_id, list(text))
 }
 
 # ==============================================================================
@@ -472,11 +523,15 @@ server <- function(input, output, session) {
   do.call(shinyFiles::shinyFileChoose, c(list(input, "file1_select"), params))
   do.call(shinyFiles::shinyFileChoose, c(list(input, "file2_select"), params))
 
-  default1 <- paste0("Select the compared file folders and execute the summary",
-                     "comparison by clicking on the 'Go' button.")
+  default1 <- paste0(
+    "Select the compared file folders and execute the summary",
+    "comparison by clicking on the 'Go' button."
+  )
 
-  default2 <- paste0("Click on a row in the summary comparison result to view",
-                     "the side-by-side details comparison.")
+  default2 <- paste0(
+    "Click on a row in the summary comparison result to view",
+    "the side-by-side details comparison."
+  )
 
   config <- shiny::reactiveValues(configuration = as.list(config_json))
   summary_text <- shiny::reactiveVal(default1)
@@ -536,50 +591,7 @@ server <- function(input, output, session) {
   # ============================================================================
 
   list_of_files <- shiny::eventReactive(input$go, {
-    dt_comparators_list <<- list()
-
-    if (input$compare_tabs == "tabs_folder") {
-      if (file.exists(input$folder1) && file.exists(input$folder2)) {
-        set_visibility("comparison_comments_container", FALSE)
-        shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
-        set_reactive_text("summary_text", "")
-
-        verifyr2::list_folder_files(
-          input$folder1,
-          input$folder2,
-          input$file_name_pattern
-        )
-      } else {
-        set_reactive_text(
-          "summary_text",
-          paste0(
-            "No folder selected or",
-            "folders do not exist"
-          )
-        )
-        NULL
-      }
-    } else {
-      if (file.exists(input$file1) && file.exists(input$file2)) {
-        set_visibility("comparison_comments_container", FALSE)
-        shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
-        set_reactive_text("summary_text", "")
-
-        verifyr2::list_files(
-          input$file1,
-          input$file2
-        )
-      } else {
-        set_reactive_text(
-          "summary_text",
-          paste0(
-            "No files selected or",
-            "files do not exist"
-          )
-        )
-        NULL
-      }
-    }
+    update_list_files(input, output, session)
   })
 
   shiny::observeEvent(input$details_tabs, {
@@ -770,10 +782,6 @@ server <- function(input, output, session) {
       list(row_id = new_row_index)
     )
   })
-
-  set_reactive_text <- function(reactive_id, text, class = "") {
-    do.call(reactive_id, list(text))
-  }
 }
 
 shiny::shinyApp(ui, server)

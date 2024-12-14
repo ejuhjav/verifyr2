@@ -4,6 +4,8 @@
 #' This comparator contains the custom handling for handling only RTF content
 #' part for the comparison.
 #'
+#' @import striprtf
+#'
 #' @include TxtFileComparator.R
 #'
 #' @examples
@@ -13,13 +15,13 @@
 #' # the correct comparator instance based on the file types.
 #'
 #' file1 <- 'my_file1.rtf'
-#' file1 <- 'my_file2.rtf'
-#' comparator <- verifyr::create_comparator(file1, file2)
+#' file2 <- 'my_file2.rtf'
+#' comparator <- verifyr2::create_comparator(file1, file2)
 #'
 #' # If needed, an explicit comparator can be created as well.
 #'
 #' file1 <- 'my_file1.rtf'
-#' file1 <- 'my_file2.rft'
+#' file2 <- 'my_file2.rft'
 #' comparator <- RtfFileComparator$new(file1, file2)
 #'
 #' @export

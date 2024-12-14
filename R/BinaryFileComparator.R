@@ -12,13 +12,13 @@
 #' # the correct comparator instance based on the file types.
 #'
 #' file1 <- 'my_file1.bin'
-#' file1 <- 'my_file2.bin'
-#' comparator <- verifyr::create_comparator(file1, file2)
+#' file2 <- 'my_file2.bin'
+#' comparator <- verifyr2::create_comparator(file1, file2)
 #'
 #' # If needed, an explicit comparator can be created as well.
 #'
 #' file1 <- 'my_file1.bin'
-#' file1 <- 'my_file2.bin'
+#' file2 <- 'my_file2.bin'
 #' comparator <- BinaryFileComparator$new(file1, file2)
 #'
 #' @export

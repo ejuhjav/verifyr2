@@ -20,13 +20,13 @@ part for the comparison.
 # the correct comparator instance based on the file types.
 
 file1 <- 'my_file1.pdf'
-file1 <- 'my_file2.pdf'
-comparator <- verifyr::create_comparator(file1, file2)
+file2 <- 'my_file2.pdf'
+comparator <- verifyr2::create_comparator(file1, file2)
 
 # If needed, an explicit comparator can be created as well.
 
 file1 <- 'my_file1.pdf'
-file1 <- 'my_file2.pdf'
+file2 <- 'my_file2.pdf'
 comparator <- PdfFileComparator$new(file1, file2)
 
 }

@@ -4,6 +4,8 @@
 #' This comparator contains the custom handling for handling only img content
 #' part for the comparison.
 #'
+#' @import magick base64enc
+#'
 #' @include BinaryFileComparator.R
 #'
 #' @field image1_raw local property for storing the already extracted raw data for image1.
@@ -16,13 +18,13 @@
 #' # the correct comparator instance based on the file types.
 #'
 #' file1 <- 'my_file1.jpg'
-#' file1 <- 'my_file2.jpg'
-#' comparator <- verifyr::create_comparator(file1, file2)
+#' file2 <- 'my_file2.jpg'
+#' comparator <- verifyr2::create_comparator(file1, file2)
 #'
 #' # If needed, an explicit comparator can be created as well.
 #'
 #' file1 <- 'my_file1.png'
-#' file1 <- 'my_file2.png'
+#' file2 <- 'my_file2.png'
 #' comparator <- ImgFileComparator$new(file1, file2)
 #'
 #' # This comparator has also second explicit creation method that is used
