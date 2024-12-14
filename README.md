@@ -27,27 +27,18 @@ such option would be to use the "devtools" package:
 
 ## Creating and calling the separators manually
 
-instantiating a new comparator instance for every comparison:
-
 ``` bash
-> verifyr2::vrf_summary(verifyr2::vrf_comparator(file1, file2), omit = omit}
-> verifyr2::vrf_details(verifyr2::vrf_comparator(file1, file2), omit = omit)
+> comparator <- verifyr2::create_comparator(file1, file2)
+> comparator$vrf_summary()
+> comparator$vrf_details()
 ```
 
-instantiating a comparator instance and using that same for both comparison of same files
+instantiating an explicit comparator manually
 
 ``` bash
-> comparator <- verifyr2::vrf_comparator(file1, file2)
-> verifyr2::vrf_summary(comparator, omit = omit)
-> verifyr2::vrf_details(comparator, omit = omit)
-```
-
-instantiating an explicit comparator manually when comparing files of single specific type
-
-``` bash
-> comparator <- new("RtfFileComparator")
-> verifyr2::vrf_summary(comparator, file1, file2, omit = omit)
-> verifyr2::vrf_details(comparator, file3, file4, omit = omit)
+> comparator <- RtfFileComparator$new(file1, file2)
+> comparator$vrf_summary()
+> comparator$vrf_details()
 ```
 
 ## Adding support to additional file types
@@ -57,24 +48,32 @@ new comparison logic for different file types. In most cases, this will simply r
 of a new file comparator with the file extension name and implementing the file contents getter. The included
 implementation for pdf file comparison is an example of how to do this (see source file for full documentation).
 
+When using the provided generic create_comparator function along with your custom comparator class implementation, 
+please note that the comparator class name prefix must match with the compared file type. 
+
 ``` bash
 #' PdfFileComparator.R
+#'
+#' @import pdftools
 #'
 #' @include TxtFileComparator.R
 #'
 #' @export
+#'
+PdfFileComparator <- R6Class(
+  "PdfFileComparator",
+  inherit = TxtFileComparator,
+  public = list(
+    vrf_contents = function(file, omit, options) {
+      content <- pdftools::pdf_text(file)
+      content <- paste(content, collapse = "")
+      content <- strsplit(content, "\n")[[1]]
 
-setClass("PdfFileComparator",
-         contains = "TxtFileComparator",
-         slots = list(file1 = "ANY", file2 = "ANY"))
+      return(self$vrf_contents_inner(content, omit, options))
+    }
+  )
+)
 
-setMethod("vrf_contents", "PdfFileComparator", function(comparator, file, omit, options) {
-  content <- pdftools::pdf_text(file)
-  content <- paste(content, collapse = "")
-  content <- strsplit(content, "\n")[[1]]
-
-  return(vrf_contents_inner(comparator, content, omit, options))
-})
 ```
 
 ## Credits
