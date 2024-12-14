@@ -14,9 +14,9 @@ Imports:
     dplyr,
     magick,
     magrittr,
-    methods,
     mime,
     pdftools,
+    R6,
     shiny,
     stringr,
     striprtf,
@@ -34,6 +34,7 @@ RoxygenNote: 7.3.2
 Collate: 
     'FileComparator.R'
     'BinaryFileComparator.R'
+    'FileComparatorFactory.R'
     'ImgFileComparator.R'
     'TxtFileComparator.R'
     'PdfFileComparator.R'
