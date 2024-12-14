@@ -24,6 +24,11 @@
 #'
 #' @export
 #'
+
+# Disable cyclomatic complexity lint for the R6 class definition as lintr considers
+# the whole class definition as a single function.
+#
+# nolint start: cyclocomp_linter
 TxtFileComparator <- R6Class(
   "TxtFileComparator",
   inherit = BinaryFileComparator,
@@ -311,3 +316,4 @@ my_finalizer <- function(x, x.chr, omit) {
 
   return(diffobj::finalizeHtml(x, html_string))
 }
+# nolint end: cyclocomp_linter
