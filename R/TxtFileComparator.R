@@ -4,134 +4,226 @@
 #' This comparator contains the methods for doing basic comparisons on raw text
 #' contents.
 #'
+#' @import stringr
+#'
 #' @include BinaryFileComparator.R
 #'
 #' @examples
 #'
 #' # The normal way for creating a comparator would be to call the generic
-#' # factory method verifyr2::vrf_comparator, but if needed, an explicit
-#' # comparator can be instantiated directly as well:
-#' comparator <- new("TxtFileComparator")
+#' # factory method verifyr2::create_comparator that will automatically create
+#' # the correct comparator instance based on the file types.
+#'
+#' file1 <- 'my_file1.txt'
+#' file2 <- 'my_file2.txt'
+#' comparator <- verifyr2::create_comparator(file1, file2)
+#'
+#' # If needed, an explicit comparator can be created as well.
+#'
+#' file1 <- 'my_file1.lst'
+#' file2 <- 'my_file2.lst'
+#' comparator <- TxtFileComparator$new(file1, file2)
 #'
 #' @export
-
-setClass("TxtFileComparator",
-         contains = "BinaryFileComparator",
-         slots = list(file1 = "ANY", file2 = "ANY"))
-
-#' Method for comparing the inner part for the details query. This method can be
-#' overwritten by more specialized comparator classes. This method is intended
-#' to be called only by the comparator classes in the processing and shouldn't
-#' be called directly by the user.
 #'
-#' @param comparator comparator instance used for the comparison.
-#' @param file1      first file to compare
-#' @param file2      second file to compare
-#' @param omit       all lines containing the omit string will be excluded from
-#'                   the comparison (detaulf = NULL)
-#' @param options    additional comparator parameters
-#'
-#' @keywords internal
 
-setMethod("vrf_summary_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options) {
+# Disable cyclomatic complexity lint for the R6 class definition as lintr considers
+# the whole class definition as a single function.
+#
+# nolint start: cyclocomp_linter
+TxtFileComparator <- R6Class(
+  "TxtFileComparator",
+  inherit = BinaryFileComparator,
+  public = list(
 
-  file1_contents_list <- vrf_contents(comparator, file1, omit, options)
-  file2_contents_list <- vrf_contents(comparator, file2, omit, options)
+    #' @description
+    #' Method for comparing the inner part for the details query. This method can be
+    #' overwritten by more specialized comparator classes. This method is intended
+    #' to be called only by the comparator classes in the processing and shouldn't
+    #' be called directly by the user.
+    #'
+    #' @param omit    string pattern to omit from the comparison
+    #' @param options additional comparator parameters
+    #'
+    vrf_summary_inner = function(omit, options) {
+      file1_contents_list <- self$file1_contents_list
+      file2_contents_list <- self$file2_contents_list
 
-  file1_contents_omit <- file1_contents_list[[2]]
-  file2_contents_omit <- file2_contents_list[[2]]
+      if (is.null(file1_contents_list)) {
+        file1_contents_list <- self$vrf_contents(self$file1, omit, options)
+        self$file1_contents_list <- file1_contents_list
+      }
 
-  difference <- all.equal(file1_contents_omit, file2_contents_omit)
-  result     <- "File content comparison failed!"
-  pattern    <- "Lengths \\((\\d+), (\\d+)\\) differ \\(string compare on first"
+      if (is.null(file2_contents_list)) {
+        file2_contents_list <- self$vrf_contents(self$file2, omit, options)
+        self$file2_contents_list <- file2_contents_list
+      }
 
-  if (typeof(difference) == "logical") {
-    # all.equal returns logical vector if there are no differences
-    result <- "No differences"
-  } else if (length(difference) >= 1 && grepl(pattern, difference[1])) {
-    # all.equal returns length 1/2 vector with first element comtaining text
-    #  matching the pattern
-    result <- "Different number of lines in compared content"
-  } else if (length(difference) == 1) {
-    # all.equal returns length 1 vector if the number of rows are the same but
-    # there are differences
-    count  <- as.numeric(gsub("[^[:digit:].]", "", difference))
-    result <- paste0("File content has changes in ", count, " place(s)")
-  }
+      file1_contents_omit <- file1_contents_list[[2]]
+      file2_contents_omit <- file2_contents_list[[2]]
 
-  return(result)
-})
+      difference    <- all.equal(file1_contents_omit, file2_contents_omit)
+      result        <- "File content comparison failed!"
+      result_images <- ""
+      pattern       <- "Lengths \\((\\d+), (\\d+)\\) differ \\(string compare on first"
 
-#' Method for comparing the inner part for the details query. This method can
-#' be overwritten by more specialized comparator classes. This method is
-#' intended to be called only by the comparator classes in the processing and
-#' shouldn't be called directly by the user.
-#'
-#' @param comparator comparator instance used for the comparison
-#' @param file1      first file to compare
-#' @param file2      second file to compare
-#' @param omit       all lines containing the omit string will be excluded from
-#'                   the comparison (detaulf = NULL)
-#' @param options    additional comparator parameters
-#'
-#' @keywords internal
+      if (typeof(difference) == "logical") {
+        # all.equal returns logical vector if there are no differences
+        result <- "No differences."
+      } else if (length(difference) >= 1 && grepl(pattern, difference[1])) {
+        # all.equal returns length 1/2 vector with first element comtaining text
+        #  matching the pattern
+        result <- "Different number of lines in compared content."
+      } else if (length(difference) == 1) {
+        # all.equal returns length 1 vector if the number of rows are the same but
+        # there are differences
+        count  <- as.numeric(gsub("[^[:digit:].]", "", difference))
+        result <- paste0("File content has changes in ", count, " place(s).")
+      }
 
-setMethod("vrf_details_inner", "TxtFileComparator", function(comparator, file1, file2, omit, options) {
+      # Generate additional summary string based on embedded image differences
+      # if applicable.
+      if (3 == length(file1_contents_list) && 3 == length(file2_contents_list)) {
+        result_images <- "No differences in embedded images."
+        file1_contents_images <- file1_contents_list[[3]]
+        file2_contents_images <- file2_contents_list[[3]]
 
-  file1_contents_list <- vrf_contents(comparator, file1, omit, options)
-  file2_contents_list <- vrf_contents(comparator, file2, omit, options)
+        if (length(file1_contents_images) != length(file2_contents_images)) {
+          # Number of found embedded images differs between the files.
+          result_images <- "Different amount of embedded images."
+        } else {
+          # Number of found embedded images is the same; calculate how many of the embedded
+          # images has changed (based on raw file data) compared to total count.
+          matches <- 0
+          total <- length(file1_contents_images)
 
-  file1_contents_whole <- file1_contents_list[[1]]
-  file2_contents_whole <- file2_contents_list[[1]]
+          for (index in seq_along(file1_contents_images)) {
+            if (identical(file1_contents_images[[index]], file2_contents_images[[index]])) {
+              matches <- matches + 1
+            }
+          }
 
-  context <- 2
-  if ("full" == get_nested(options, "details", "mode")) {
-    context <- -1
-  }
+          if (matches != length(file1_contents_images)) {
+            result_images <- paste0(total - matches, "/", total, " embedded images have differences.")
+          }
+        }
+        result <- paste0(result, " ", result_images)
+      }
 
-  my_equalizer_with_omit <- function(x, x.chr) {
-    my_finalizer(x, x.chr, omit)
-  }
+      return(result)
+    },
 
-  style <- diffobj::StyleHtmlLightRgb(html.output = "diff.w.style",
-                                      finalizer = my_equalizer_with_omit)
+    #' @description
+    #' Method for comparing the inner part for the details query. This method can
+    #' be overwritten by more specialized comparator classes. This method is
+    #' intended to be called only by the comparator classes in the processing and
+    #' shouldn't be called directly by the user.
+    #'
+    #' @param omit    string pattern to omit from the comparison
+    #' @param options additional comparator parameters
+    #'
+    vrf_details_inner = function(omit, options) {
+      file1_contents_list <- self$file1_contents_list
+      file2_contents_list <- self$file2_contents_list
 
-  diff_print <- diffobj::diffPrint(file1_contents_whole,
-                                   file2_contents_whole,
-                                   context = context,
-                                   style = style)
+      if (is.null(file1_contents_list)) {
+        file1_contents_list <- self$vrf_contents(self$file1, omit, options)
+        self$file1_contents_list <- file1_contents_list
+      }
 
-  return(diff_print)
-})
+      if (is.null(file2_contents_list)) {
+        file2_contents_list <- self$vrf_contents(self$file2, omit, options)
+        self$file2_contents_list <- file2_contents_list
+      }
 
+      file1_contents_whole <- file1_contents_list[[1]]
+      file2_contents_whole <- file2_contents_list[[1]]
 
-#' Generic for getting the inner part for the file contents query. The method
-#' returns the file contents in two separate vectors inside a list. The first
-#' vector is the file contents and the second one is the file contents with the
-#' rows matching the omit string excluded. This method can be overwritten by
-#' more specialized comparator classes. This method is intended to be called
-#' only by the comparator classes in the processing and shouldn't be called
-#' directly by the user.
-#'
-#' @param comparator comparator instance used for the comparison
-#' @param contents   file contents
-#' @param omit       all lines containing the omit string will be excluded
-#'                   from the comparison (detaulf = NULL)
-#' @param options    additional comparator parameters
-#'
-#' @keywords internal
+      context <- 2
+      if ("full" == get_nested(options, "details", "mode")) {
+        context <- -1
+      }
 
-setMethod("vrf_contents_inner", "TxtFileComparator", function(comparator, contents, omit, options) {
-  contents_omit <- contents
+      my_equalizer_with_omit <- function(x, x.chr) {
+        my_finalizer(x, x.chr, omit)
+      }
 
-  if (!is.null(omit) && "" != paste0(omit)) {
-    contents_omit <- stringr::str_subset(string = contents,
-                                         pattern = paste0(omit),
-                                         negate = TRUE)
-  }
+      style <- diffobj::StyleHtmlLightRgb(
+        html.output = "diff.w.style",
+        finalizer = my_equalizer_with_omit
+      )
 
-  return(list(contents, contents_omit))
-})
+      diff_print <- diffobj::diffPrint(
+        file1_contents_whole,
+        file2_contents_whole,
+        context = context,
+        style = style
+      )
+
+      result <- list(
+        list(
+          type = "text",
+          contents = diff_print
+        )
+      )
+
+      # Append the possible extended images into the result list if applicable.
+      # List of images is included in the fileX_contents_lists if found from
+      # content getter.
+      if (3 == length(file1_contents_list) && 3 == length(file2_contents_list)) {
+        file1_contents_images <- file1_contents_list[[3]]
+        file2_contents_images <- file2_contents_list[[3]]
+
+        # Only display the differences if there is the same amount of images found
+        # from the compared files. Otherwise it would require additional logic to
+        # decide which files should be compared with each others (which is something
+        # that could be developed further with size etc comparisons).
+        if (length(file1_contents_images) == length(file2_contents_images)) {
+          for (index in seq_along(file1_contents_images)) {
+            # Manually create a ImgFileComparator instance for every embedded image
+            # found and call the details comparison based on existing bin data.
+            comparator <- ImgFileComparator$new(
+              NULL,
+              NULL,
+              file1_contents_images[[index]],
+              file2_contents_images[[index]]
+            )
+            result <- append(result, comparator$vrf_details_inner(omit, options))
+          }
+        }
+      }
+
+      return(result)
+    },
+
+    #' @description
+    #' Method for getting the inner part for the file contents query. The method
+    #' returns the file contents in two separate vectors inside a list. The first
+    #' vector is the file contents and the second one is the file contents with the
+    #' rows matching the omit string excluded. This method can be overwritten by
+    #' more specialized comparator classes. This method is intended to be called
+    #' only by the comparator classes in the processing and shouldn't be called
+    #' directly by the user.
+    #'
+    #' @param contents file contents
+    #' @param omit    string pattern to omit from the comparison
+    #' @param options  additional comparator parameters
+    #'
+    vrf_contents_inner = function(contents, omit, options) {
+      contents_omit <- contents
+
+      if (!is.null(omit) && "" != paste0(omit)) {
+        contents_omit <- stringr::str_subset(
+          string = contents,
+          pattern = paste0(omit),
+          negate = TRUE
+        )
+      }
+
+      return(list(contents, contents_omit))
+    }
+  )
+)
 
 #' Custom finalizer method for diffobj html content finalizing. This method is
 #' used to modify the diff html output so that omitted rows have their own
@@ -156,46 +248,66 @@ my_finalizer <- function(x, x.chr, omit) {
         row <- split[[i]]
 
         # modifying maching row markup
-        row <- gsub("class='diffobj-match'",
-                    "class='ignore'",
-                    row)
+        row <- gsub(
+          "class='diffobj-match'",
+          "class='ignore'",
+          row
+        )
 
-        row <- gsub("<div class='diffobj-gutter'><div class='ignore'>&nbsp;",
-                    "<div class='diffobj-gutter'><div class='ignore'>x",
-                    row)
+        row <- gsub(
+          "<div class='diffobj-gutter'><div class='ignore'>&nbsp;",
+          "<div class='diffobj-gutter'><div class='ignore'>x",
+          row
+        )
 
         # modifying inserted row markup
-        row <- gsub("class='insert'",
-                    "class='ignore'",
-                    row)
+        row <- gsub(
+          "class='insert'",
+          "class='ignore'",
+          row
+        )
 
-        row <- gsub("class='diffobj-word insert'",
-                    "class='diffobj-word ignore'",
-                    row)
+        row <- gsub(
+          "class='diffobj-word insert'",
+          "class='diffobj-word ignore'",
+          row
+        )
 
-        row <- gsub("<div class='diffobj-gutter'><div class='ignore'>&gt;",
-                    "<div class='diffobj-gutter'><div class='ignore'>X",
-                    row)
+        row <- gsub(
+          "<div class='diffobj-gutter'><div class='ignore'>&gt;",
+          "<div class='diffobj-gutter'><div class='ignore'>X",
+          row
+        )
 
         # modifying deleted row markup
-        row <- gsub("class='delete'",
-                    "class='ignore'",
-                    row)
+        row <- gsub(
+          "class='delete'",
+          "class='ignore'",
+          row
+        )
 
-        row <- gsub("class='diffobj-word delete'",
-                    "class='diffobj-word ignore'",
-                    row)
+        row <- gsub(
+          "class='diffobj-word delete'",
+          "class='diffobj-word ignore'",
+          row
+        )
 
-        row <- gsub("<div class='diffobj-gutter'><div class='ignore'>&lt;",
-                    "<div class='diffobj-gutter'><div class='ignore'>X",
-                    row)
+        row <- gsub(
+          "<div class='diffobj-gutter'><div class='ignore'>&lt;",
+          "<div class='diffobj-gutter'><div class='ignore'>X",
+          row
+        )
 
         # highlight the ommitted part
-        row <- gsub(omit,
-                    paste0("<span class='diffobj-word-highlight ignore'>",
-                           omit,
-                           "</span>"),
-                    row)
+        row <- gsub(
+          omit,
+          paste0(
+            "<span class='diffobj-word-highlight ignore'>",
+            omit,
+            "</span>"
+          ),
+          row
+        )
 
         split[[i]] <- row
       }
@@ -206,3 +318,4 @@ my_finalizer <- function(x, x.chr, omit) {
 
   return(diffobj::finalizeHtml(x, html_string))
 }
+# nolint end: cyclocomp_linter

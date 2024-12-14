@@ -1,6 +1,6 @@
 
 <div align="center">
-  <img src="./assets/verifyr2.png" alt="Project Logo" width="200">
+  <img src="./man/figures/verifyr2.png" alt="Project Logo" width="200">
 </div>
 
 # verifyr2
