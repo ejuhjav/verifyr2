@@ -14,7 +14,7 @@
 #' # The normal way for creating a comparator would be to call the generic
 #' # factory method verifyr2::create_comparator that will automatically create
 #' # the correct comparator instance based on the file types.
-#' 
+#'
 #' file1 <- 'my_file1.jpg'
 #' file1 <- 'my_file2.jpg'
 #' comparator <- verifyr::create_comparator(file1, file2)
