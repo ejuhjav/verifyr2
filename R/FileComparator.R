@@ -54,13 +54,13 @@ FileComparator <- R6Class(
 
       if (!file.exists(self$file1) || !file.exists(self$file2)) {
         result <- "File(s) not available; unable to compare."
+      } else {
+        tryCatch({
+          result <- self$vrf_summary_inner(omit, options)
+        }, error = function(e) {
+          result <- paste0("Error reading file contents: ", conditionMessage(e))
+        })
       }
-
-      tryCatch({
-        result <- self$vrf_summary_inner(omit, options)
-      }, error = function(e) {
-        result <- paste0("Error reading file contents: ", conditionMessage(e))
-      })
 
       self$summary_comparison <- result
       return(result)
