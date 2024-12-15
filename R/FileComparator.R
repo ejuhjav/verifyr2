@@ -35,6 +35,7 @@ FileComparator <- R6Class(
     initialize = function(file1 = NULL, file2 = NULL) {
       self$file1 <- file1
       self$file2 <- file2
+      self$details_comparison <- list("summary" = NULL, "full" = NULL)
     },
 
     #' @description
@@ -75,8 +76,13 @@ FileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_details = function(omit = NULL, options = NULL) {
-      if (!is.null(self$details_comparison)) {
-        return(self$details_comparison)
+      mode <- get_nested(options, "details", "mode")
+      if ("NA" == mode) {
+        mode <- "summary"
+      }
+
+      if (!is.null(self$details_comparison[[mode]])) {
+        return(self$details_comparison[[mode]])
       }
 
       if (!file.exists(self$file1) || !file.exists(self$file2)) {
@@ -99,7 +105,7 @@ FileComparator <- R6Class(
         })
       }
 
-      self$details_comparison <- result
+      self$details_comparison[[mode]] <- result
       return(result)
     },
 
