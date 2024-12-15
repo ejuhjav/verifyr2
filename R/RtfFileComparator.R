@@ -6,7 +6,7 @@
 #'
 #' @import striprtf
 #'
-#' @include TxtFileComparator.R
+#' @include TxtWithImagesFileComparator.R
 #'
 #' @examples
 #'
@@ -28,7 +28,7 @@
 #'
 RtfFileComparator <- R6Class(
   "RtfFileComparator",
-  inherit = TxtFileComparator,
+  inherit = TxtWithImagesFileComparator,
   public = list(
 
     #' @description
@@ -55,12 +55,29 @@ RtfFileComparator <- R6Class(
         return(super$vrf_contents(file, omit, options))
       }
 
-      # In content mode, we get the rtf text contents and the possible embedded images
-      # 1. Read the RTF file contents
+      # In content mode, we get the rtf text content
       contents <- striprtf::read_rtf(file = file)
       result   <- self$vrf_contents_inner(contents, omit, options)
 
-      # 2. Read the RTF file embedded images
+      return(result)
+    },
+
+    #' @description
+    #' "Abstract" method for getting the raw image hex vector array from the given
+    #' source file.
+    #'
+    #' @param file file for which to get the embedded image details
+    #'
+    vrf_images = function(file, options) {
+      # in raw mode no image details are extracted separately
+      # @todo, move this check to the parent class
+      if ("raw" == get_nested(options, "rtf", "mode")) {
+        return(list())
+      }
+
+      result <- list()
+
+      #  Read the RTF file embedded images
       rtf_content <- readLines(file, warn = FALSE)
       rtf_content <- paste(rtf_content, collapse = "\n")
 
@@ -74,39 +91,11 @@ RtfFileComparator <- R6Class(
         base64_data <- strsplit(base64_data_with_braces, "}")[[1]][1]
 
         if (!is.na(base64_data) && nchar(base64_data) > 0) {
-          if (2 == length(result)) {
-            result[[3]] <- list()
-          }
-          raw_data <- hex2raw(base64_data)
-          result[[3]] <- c(result[[3]], list(raw_data))
+          raw_data <- self$hex2raw(base64_data)
+          result <- c(result, list(raw_data))
         }
       }
       return(result)
     }
   )
 )
-
-#' Internal helper method for converting a hex string to raw vector.
-#'
-#' @param hex_string hexadecimal string to be converted to raw vector
-#'
-#' @keywords internal
-
-hex2raw <- function(hex_string) {
-  # Remove non-hex characters
-  hex_string <- gsub("[^0-9a-fA-F]", "", hex_string)
-
-  # check that the input string is a hex string
-  if (nchar(hex_string) %% 2 != 0 || nchar(hex_string) < 2) {
-    stop("input string isn't a hex string")
-  }
-
-  # Generate start and end indices
-  start_indices <- seq(1, nchar(hex_string), 2)
-  end_indices <- seq(2, nchar(hex_string), 2)
-
-  # Extract byte-sized chunks
-  bytes <- substring(hex_string, start_indices, end_indices)
-
-  as.raw(as.hexmode(bytes))
-}

@@ -81,35 +81,6 @@ TxtFileComparator <- R6Class(
         result <- paste0("File content has changes in ", count, " place(s).")
       }
 
-      # Generate additional summary string based on embedded image differences
-      # if applicable.
-      if (3 == length(file1_contents_list) && 3 == length(file2_contents_list)) {
-        result_images <- "No differences in embedded images."
-        file1_contents_images <- file1_contents_list[[3]]
-        file2_contents_images <- file2_contents_list[[3]]
-
-        if (length(file1_contents_images) != length(file2_contents_images)) {
-          # Number of found embedded images differs between the files.
-          result_images <- "Different amount of embedded images."
-        } else {
-          # Number of found embedded images is the same; calculate how many of the embedded
-          # images has changed (based on raw file data) compared to total count.
-          matches <- 0
-          total <- length(file1_contents_images)
-
-          for (index in seq_along(file1_contents_images)) {
-            if (identical(file1_contents_images[[index]], file2_contents_images[[index]])) {
-              matches <- matches + 1
-            }
-          }
-
-          if (matches != length(file1_contents_images)) {
-            result_images <- paste0(total - matches, "/", total, " embedded images have differences.")
-          }
-        }
-        result <- paste0(result, " ", result_images)
-      }
-
       return(result)
     },
 
@@ -167,32 +138,6 @@ TxtFileComparator <- R6Class(
         )
       )
 
-      # Append the possible extended images into the result list if applicable.
-      # List of images is included in the fileX_contents_lists if found from
-      # content getter.
-      if (3 == length(file1_contents_list) && 3 == length(file2_contents_list)) {
-        file1_contents_images <- file1_contents_list[[3]]
-        file2_contents_images <- file2_contents_list[[3]]
-
-        # Only display the differences if there is the same amount of images found
-        # from the compared files. Otherwise it would require additional logic to
-        # decide which files should be compared with each others (which is something
-        # that could be developed further with size etc comparisons).
-        if (length(file1_contents_images) == length(file2_contents_images)) {
-          for (index in seq_along(file1_contents_images)) {
-            # Manually create a ImgFileComparator instance for every embedded image
-            # found and call the details comparison based on existing bin data.
-            comparator <- ImgFileComparator$new(
-              NULL,
-              NULL,
-              file1_contents_images[[index]],
-              file2_contents_images[[index]]
-            )
-            result <- append(result, comparator$vrf_details_inner(omit, options))
-          }
-        }
-      }
-
       return(result)
     },
 
@@ -224,6 +169,7 @@ TxtFileComparator <- R6Class(
     }
   )
 )
+# nolint end: cyclocomp_linter
 
 #' Custom finalizer method for diffobj html content finalizing. This method is
 #' used to modify the diff html output so that omitted rows have their own
@@ -318,4 +264,3 @@ my_finalizer <- function(x, x.chr, omit) {
 
   return(diffobj::finalizeHtml(x, html_string))
 }
-# nolint end: cyclocomp_linter
