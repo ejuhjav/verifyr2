@@ -121,11 +121,8 @@ ImgFileComparator <- R6Class(
     #' @param file2 second file to compare
     #'
     vrf_details_inner_from_files = function(file1, file2) {
-      image1 <- magick::image_read(self$file1)
-      image2 <- magick::image_read(self$file2)
-
-      self$image1_raw <- magick::image_write(image1, format = "png")
-      self$image2_raw <- magick::image_write(image2, format = "png")
+      self$image1_raw <- readBin(self$file1, what = "raw", n = file.info(self$file1)$size)
+      self$image2_raw <- readBin(self$file2, what = "raw", n = file.info(self$file2)$size)
 
       return(self$vrf_details_inner_from_raw())
     }

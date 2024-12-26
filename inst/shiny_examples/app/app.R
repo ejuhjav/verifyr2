@@ -387,7 +387,14 @@ update_details_comparison <- function(input, output, session, config, row, row_i
             ),
             shiny::tags$div(
               class = "custom-img-diffobj-image-display",
-              shiny::tags$img(src = instance_data$content$image3, alt = "Difference Image", style = "width: 100%;")
+              if (!is.null(instance_data$content$image3)) {
+                shiny::tags$img(src = instance_data$content$image3, alt = "Difference Image", style = "width: 100%;")
+              } else {
+                shiny::tags$div(
+                  style = "height: 100%; width: 100%; text-align: center; line_height: 100%",
+                  "No differences"
+                )
+              }
             )
           )
         )
