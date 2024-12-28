@@ -31,24 +31,26 @@ comparator <- RtfFileComparator$new(file1, file2)
 
 }
 \section{Super classes}{
-\code{\link[verifyr2:FileComparator]{verifyr2::FileComparator}} -> \code{\link[verifyr2:BinaryFileComparator]{verifyr2::BinaryFileComparator}} -> \code{\link[verifyr2:TxtFileComparator]{verifyr2::TxtFileComparator}} -> \code{RtfFileComparator}
+\code{\link[verifyr2:FileComparator]{verifyr2::FileComparator}} -> \code{\link[verifyr2:BinaryFileComparator]{verifyr2::BinaryFileComparator}} -> \code{\link[verifyr2:TxtFileComparator]{verifyr2::TxtFileComparator}} -> \code{\link[verifyr2:TxtWithImagesFileComparator]{verifyr2::TxtWithImagesFileComparator}} -> \code{RtfFileComparator}
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-RtfFileComparator-vrf_contents}{\code{RtfFileComparator$vrf_contents()}}
+\item \href{#method-RtfFileComparator-vrf_images}{\code{RtfFileComparator$vrf_images()}}
 \item \href{#method-RtfFileComparator-clone}{\code{RtfFileComparator$clone()}}
 }
 }
 \if{html}{\out{
 <details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="initialize"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-initialize'><code>verifyr2::FileComparator$initialize()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_details"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_details'><code>verifyr2::FileComparator$vrf_details()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_summary"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_summary'><code>verifyr2::FileComparator$vrf_summary()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="TxtFileComparator" data-id="vrf_contents_inner"><a href='../../verifyr2/html/TxtFileComparator.html#method-TxtFileComparator-vrf_contents_inner'><code>verifyr2::TxtFileComparator$vrf_contents_inner()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="verifyr2" data-topic="TxtFileComparator" data-id="vrf_details_inner"><a href='../../verifyr2/html/TxtFileComparator.html#method-TxtFileComparator-vrf_details_inner'><code>verifyr2::TxtFileComparator$vrf_details_inner()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="verifyr2" data-topic="TxtFileComparator" data-id="vrf_summary_inner"><a href='../../verifyr2/html/TxtFileComparator.html#method-TxtFileComparator-vrf_summary_inner'><code>verifyr2::TxtFileComparator$vrf_summary_inner()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="verifyr2" data-topic="TxtWithImagesFileComparator" data-id="hex2raw"><a href='../../verifyr2/html/TxtWithImagesFileComparator.html#method-TxtWithImagesFileComparator-hex2raw'><code>verifyr2::TxtWithImagesFileComparator$hex2raw()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="verifyr2" data-topic="TxtWithImagesFileComparator" data-id="initialize"><a href='../../verifyr2/html/TxtWithImagesFileComparator.html#method-TxtWithImagesFileComparator-initialize'><code>verifyr2::TxtWithImagesFileComparator$initialize()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="verifyr2" data-topic="TxtWithImagesFileComparator" data-id="vrf_details_inner"><a href='../../verifyr2/html/TxtWithImagesFileComparator.html#method-TxtWithImagesFileComparator-vrf_details_inner'><code>verifyr2::TxtWithImagesFileComparator$vrf_details_inner()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="verifyr2" data-topic="TxtWithImagesFileComparator" data-id="vrf_summary_inner"><a href='../../verifyr2/html/TxtWithImagesFileComparator.html#method-TxtWithImagesFileComparator-vrf_summary_inner'><code>verifyr2::TxtWithImagesFileComparator$vrf_summary_inner()</code></a></span></li>
 </ul>
 </details>
 }}
@@ -78,6 +80,26 @@ file content parts are returned.
 \item{\code{file}}{file for which to get the contents}
 
 \item{\code{omit}}{string pattern to omit from the comparison}
+
+\item{\code{options}}{additional comparator parameters}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-RtfFileComparator-vrf_images"></a>}}
+\if{latex}{\out{\hypertarget{method-RtfFileComparator-vrf_images}{}}}
+\subsection{Method \code{vrf_images()}}{
+"Abstract" method for getting the raw image hex vector array from the given
+source file.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RtfFileComparator$vrf_images(file, options)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{file}}{file for which to get the embedded image details}
 
 \item{\code{options}}{additional comparator parameters}
 }
