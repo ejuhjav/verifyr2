@@ -6,7 +6,7 @@
 #'
 #' @import striprtf
 #'
-#' @include TxtWithImagesFileComparator.R
+#' @include TxtWithImagesComparator.R
 #'
 #' @examples
 #'
@@ -66,7 +66,8 @@ RtfFileComparator <- R6Class(
     #' "Abstract" method for getting the raw image hex vector array from the given
     #' source file.
     #'
-    #' @param file file for which to get the embedded image details
+    #' @param file    file for which to get the embedded image details
+    #' @param options additional comparator parameters
     #'
     vrf_images = function(file, options) {
       # in raw mode no image details are extracted separately

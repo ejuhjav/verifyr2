@@ -38,6 +38,7 @@ Collate:
     'ImgFileComparator.R'
     'TxtFileComparator.R'
     'PdfFileComparator.R'
+    'TxtWithImagesComparator.R'
     'RtfFileComparator.R'
     'get_nested.R'
     'list_files.R'

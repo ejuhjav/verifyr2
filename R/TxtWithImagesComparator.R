@@ -8,6 +8,9 @@
 #'
 #' @include TxtFileComparator.R
 #'
+#' @field file1_images_raw local property for storing image1 raw data
+#' @field file2_images_raw local property for storing image2 raw data
+#'
 
 # Disable cyclomatic complexity lint for the R6 class definition as lintr considers
 # the whole class definition as a single function.
