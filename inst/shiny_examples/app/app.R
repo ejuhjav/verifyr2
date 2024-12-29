@@ -307,7 +307,6 @@ update_details_comparison <- function(input, output, session, config, row, row_i
   output$details_out_generic <- shiny::renderUI({
     shiny::HTML("")
   })
-  #shinyjs::html("details_out_generic", "")
 
   shiny::withProgress(
     message = "Processing comparison details...",
@@ -354,70 +353,69 @@ update_details_comparison <- function(input, output, session, config, row, row_i
       instance_data <- details[[index]]
 
       if ("image" == instance_data$type) {
-        details_out_generic_addition <- shiny::tags$div(
+        shiny::tags$div(
           style = "padding: 9.5px;",
           class = "custom-img-diffobj-wrapper",
-
+          shiny::tags$div(
+            style = "display: flex;",
+            class = "custom-img-diffobj-container top",
             shiny::tags$div(
-              style = "display: flex;",
-              class = "custom-img-diffobj-container top",
+              style = "display: inline-block; flex: 0 0 33.3333%;",
               shiny::tags$div(
-                style = "display: inline-block; flex: 0 0 33.3333%;",
-                shiny::tags$div(
-                  class = "custom-img-diffobj-image custom-img-diffobj-image-1",
-                  shiny::tags$span("Image version 1")
-                )
-              ),
-              shiny::tags$div(
-                style = "display: inline-block; flex: 0 0 33.3333%;",
-                shiny::tags$div(
-                  class = "custom-img-diffobj-image custom-img-diffobj-image-2",
-                  shiny::tags$span("Image version 2")
-                )
-              ),
-              shiny::tags$div(
-                style = "display: inline-block; flex: 0 0 33.3333%;",
-                shiny::tags$div(
-                  class = "custom-img-diffobj-image custom-img-diffobj-image-3",
-                  shiny::tags$span("Image difference")
-                )
+                class = "custom-img-diffobj-image custom-img-diffobj-image-1",
+                shiny::tags$span("Image version 1")
               )
             ),
             shiny::tags$div(
-              style = "display: flex;",
-              class = "custom-img-diffobj-container bottom",
+              style = "display: inline-block; flex: 0 0 33.3333%;",
               shiny::tags$div(
-                style = "display: inline-block; flex: 0 0 33.3333%;",
-                shiny::tags$div(
-                  class = "custom-img-diffobj-image-display",
-                  shiny::tags$img(src = instance_data$content$image1, alt = "Image1", style = "width: 100%;")
-                )
-              ),
+                class = "custom-img-diffobj-image custom-img-diffobj-image-2",
+                shiny::tags$span("Image version 2")
+              )
+            ),
+            shiny::tags$div(
+              style = "display: inline-block; flex: 0 0 33.3333%;",
               shiny::tags$div(
-                style = "display: inline-block; flex: 0 0 33.3333%;",
-                shiny::tags$div(
-                  class = "custom-img-diffobj-image-display",
-                  shiny::tags$img(src = instance_data$content$image2, alt = "Image2", style = "width: 100%;")
-                )
-              ),
-              shiny::tags$div(
-                style = "display: inline-block; flex: 0 0 33.3333%;",
-                shiny::tags$div(
-                  class = "custom-img-diffobj-image-display",
-                  if (!is.null(instance_data$content$image3)) {
-                    shiny::tags$img(src = instance_data$content$image3, alt = "Difference Image", style = "width: 100%;")
-                  } else {
-                    shiny::tags$div(
-                      style = "background-color: #fff; justify-content: center; align-items: center; display: flex; height: 100%;",
-                      shiny::tags$div(
-                        style = "text-align: center",
-                        "No differences"
-                      )
-                    )
-                  }
-                )
+                class = "custom-img-diffobj-image custom-img-diffobj-image-3",
+                shiny::tags$span("Image difference")
               )
             )
+          ),
+          shiny::tags$div(
+            style = "display: flex;",
+            class = "custom-img-diffobj-container bottom",
+            shiny::tags$div(
+              style = "display: inline-block; flex: 0 0 33.3333%;",
+              shiny::tags$div(
+                class = "custom-img-diffobj-image-display",
+                shiny::tags$img(src = instance_data$content$image1, alt = "Image1", style = "width: 100%;")
+              )
+            ),
+            shiny::tags$div(
+              style = "display: inline-block; flex: 0 0 33.3333%;",
+              shiny::tags$div(
+                class = "custom-img-diffobj-image-display",
+                shiny::tags$img(src = instance_data$content$image2, alt = "Image2", style = "width: 100%;")
+              )
+            ),
+            shiny::tags$div(
+              style = "display: inline-block; flex: 0 0 33.3333%;",
+              shiny::tags$div(
+                class = "custom-img-diffobj-image-display",
+                if (!is.null(instance_data$content$image3)) {
+                  shiny::tags$img(src = instance_data$content$image3, alt = "Difference Image", style = "width: 100%;")
+                } else {
+                  shiny::tags$div(
+                    style = "background-color: #fff; justify-content: center; align-items: center; display: flex; height: 100%;",
+                    shiny::tags$div(
+                      style = "text-align: center",
+                      "No differences"
+                    )
+                  )
+                }
+              )
+            )
+          )
         )
       }
     })
@@ -589,10 +587,7 @@ server <- function(input, output, session) {
       } else {
         set_reactive_text(
           "summary_text",
-          paste0(
-            "No folder selected or",
-            "folders do not exist"
-          )
+          "No folder selected or folders do not exist"
         )
         NULL
       }
@@ -609,10 +604,7 @@ server <- function(input, output, session) {
       } else {
         set_reactive_text(
           "summary_text",
-          paste0(
-            "No files selected or",
-            "files do not exist"
-          )
+          "No files selected or files do not exist"
         )
         NULL
       }
@@ -779,13 +771,15 @@ server <- function(input, output, session) {
     new_row_index <- input$process_row
 
     # clear/initialize comparison specific comment value when selecting a row
-    if (!is.null(row_index) && row_index != new_row_index) {
-      row_comment <- paste0(dt_file_list[new_row_index, "comments_details"])
-      shiny::updateTextAreaInput(
-        session,
-        "details_out_comments",
-        value = row_comment
-      )
+    if (!is.null(row_index)) {
+      if (row_index != new_row_index) {
+        row_comment <- paste0(dt_file_list[new_row_index, "comments_details"])
+        shiny::updateTextAreaInput(
+          session,
+          "details_out_comments",
+          value = row_comment
+        )
+      }
     }
 
     set_visibility("comparison_comments_container", TRUE)
