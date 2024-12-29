@@ -83,15 +83,30 @@ div.diffobj-container.light.rgb span.diffobj-word.ignore span.diffobj-word-highl
     background-color: #ccc;
 }
 
-div.custom-img-diffobj-container {
+div.custom-img-diffobj-wrapper {
     padding: 9.5px;
     margin: 20px 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+div.custom-img-diffobj-container {
     font-size: 1.2em;
     line-height: 1.42857143;
     color: #333;
     background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+}
+
+div.custom-img-diffobj-container.top {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: 0 !important;
+}
+
+div.custom-img-diffobj-container.bottom {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0 !important;
 }
 
 div.custom-img-diffobj-container > div {
@@ -145,4 +160,5 @@ div.custom-img-diffobj-container > div {
     margin-left: 13px;
     background-color: #eeeeee;
     border-left: 1px solid #888888;
+    height: 100%;
 }
