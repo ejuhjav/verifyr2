@@ -307,7 +307,7 @@ update_details_comparison <- function(input, output, session, config, row, row_i
   output$details_out_generic <- shiny::renderUI({
     shiny::HTML("")
   })
-
+ 
   shiny::withProgress(
     message = "Processing comparison details...",
     value = 0,
@@ -743,6 +743,8 @@ server <- function(input, output, session) {
                 row_index = seq_along(dt_file_list$file1)
               ),
               .f = function(file1, file2, omitted, row_index) {
+                shiny::setProgress(detail = file1)
+
                 # Process a single row
                 comparator <- get_comparator(row_index, file1, file2)
                 result <- comparator$vrf_summary(
@@ -751,7 +753,7 @@ server <- function(input, output, session) {
                 )
 
                 # Update progress
-                shiny::incProgress(1 / nrow(dt_file_list), detail = file1)
+                shiny::incProgress(1 / nrow(dt_file_list))
                 result
               }
             )
