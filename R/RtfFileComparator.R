@@ -87,13 +87,15 @@ RtfFileComparator <- R6Class(
       base64_strings <- stringr::str_extract_all(rtf_content, base64_pattern)[[1]]
 
       if (length(base64_strings) > 0) {
-        split_parts <- strsplit(base64_strings[1], " ")[[1]]
-        base64_data_with_braces <- split_parts[2]
-        base64_data <- strsplit(base64_data_with_braces, "}")[[1]][1]
+        for (index in seq_along(base64_strings)) {
+          split_parts <- strsplit(base64_strings[index], " ")[[1]]
+          base64_data_with_braces <- split_parts[2]
+          base64_data <- strsplit(base64_data_with_braces, "}")[[1]][1]
 
-        if (!is.na(base64_data) && nchar(base64_data) > 0) {
-          raw_data <- self$hex2raw(base64_data)
-          result <- c(result, list(raw_data))
+          if (!is.na(base64_data) && nchar(base64_data) > 0) {
+            raw_data <- self$hex2raw(base64_data)
+            result <- c(result, list(raw_data))
+          }
         }
       }
       return(result)
