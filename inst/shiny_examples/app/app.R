@@ -86,7 +86,7 @@ javascript_additions <- function() {
     shiny::tags$script(htmltools::HTML("
       Shiny.addCustomMessageHandler('highlightRow', function(message) {
         $('.dataTable tr').removeClass('row_highlighted');
-        $('.dataTable tr:nth-child(' + message.row_id + ')').addClass('row_highlighted');
+        $('.dataTable #process_' + message.row_id).closest('tr').addClass('row_highlighted');
       });
     "))
   )
@@ -639,7 +639,7 @@ server <- function(input, output, session) {
     dt_file_list[row_index, "comments"] <- ifelse(comment != "", "yes", "no")
     dt_file_list <<- dt_file_list
 
-    DT::replaceData(dt_proxy, dt_file_list)
+    DT::replaceData(dt_proxy, dt_file_list, resetPaging = FALSE)
     shinyjs::delay(100, {
       session$sendCustomMessage(
         "highlightRow",
@@ -655,7 +655,7 @@ server <- function(input, output, session) {
         dt_file_list[row_index, "comments"] <- "no"
         dt_file_list <<- dt_file_list
 
-        DT::replaceData(dt_proxy, dt_file_list)
+        DT::replaceData(dt_proxy, dt_file_list, resetPaging = FALSE)
         shinyjs::delay(100, {
           session$sendCustomMessage(
             "highlightRow",
