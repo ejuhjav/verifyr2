@@ -73,6 +73,10 @@ jobs:
             cat(pct, file="/workdir/.github/badges/coverage.txt")
           '
 
+          echo "=== Contents of coverage.txt ==="
+          cat .github/badges/coverage.txt
+          echo "=== End of coverage.txt ==="
+
       - name: Create coverage badge manually
         run: |
           COVERAGE=$(cat .github/badges/coverage.txt)
