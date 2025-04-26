@@ -62,16 +62,37 @@ jobs:
             }
           '
 
-      - name: Calculate test coverage
+      - name: Calculate test coverage and save value
         id: coverage
         run: |
+          mkdir -p .github/badges
           docker run --rm -v ${{ github.workspace }}:/workdir my-r-package-ci \
-          Rscript -e 'cov <- covr::package_coverage("/workdir"); cat(round(covr::percent_coverage(cov), 1))' > coverage.txt
+          Rscript -e '
+            cov <- covr::package_coverage("/workdir");
+            pct <- round(covr::percent_coverage(cov), 1);
+            cat(pct, file="/workdir/.github/badges/coverage.txt")
+          '
 
-      - name: Generate Coverage Badge
-        uses: tj-actions/coverage-badge-py@v2
-        with:
-          coverage-summary: coverage.txt
+      - name: Create coverage badge manually
+        run: |
+          COVERAGE=$(cat .github/badges/coverage.txt)
+          COLOR="red"
+          if (( $(echo "$COVERAGE > 80" | bc -l) )); then COLOR="green"; fi
+          if (( $(echo "$COVERAGE > 60" | bc -l) && $(echo "$COVERAGE <= 80" | bc -l) )); then COLOR="yellow"; fi
+          echo "<svg xmlns='http://www.w3.org/2000/svg' width='120' height='20'>
+            <linearGradient id='a' x2='0' y2='100%'>
+              <stop offset='0' stop-color='#bbb' stop-opacity='.1'/>
+              <stop offset='1' stop-opacity='.1'/>
+            </linearGradient>
+            <rect rx='3' width='120' height='20' fill='#555'/>
+            <rect rx='3' x='60' width='60' height='20' fill='$COLOR'/>
+            <path fill='$COLOR' d='M60 0h4v20h-4z'/>
+            <rect rx='3' width='120' height='20' fill='url(#a)'/>
+            <g fill='#fff' text-anchor='middle' font-family='Verdana' font-size='11'>
+              <text x='30' y='15'>coverage</text>
+              <text x='90' y='15'>$COVERAGE%</text>
+            </g>
+          </svg>" > .github/badges/coverage.svg
 
       - name: Upload coverage badge
         uses: actions/upload-artifact@v4
