@@ -1,59 +1,70 @@
-name: Check R Package
+name: R Package Check and Coverage
 
 on:
   push:
-    branches: [main, pipeline]
+    branches: [ main, pipeline ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
-  check:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to GitHub Container Registry (optional)
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build Docker image with cache
+      - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
-          tags: rpkgcheck:latest
+          tags: my-r-package-ci
           load: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Run devtools::check()
+      - name: Install R dependencies (from DESCRIPTION)
         run: |
-          docker run --rm -v ${{ github.workspace }}:/pkg rpkgcheck:latest Rscript -e 'devtools::check("/pkg", error_on = "warning")'
+          docker run --rm -v ${{ github.workspace }}:/workdir my-r-package-ci \
+          Rscript -e 'devtools::install_deps("/workdir", dependencies = TRUE)'
 
-      - name: Run code coverage
+      - name: Run devtools::load_all() check
         run: |
-          docker run --rm -v ${{ github.workspace }}:/pkg rpkgcheck:latest Rscript -e 'covr::codecov(quiet = FALSE, path = "/pkg")'
+          docker run --rm -v ${{ github.workspace }}:/workdir my-r-package-ci \
+          Rscript -e 'devtools::load_all("/workdir")'
 
-      - name: Generate and commit badge
+      - name: Run devtools::check() and analyze results
         run: |
-          mkdir -p man/figures
-          docker run --rm -v ${{ github.workspace }}:/pkg rpkgcheck:latest Rscript -e '
-            cov <- covr::package_coverage(path = "/pkg")
-            covr::coverage_to_svg(cov, file = "/pkg/man/figures/coverage.svg")
+          docker run --rm -v ${{ github.workspace }}:/workdir my-r-package-ci \
+          Rscript -e '
+            result <- devtools::check("/workdir", error_on = "never")
+            n_errors <- length(result$errors)
+            n_warnings <- length(result$warnings)
+            n_notes <- length(result$notes)
+            cat(sprintf("Check result: %d errors, %d warnings, %d notes\n", n_errors, n_warnings, n_notes))
+            if (n_errors > 0 || n_warnings > 0) {
+              stop("❌ devtools::check() failed due to errors or warnings")
+            } else {
+              cat("✅ devtools::check() passed with 0 errors and 0 warnings\n")
+            }
           '
 
-      - name: Commit coverage badge
+      - name: Run coverage analysis and save badge
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add man/figures/coverage.svg
-          git commit -m "Update coverage badge" || echo "No changes to commit"
-          git push
+          docker run --rm -v ${{ github.workspace }}:/workdir my-r-package-ci \
+          Rscript -e '
+            library(covr)
+            cov <- package_coverage("/workdir")
+            percent <- round(percent_coverage(cov), 1)
+            cat(sprintf("Coverage: %.1f%%\n", percent))
+            dir.create("/workdir/man/figures", showWarnings = FALSE)
+            badge <- covr::create_badge(percent, color = if (percent >= 90) "brightgreen" else if (percent >= 75) "yellow" else "red")
+            writeLines(badge, "/workdir/man/figures/coverage.svg")
+          '
+
+      - name: Upload coverage badge
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-badge
+          path: man/figures/coverage.svg
 
