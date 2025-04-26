@@ -14,6 +14,9 @@ RUN apt-get update && apt-get install -y \
     libmagickwand-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Explicitly install the following packages
+RUN Rscript -e 'install.packages(c("magick", "pdftools", "striprtf"), repos = "https://cloud.r-project.org")'
+
 # Set working directory inside the container
 WORKDIR /workdir
 
