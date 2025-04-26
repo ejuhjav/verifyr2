@@ -43,6 +43,9 @@ jobs:
           docker run --rm -v ${{ github.workspace }}:/workdir my-r-package-ci \
           Rscript -e "devtools::check('/workdir', error_on = 'warning')"
 
+      - name: Show the event that triggered the workflow
+        run: echo "Triggered by event: ${{ github.event_name }}"
+
   coverage:
     name: Test coverage
     runs-on: ubuntu-latest
