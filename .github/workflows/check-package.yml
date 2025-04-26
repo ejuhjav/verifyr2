@@ -2,9 +2,9 @@ name: Check R Package
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, pipeline]
   pull_request:
-    branches: [main, master]
+    branches: [main]
 
 jobs:
   check:
