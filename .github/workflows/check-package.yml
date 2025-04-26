@@ -1,5 +1,8 @@
 name: R Package Check
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:
