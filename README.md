@@ -1,5 +1,5 @@
 
-# verifyr2 <img src="./man/figures/verifyr2.png" align="right" height="223" />
+# verifyr2 - test <img src="./man/figures/verifyr2.png" align="right" height="223" />
 
 ![Coverage](https://github.com/ejuhjav/verifyr2/actions/workflows/check-package.yml/badge.svg) ![Coverage Badge](https://raw.githubusercontent.com/ejuhjav/verifyr2/main/.github/badges/coverage.svg)
 
