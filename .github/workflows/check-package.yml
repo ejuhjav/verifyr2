@@ -1,0 +1,95 @@
+name: R Package Check and Coverage
+
+on:
+  push:
+    branches: [ main, pipeline ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write    # Needed to push badge updates back
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}  # Use default GitHub token
+
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image
+      run: |
+        docker build -t r-package-check .
+
+    - name: Run devtools::load_all and devtools::check
+      run: |
+        docker run --rm r-package-check /bin/bash -c "
+          R -e 'devtools::load_all()'
+          Rscript -e '\
+            res <- devtools::check(error_on = \"never\"); \
+            errs <- length(res$errors); \
+            warns <- length(res$warnings); \
+            if (errs > 0 || warns > 0) { \
+              message(\"❌ Package check failed: \", errs, \" errors, \", warns, \" warnings\"); \
+              quit(status = 1); \
+            } else { \
+              message(\"✅ Package check passed: 0 errors, 0 warnings\"); \
+            } \
+          '
+        "
+
+    - name: Run test coverage with covr
+      run: |
+        docker run --rm r-package-check /bin/bash -c "
+          Rscript -e '\
+            library(covr); \
+            cov <- package_coverage(); \
+            percent <- round(coverage_to_list(cov)$percent_coverage, 1); \
+            writeLines(as.character(percent), \"coverage.txt\"); \
+            cat(\"Test coverage:\", percent, \"%\\n\"); \
+          '
+        "
+
+    - name: Generate coverage badge
+      run: |
+        COVERAGE=$(cat coverage.txt)
+        COLOR=red
+        if (( $(echo "$COVERAGE >= 90" | bc -l) )); then COLOR=brightgreen; \
+        elif (( $(echo "$COVERAGE >= 75" | bc -l) )); then COLOR=yellowgreen; \
+        elif (( $(echo "$COVERAGE >= 50" | bc -l) )); then COLOR=orange; fi
+        echo "Creating badge with coverage: $COVERAGE%"
+        mkdir -p man/figures
+        echo "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"150\" height=\"20\">
+          <linearGradient id=\"b\" x2=\"0\" y2=\"100%\">
+            <stop offset=\"0\" stop-color=\"#bbb\" stop-opacity=\".1\"/>
+            <stop offset=\"1\" stop-opacity=\".1\"/>
+          </linearGradient>
+          <mask id=\"a\">
+            <rect width=\"150\" height=\"20\" rx=\"3\" fill=\"#fff\"/>
+          </mask>
+          <g mask=\"url(#a)\">
+            <rect width=\"85\" height=\"20\" fill=\"#555\"/>
+            <rect x=\"85\" width=\"65\" height=\"20\" fill=\"#$COLOR\"/>
+            <rect width=\"150\" height=\"20\" fill=\"url(#b)\"/>
+          </g>
+          <g fill=\"#fff\" text-anchor=\"middle\" font-family=\"Verdana\" font-size=\"11\">
+            <text x=\"42.5\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">coverage</text>
+            <text x=\"42.5\" y=\"14\">coverage</text>
+            <text x=\"115\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">${COVERAGE}%</text>
+            <text x=\"115\" y=\"14\">${COVERAGE}%</text>
+          </g>
+        </svg>" > man/figures/coverage.svg
+
+    - name: Commit badge
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add man/figures/coverage.svg
+        git commit -m "Update coverage badge" || echo "No changes to commit"
+        git push
+

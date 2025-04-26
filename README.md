@@ -1,9 +1,5 @@
 
-<div align="center">
-  <img src="./man/figures/verifyr2.png" alt="Project Logo" width="200">
-</div>
-
-# verifyr2
+# verifyr2 ![Coverage](./man/figures/coverage.svg)
 
 Verifyr2 is an R package for extendable file comparison classes and methods including an
 example shiny app for combining the functions into a convenient application.
@@ -79,4 +75,8 @@ PdfFileComparator <- R6Class(
 ## Credits
 
 Verifyr2 implementation is based on the concept of the [verifyr package](https://github.com/novartis/verifyr).
+
+<div align="center">
+  <img src="./man/figures/verifyr2.png" alt="Project Logo" width="200">
+</div>
 
