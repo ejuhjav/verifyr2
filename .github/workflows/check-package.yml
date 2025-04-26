@@ -1,14 +1,10 @@
-name: R Package Check
-
-permissions:
-  contents: write
+name: Check and Coverage
 
 on:
-  push:
+  pull_request:
     branches:
       - main
-      - pipeline
-  pull_request:
+  push:
     branches:
       - main
 
@@ -17,100 +13,63 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Cache Docker layers
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - name: Build Docker image
+      - name: Build Docker Image
         uses: docker/build-push-action@v5
         with:
           context: .
-          tags: my-r-package-ci
           load: true
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
+          tags: my-r-package-ci
 
-      - name: Replace old cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-
-      - name: Install R package dependencies
+      - name: Run devtools::check inside Docker
         run: |
           docker run --rm -v ${{ github.workspace }}:/workdir my-r-package-ci \
-          Rscript -e 'if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools"); devtools::install_deps("/workdir", dependencies = TRUE)'
+          Rscript -e "devtools::check('/workdir')"
 
-      - name: Load package with devtools::load_all()
+  coverage:
+    needs: check
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate coverage inside Docker
         run: |
           docker run --rm -v ${{ github.workspace }}:/workdir my-r-package-ci \
-          Rscript -e 'devtools::load_all("/workdir")'
+          Rscript -e "cov <- covr::package_coverage('/workdir'); cat(round(covr::percent_coverage(cov), 1))" > coverage.txt
 
-      - name: Check package with devtools::check()
+      - name: Print coverage.txt contents
         run: |
-          docker run --rm -v ${{ github.workspace }}:/workdir my-r-package-ci \
-          Rscript -e '
-            check <- devtools::check("/workdir", error_on = "warning");
-            if (length(check$errors) > 0 || length(check$warnings) > 0) {
-              stop("There were errors or warnings during devtools::check()")
-            }
-          '
+          echo "Coverage percentage from coverage.txt:"
+          cat coverage.txt
 
-      - name: Calculate test coverage and save value
-        id: coverage
+      - name: Generate SVG badge manually
         run: |
+          COVERAGE=$(cat coverage.txt)
           mkdir -p .github/badges
-          docker run --rm -v ${{ github.workspace }}:/workdir my-r-package-ci \
-          Rscript -e '
-            cov <- covr::package_coverage("/workdir");
-            pct <- round(covr::percent_coverage(cov), 1);
-            cat(pct, file="/workdir/.github/badges/coverage.txt")
-          '
-
-          echo "=== Contents of coverage.txt ==="
-          cat .github/badges/coverage.txt
-          echo "=== End of coverage.txt ==="
-
-      - name: Create coverage badge manually
-        run: |
-          COVERAGE=$(cat .github/badges/coverage.txt)
-          COLOR="red"
-          if (( $(echo "$COVERAGE > 80" | bc -l) )); then COLOR="green"; fi
-          if (( $(echo "$COVERAGE > 60" | bc -l) && $(echo "$COVERAGE <= 80" | bc -l) )); then COLOR="yellow"; fi
-          echo "<svg xmlns='http://www.w3.org/2000/svg' width='120' height='20'>
-            <linearGradient id='a' x2='0' y2='100%'>
-              <stop offset='0' stop-color='#bbb' stop-opacity='.1'/>
-              <stop offset='1' stop-opacity='.1'/>
-            </linearGradient>
-            <rect rx='3' width='120' height='20' fill='#555'/>
-            <rect rx='3' x='60' width='60' height='20' fill='$COLOR'/>
-            <path fill='$COLOR' d='M60 0h4v20h-4z'/>
-            <rect rx='3' width='120' height='20' fill='url(#a)'/>
-            <g fill='#fff' text-anchor='middle' font-family='Verdana' font-size='11'>
-              <text x='30' y='15'>coverage</text>
-              <text x='90' y='15'>$COVERAGE%</text>
-            </g>
+          echo "<svg xmlns='http://www.w3.org/2000/svg' width='100' height='20'>
+          <rect width='100' height='20' fill='#555'/>
+          <rect x='50' width='50' height='20' fill='#4c1'/>
+          <text x='25' y='14' fill='#fff' font-family='Verdana' font-size='11'>coverage</text>
+          <text x='75' y='14' fill='#fff' font-family='Verdana' font-size='11'>${COVERAGE}%</text>
           </svg>" > .github/badges/coverage.svg
 
-      - name: Upload coverage badge
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-badge
-          path: .github/badges/coverage.svg
-
-      - name: Commit coverage badge
+      - name: Commit and push badge
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git fetch
+          git checkout main
           git add .github/badges/coverage.svg
           git commit -m "Update coverage badge [skip ci]" || echo "No changes to commit"
-          git push origin HEAD
+          git push
+
