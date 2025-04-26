@@ -1,7 +1,7 @@
 
 # verifyr2 <img src="./man/figures/verifyr2.png" align="right" height="223" />
 
-![Coverage](./man/figures/coverage.svg)
+![Coverage](https://github.com/ejuhjav/verifyr2/actions/workflows/check-package.yml/badge.svg)
 
 Verifyr2 is an R package for extendable file comparison classes and methods including an
 example shiny app for combining the functions into a convenient application.
