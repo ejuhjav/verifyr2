@@ -8,70 +8,110 @@ on:
 
 jobs:
   check:
+    name: R CMD check
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image with cache
         uses: docker/build-push-action@v5
         with:
           context: .
           push: false
+          load: true
           tags: my-r-package-ci:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Run devtools::check()
+      - name: List Docker images (debug)
+        run: docker images
+
+      - name: Run devtools::check
         run: |
           docker run --rm -v ${{ github.workspace }}:/workdir my-r-package-ci \
-          Rscript -e 'devtools::check("/workdir", error_on = "warning")'
+          Rscript -e "devtools::check('/workdir', error_on = 'warning')"
 
   coverage:
-    needs: check
+    name: Test coverage
     runs-on: ubuntu-latest
+    needs: check
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image with cache
         uses: docker/build-push-action@v5
         with:
           context: .
           push: false
+          load: true
           tags: my-r-package-ci:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Calculate coverage
+      - name: List Docker images (debug)
+        run: docker images
+
+      - name: Run coverage and save output
         run: |
           docker run --rm -v ${{ github.workspace }}:/workdir my-r-package-ci \
-          Rscript -e 'cov <- covr::package_coverage("/workdir"); cat(round(covr::percent_coverage(cov), 1))' > coverage.txt
-      
-      - name: Show coverage
-        run: cat coverage.txt
+          Rscript -e "cov <- covr::package_coverage('/workdir'); cat(round(covr::percent_coverage(cov), 1))" > coverage.txt
+          
+          echo "Generated coverage.txt:"
+          cat coverage.txt
 
-      - name: Create badge
+      - name: Create SVG badge manually
         run: |
-          COVERAGE=$(cat coverage.txt)
           mkdir -p .github/badges
-          echo "<svg xmlns='http://www.w3.org/2000/svg' width='100' height='20'>
-                  <rect width='100' height='20' fill='#555'/>
-                  <rect x='50' width='50' height='20' fill='#4c1'/>
-                  <text x='25' y='14' fill='#fff' font-family='Verdana' font-size='11'>coverage</text>
-                  <text x='75' y='14' fill='#fff' font-family='Verdana' font-size='11'>$COVERAGE%</text>
-                </svg>" > .github/badges/coverage.svg
+          coverage=$(cat coverage.txt)
+          cat <<EOF > .github/badges/coverage.svg
+          <svg xmlns="http://www.w3.org/2000/svg" width="110" height="20">
+            <linearGradient id="a" x2="0" y2="100%">
+              <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
+              <stop offset="1" stop-opacity=".1"/>
+            </linearGradient>
+            <rect rx="3" width="110" height="20" fill="#555"/>
+            <rect rx="3" x="55" width="55" height="20" fill="#007ec6"/>
+            <path fill="#007ec6" d="M55 0h4v20h-4z"/>
+            <rect rx="3" width="110" height="20" fill="url(#a)"/>
+            <g fill="#fff" text-anchor="middle" font-family="Verdana" font-size="11">
+              <text x="27.5" y="15" fill="#010101" fill-opacity=".3">coverage</text>
+              <text x="27.5" y="14">coverage</text>
+              <text x="82.5" y="15" fill="#010101" fill-opacity=".3">${coverage}%</text>
+              <text x="82.5" y="14">${coverage}%</text>
+            </g>
+          </svg>
+          EOF
 
-      - name: Commit badge if on main
-        if: github.ref == 'refs/heads/main'
+      - name: Commit and push coverage badge
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
           git add .github/badges/coverage.svg
           git commit -m "Update coverage badge [skip ci]" || echo "No changes to commit"
-          git push
+          git push origin main
 
