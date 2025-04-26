@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Explicitly install the following packages
-RUN Rscript -e 'install.packages(c("magick", "pdftools", "striprtf"), repos = "https://cloud.r-project.org")'
+RUN Rscript -e 'install.packages(c("magick", "pdftools", "striprtf", "lintr"), repos = "https://cloud.r-project.org")'
 
 # Set working directory inside the container
 WORKDIR /workdir
