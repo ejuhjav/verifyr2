@@ -81,15 +81,18 @@ jobs:
 
       - name: Run coverage and save output
         run: |
+          mkdir -p coverage-report .github/badges
           docker run --rm -v ${{ github.workspace }}:/workdir my-r-package-ci \
-          Rscript -e "cov <- covr::package_coverage('/workdir'); cat(round(covr::percent_coverage(cov), 1))" > coverage.txt
-          
+          Rscript -e "cov <- covr::package_coverage('/workdir'); \
+                     cat(round(covr::percent_coverage(cov), 1), file = 'coverage.txt'); \
+                     covr::report(cov, file = '/workdir/coverage-report/index.html')"
+
           echo "Generated coverage.txt:"
           cat coverage.txt
 
       - name: Create SVG badge manually
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          mkdir -p .github/badges
           coverage=$(cat coverage.txt)
           cat <<EOF > .github/badges/coverage.svg
           <svg xmlns="http://www.w3.org/2000/svg" width="110" height="20">
@@ -104,23 +107,25 @@ jobs:
             <g fill="#fff" text-anchor="middle" font-family="Verdana" font-size="11">
               <text x="27.5" y="15" fill="#010101" fill-opacity=".3">coverage</text>
               <text x="27.5" y="14">coverage</text>
-              <text x="82.5" y="15" fill="#010101" fill-opacity=".3">${coverage}%</text>
-              <text x="82.5" y="14">${coverage}%</text>
+              <text x="82.5" y="15" fill="#010101" fill-opacity=".3">\${coverage}%</text>
+              <text x="82.5" y="14">\${coverage}%</text>
             </g>
           </svg>
           EOF
 
-      - name: Copy artifacts to publish directory
-        run: |
-          mkdir -p public
-          cp .github/badges/coverage.svg public/
-          # If you later generate an HTML report, copy it too:
-          # cp -r path/to/html/report public/coverage-report/
-
-      - name: Deploy to GitHub Pages
+      - name: Deploy to gh-pages branch
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-          publish_branch: gh-pages
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+          git clone --branch gh-pages --single-branch https://github.com/${{ github.repository }} gh-pages
+
+          rm -rf gh-pages/coverage
+          mkdir -p gh-pages/coverage
+          cp -r coverage-report/* gh-pages/coverage/
+
+          cd gh-pages
+          git add coverage
+          git commit -m "Update coverage report [skip ci]" || echo "No changes to commit"
+          git push origin gh-pages
