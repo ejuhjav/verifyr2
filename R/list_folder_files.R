@@ -43,6 +43,7 @@ list_folder_files <- function(folder1, folder2, pattern = NULL) {
   }
 
   print("one or both of the folders do not exist")
+  return(NULL)
 }
 
 folder_info <- function(folder, column_name, pattern) {
