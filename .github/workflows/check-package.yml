@@ -110,12 +110,17 @@ jobs:
           </svg>
           EOF
 
-      - name: Commit and push coverage badge
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - name: Copy artifacts to publish directory
         run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          git add .github/badges/coverage.svg
-          git commit -m "Update coverage badge [skip ci]" || echo "No changes to commit"
-          git push origin main
+          mkdir -p public
+          cp .github/badges/coverage.svg public/
+          # If you later generate an HTML report, copy it too:
+          # cp -r path/to/html/report public/coverage-report/
 
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
