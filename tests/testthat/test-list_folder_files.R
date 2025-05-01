@@ -6,9 +6,6 @@ base2 <- "test_outputs/rtf"
 # Generic file existence checks
 ################################################################################
 
-
-  print("one or both of the folders do not exist")
-
 test_that(paste(
   "'one or both of the folders do not exist' ",
   "printed if one of the folders does not exist"
