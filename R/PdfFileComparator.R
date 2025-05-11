@@ -28,7 +28,7 @@
 #'
 PdfFileComparator <- R6Class(
   "PdfFileComparator",
-  inherit = TxtFileComparator,
+  inherit = TxtWithImagesFileComparator,
   public = list(
 
     #' @description
@@ -54,6 +54,18 @@ PdfFileComparator <- R6Class(
       content <- strsplit(content, "\n")[[1]]
 
       return(self$vrf_contents_inner(content, omit, options))
+    },
+
+    #' @description
+    #' "Abstract" method for getting the raw image hex vector array from the given
+    #' source file.
+    #'
+    #' @param file    file for which to get the embedded image details
+    #' @param options additional comparator parameters
+    #'
+    vrf_images = function(file, options) {
+      # @todo, missing implementation for image extraction
+      return(list())
     }
   )
 )
