@@ -47,6 +47,7 @@ comparator <- TxtFileComparator$new(file1, file2)
 <ul>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="initialize"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-initialize'><code>verifyr2::FileComparator$initialize()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_details"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_details'><code>verifyr2::FileComparator$vrf_details()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_option_value"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_option_value'><code>verifyr2::FileComparator$vrf_option_value()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_summary"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_summary'><code>verifyr2::FileComparator$vrf_summary()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="BinaryFileComparator" data-id="vrf_contents"><a href='../../verifyr2/html/BinaryFileComparator.html#method-BinaryFileComparator-vrf_contents'><code>verifyr2::BinaryFileComparator$vrf_contents()</code></a></span></li>
 </ul>

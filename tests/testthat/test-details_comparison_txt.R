@@ -43,9 +43,11 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "copy.txt")
 
-  options    <- list("details" = list("mode" = "summary"))
+  config <- Config$new(FALSE)
+  config$set("details.mode", "summary")
+
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(options = options)[[1]]
+  result     <- comparator$vrf_details(options = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
@@ -57,9 +59,11 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "changes_one_row.txt")
 
-  options    <- list("details" = list("mode" = "full"))
+  config <- Config$new(FALSE)
+  config$set("details.mode", "full")
+
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(options = options)[[1]]
+  result     <- comparator$vrf_details(options = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
@@ -73,9 +77,11 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "addition_one_row.txt")
 
-  options    <- list("details" = list("mode" = "full"))
+  config <- Config$new(FALSE)
+  config$set("details.mode", "full")
+
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(options = options, omit = "Line 4")[[1]]
+  result     <- comparator$vrf_details(options = config, omit = "Line 4")[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")

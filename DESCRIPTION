@@ -12,11 +12,13 @@ Imports:
     base64enc,
     diffobj,
     dplyr,
+    jsonlite,
     magick,
     magrittr,
     mime,
     pdftools,
     R6,
+    rappdirs,
     shiny,
     stringr,
     striprtf,
@@ -24,7 +26,6 @@ Imports:
 Suggests: 
     DT,
     fs,
-    jsonlite,
     shinyjs,
     shinyFiles,
     testthat (>= 3.0.0)
@@ -34,6 +35,7 @@ RoxygenNote: 7.3.2
 Collate: 
     'FileComparator.R'
     'BinaryFileComparator.R'
+    'Config.R'
     'FileComparatorFactory.R'
     'ImgFileComparator.R'
     'TxtFileComparator.R'

@@ -3,6 +3,8 @@
 #' \code{verifyr2::run_example} returns simple Shiny App where user can see how
 #' the verifyr2 functions work
 
+config <- Config$new()
+
 # the datatable contents with summary comparisons and comments
 dt_file_list <- NULL
 
@@ -286,12 +288,12 @@ get_comparator <- function(row_index, file1, file2) {
   return(comparator)
 }
 
-update_details_comparison <- function(input, output, session, config, row, row_index) {
+update_details_comparison <- function(input, output, session, config_param, row, row_index) {
   file1 <- paste0(row[1])
   file2 <- paste0(row[2])
 
-  options <- config$configuration
-  options$details$mode <- current_mode()
+  options <- config_param$clone(deep = TRUE)
+  options$set("details.mode", current_mode())
 
   # empty and hide the display elements by default before redrawing the contents
   set_visibility("details_tabs", FALSE)
@@ -476,9 +478,6 @@ server <- function(input, output, session) {
   # Element initializations
   # ============================================================================
 
-  config_file <- paste0(fs::path_package("/config.json", package = "verifyr2"))
-  config_json <- jsonlite::fromJSON(config_file)
-
   roots  <- c(
     Home = fs::path_home(),
     Examples = fs::path_package("verifyr2", "extdata")
@@ -513,7 +512,6 @@ server <- function(input, output, session) {
     "the side-by-side details comparison."
   )
 
-  config <- shiny::reactiveValues(configuration = as.list(config_json))
   summary_text <- shiny::reactiveVal(default1)
   details_text <- shiny::reactiveVal(default2)
   file1_link <- shiny::reactiveVal("")
@@ -572,43 +570,7 @@ server <- function(input, output, session) {
 
   list_of_files <- shiny::eventReactive(input$go, {
     dt_comparators_list <<- list()
-
-    if (input$compare_tabs == "tabs_folder") {
-      if (file.exists(input$folder1) && file.exists(input$folder2)) {
-        set_visibility("comparison_comments_container", FALSE)
-        shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
-        set_reactive_text("summary_text", "")
-
-        verifyr2::list_folder_files(
-          input$folder1,
-          input$folder2,
-          input$file_name_pattern
-        )
-      } else {
-        set_reactive_text(
-          "summary_text",
-          "No folder selected or folders do not exist"
-        )
-        NULL
-      }
-    } else {
-      if (file.exists(input$file1) && file.exists(input$file2)) {
-        set_visibility("comparison_comments_container", FALSE)
-        shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
-        set_reactive_text("summary_text", "")
-
-        verifyr2::list_files(
-          input$file1,
-          input$file2
-        )
-      } else {
-        set_reactive_text(
-          "summary_text",
-          "No files selected or files do not exist"
-        )
-        NULL
-      }
-    }
+    list_files(input, summary_text)
   })
 
   shiny::observeEvent(input$details_tabs, {
@@ -624,7 +586,7 @@ server <- function(input, output, session) {
         update_details_comparison(input, output, session, config, row, new_row_index)
       }
     } else {
-      current_mode(config$configuration$details$mode)
+      current_mode(config$get("details.mode"))
     }
   })
 
@@ -669,40 +631,34 @@ server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$configure, {
+    ui_elems <- generate_config_ui_grouped(config$schema, config)
+
     shiny::showModal(shiny::modalDialog(
       shiny::tags$h2("Comparison configuration"),
-      shiny::selectInput(
-        "rtf_mode",
-        "RTF comparison mode",
-        choices = c("raw", "content"),
-        selected = config$configuration$rtf$mode
-      ),
-
-      shiny::selectInput(
-        "details_mode",
-        "Details comparison mode",
-        choices = c("full", "summary"),
-        selected = config$configuration$details$mode
-      ),
-
-      shiny::p(
-        paste0(
-          "The default configuration values can be",
-          "initialized in the inst/config.json file."
-        )
-      ),
+      shiny::tagList(ui_elems),
 
       footer = shiny::tagList(
-        shiny::actionButton("submit", "Save"),
+        shiny::actionButton("reset_config_modal", "Reset"),
+        shiny::actionButton("submit_apply", "Apply"),
+        shiny::actionButton("submit_apply_save", "Apply and Save"),
         shiny::modalButton("Cancel")
       )
     ))
   })
 
-  shiny::observeEvent(input$submit, {
-    shiny::removeModal()
-    config$configuration$rtf$mode <- input$rtf_mode
-    config$configuration$details$mode <- input$details_mode
+  shiny::observeEvent(input$submit_apply, {
+    apply_config_form_inputs(input, config$schema, config, save = FALSE)
+  })
+
+  shiny::observeEvent(input$submit_apply_save, {
+    apply_config_form_inputs(input, config$schema, config, save = TRUE)
+  })
+
+  shiny::observeEvent(input$reset_config_modal, {
+    keys <- names(generate_config_ui_inputs(config$schema, config))
+    for (key in keys) {
+      shiny::updateSelectInput(session, key, selected = config$get(key))
+    }
   })
 
   summary_verify <- shiny::reactive({
@@ -749,7 +705,7 @@ server <- function(input, output, session) {
                 comparator <- get_comparator(row_index, file1, file2)
                 result <- comparator$vrf_summary(
                   omit    = omitted,
-                  options = config$configuration
+                  options = config
                 )
 
                 # Update progress
@@ -807,6 +763,130 @@ server <- function(input, output, session) {
   set_reactive_text <- function(reactive_id, text, class = "") {
     do.call(reactive_id, list(text))
   }
+}
+
+list_files <- function(input, summary_text) {
+  if (input$compare_tabs == "tabs_folder") {
+    if (file.exists(input$folder1) && file.exists(input$folder2)) {
+      set_visibility("comparison_comments_container", FALSE)
+      shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
+      set_reactive_text(summary_text, "")
+
+      verifyr2::list_folder_files(
+        input$folder1,
+        input$folder2,
+        input$file_name_pattern
+      )
+    } else {
+      set_reactive_text(
+        summary_text,
+        "No folder selected or folders do not exist"
+      )
+      return(NULL)
+    }
+  } else {
+    if (file.exists(input$file1) && file.exists(input$file2)) {
+      set_visibility("comparison_comments_container", FALSE)
+      shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
+      set_reactive_text(summary_text, "")
+
+      verifyr2::list_files(
+        input$file1,
+        input$file2
+      )
+    } else {
+      set_reactive_text(
+        summary_text,
+        "No files selected or files do not exist"
+      )
+      return(NULL)
+    }
+  }
+}
+
+`%||%` <- function(a, b) if (!is.null(a)) a else b
+
+generate_config_ui_inputs <- function(schema, config, prefix = "") {
+  inputs <- list()
+
+  for (key in names(schema)) {
+    full_key <- if (prefix == "") key else paste(prefix, key, sep = ".")
+    entry    <- schema[[key]]
+
+    if (is.list(entry) && !is.null(entry$options) && !is.null(entry$description)) {
+      inputs[[full_key]] <- shiny::selectInput(
+        inputId  = full_key,
+        label    = entry$description,
+        choices  = entry$options,
+        selected = config$get(full_key)
+      )
+    } else if (is.list(entry)) {
+      sub_inputs <- generate_config_ui_inputs(entry, config, full_key)
+      inputs     <- c(inputs, sub_inputs)
+    }
+  }
+  return(inputs)
+}
+
+generate_config_ui_grouped <- function(schema, config, prefix = "") {
+  groups <- list()
+
+  for (group in names(schema)) {
+    entries    <- schema[[group]]
+    group_desc <- group
+
+    if (!is.null(entries$description)) {
+      group_desc <- entries$description
+    }
+
+    # Exclude "description" key itself from leaf scanning
+    keys <- setdiff(names(entries), "description")
+
+    inputs <- list()
+    for (key in keys) {
+      full_key <- paste(group, key, sep = ".")
+      entry    <- entries[[key]]
+
+      # Recurse if it's nested
+      if (is.list(entry) && !is.null(entry$options) && !is.null(entry$description)) {
+        inputs[[full_key]] <- shiny::selectInput(
+          inputId  = full_key,
+          label    = entry$description,
+          choices  = entry$options,
+          selected = config$get(full_key)
+        )
+      } else if (is.list(entry)) {
+        sub_inputs <- generate_config_ui_inputs(entry, config, full_key)
+        inputs     <- c(inputs, sub_inputs)
+      }
+    }
+
+    groups[[group]] <- shiny::tagList(
+      shiny::tags$h4(group_desc),
+      inputs
+    )
+  }
+  return(groups)
+}
+
+apply_config_form_inputs <- function(input, schema, config, save = FALSE) {
+  keys <- names(generate_config_ui_inputs(schema, config))
+
+  for (key in keys) {
+    val <- input[[key]]
+    if (!is.null(val)) {
+      config$set(key, val)
+    }
+  }
+
+  if (save) {
+    config$save()
+    shiny::showNotification("Configuration saved and applied", type = "message")
+  } else {
+    shiny::showNotification("Configuration applied", type = "message")
+  }
+
+  shiny::removeModal()
 }
 
 shiny::shinyApp(ui, server)

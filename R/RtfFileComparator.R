@@ -51,7 +51,8 @@ RtfFileComparator <- R6Class(
     #'
     vrf_contents = function(file, omit, options) {
       # In raw mode we call directly the TxtFileComparator implementation of the vrf_contents
-      if ("raw" == get_nested(options, "rtf", "mode")) {
+      #if ("raw" == get_nested(options, "rtf", "mode")) {
+      if ("raw" == super$vrf_option_value(options, "rtf.mode")) {
         return(super$vrf_contents(file, omit, options))
       }
 
@@ -72,7 +73,8 @@ RtfFileComparator <- R6Class(
     vrf_images = function(file, options) {
       # in raw mode no image details are extracted separately
       # @todo, move this check to the parent class
-      if ("raw" == get_nested(options, "rtf", "mode")) {
+      #if ("raw" == get_nested(options, "rtf", "mode")) {
+      if ("raw" == super$vrf_option_value(options, "rtf.mode")) {
         return(list())
       }
 

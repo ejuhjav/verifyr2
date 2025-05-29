@@ -13,7 +13,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "nonexisting1.rtf")
   file2 <- testthat::test_path(base, "nonexisting2.rtf")
 
-  options    <- list("rtf" = list("mode" = "raw"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "raw")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -28,7 +30,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "nonexisting.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -46,7 +50,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "copy.rtf")
 
-  options    <- list("rtf" = list("mode" = "raw"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "raw")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -61,7 +67,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_one_row_content.rtf")
 
-  options    <- list("rtf" = list("mode" = "raw"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "raw")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -76,7 +84,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_one_row_footer.rtf")
 
-  options    <- list("rtf" = list("mode" = "raw"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "raw")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -91,7 +101,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "changes_one_row_content.rtf")
   file2 <- testthat::test_path(base, "base.rtf")
 
-  options    <- list("rtf" = list("mode" = "raw"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "raw")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -106,7 +118,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "changes_one_row_footer.rtf")
 
-  options    <- list("rtf" = list("mode" = "raw"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "raw")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -121,7 +135,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "changes_two_rows_content.rtf")
   file2 <- testthat::test_path(base, "base.rtf")
 
-  options    <- list("rtf" = list("mode" = "raw"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "raw")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -136,7 +152,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "changes_two_rows_footer.rtf")
 
-  options    <- list("rtf" = list("mode" = "raw"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "raw")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -155,7 +173,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "copy.rtf")
 
-  options    <- list("rtf" = list("mode" = "raw"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "raw")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(omit = "Nothing", options = options)
 
@@ -170,8 +190,10 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_one_row_content.rtf")
 
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "raw")
+
   omit       <- "Additional Row"
-  options    <- list("rtf" = list("mode" = "raw"))
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(omit = omit, options = options)
 
@@ -186,8 +208,10 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_one_row_footer.rtf")
 
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "raw")
+
   omit       <- "Additional footer row"
-  options    <- list("rtf" = list("mode" = "raw"))
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(omit = omit, options = options)
 
@@ -202,8 +226,10 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_two_rows_content.rtf")
 
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "raw")
+
   omit       <- "Additional Row"
-  options    <- list("rtf" = list("mode" = "raw"))
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(omit = omit, options = options)
 
@@ -218,8 +244,10 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_two_rows_content.rtf")
 
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "raw")
+
   omit       <- "Additional Row 1"
-  options    <- list("rtf" = list("mode" = "raw"))
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(omit = omit, options = options)
 
@@ -234,8 +262,10 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_two_rows_footer.rtf")
 
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "raw")
+
   omit       <- "Additional footer row"
-  options    <- list("rtf" = list("mode" = "raw"))
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(omit = omit, options = options)
 
@@ -250,8 +280,10 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_two_rows_footer.rtf")
 
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "raw")
+
   omit       <- "Additional footer row 1"
-  options    <- list("rtf" = list("mode" = "raw"))
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(omit = omit, options = options)
 
@@ -268,7 +300,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "base.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -282,7 +316,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_one_row_content.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -309,7 +345,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_one_row_footer.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -336,7 +374,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "changes_one_row_content.rtf")
   file2 <- testthat::test_path(base, "base.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -350,7 +390,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "changes_one_row_footer.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -364,7 +406,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "changes_two_rows_content.rtf")
   file2 <- testthat::test_path(base, "base.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -378,7 +422,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "changes_two_rows_footer.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -397,7 +443,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "copy.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(omit = "Nothing", options = options)
 
@@ -412,7 +460,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "changes_one_row_content.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(omit = "setosa", options = options)
 
@@ -427,7 +477,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_one_row_content.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(omit = "setosa", options = options)
 
@@ -442,7 +494,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_two_rows_content.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(omit = "unknown", options = options)
 
@@ -457,7 +511,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_two_rows_content.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(omit = "unknown1", options = options)
 
@@ -472,7 +528,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "changes_two_rows_content.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(omit = "setosa", options = options)
 
@@ -490,7 +548,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base_with_image.rtf")
   file2 <- testthat::test_path(base, "base_with_image.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 
@@ -505,7 +565,9 @@ test_that(paste(
   file1 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
   file2 <- testthat::test_path(base, "base_with_image.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(options = options)
 

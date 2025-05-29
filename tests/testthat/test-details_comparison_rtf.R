@@ -12,9 +12,11 @@ test_that(paste(
   file1 <- testthat::test_path(base, "nonexisting1.rtf")
   file2 <- testthat::test_path(base, "nonexisting2.rtf")
 
-  options    <- list("rtf" = list("mode" = "raw"))
+  config <- Config$new(FALSE)
+  config$set("rtf.mode", "raw")
+
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(options = options)[[1]]
+  result     <- comparator$vrf_details(options = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(result$contents, "File(s) not available; unable to compare.")
@@ -27,9 +29,11 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "nonexisting.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  config <- Config$new(FALSE)
+  config$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(options = options)[[1]]
+  result     <- comparator$vrf_details(options = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(result$contents, "File(s) not available; unable to compare.")
@@ -46,9 +50,11 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "copy.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  config <- Config$new(FALSE)
+  config$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(options = options)[[1]]
+  result     <- comparator$vrf_details(options = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
@@ -61,9 +67,11 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "changes_one_row_content.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  config <- Config$new(FALSE)
+  config$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(options = options)[[1]]
+  result     <- comparator$vrf_details(options = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
@@ -76,9 +84,11 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base_with_image.rtf")
   file2 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
 
-  options    <- list("rtf" = list("mode" = "content"))
+  config <- Config$new(FALSE)
+  config$set("rtf.mode", "content")
+
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(options = options)[[1]]
+  result     <- comparator$vrf_details(options = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
@@ -91,9 +101,11 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "changes_one_row_content.rtf")
 
-  options    <- list("rtf" = list("mode" = "raw"))
+  config <- Config$new(FALSE)
+  config$set("rtf.mode", "raw")
+
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(options = options)[[1]]
+  result     <- comparator$vrf_details(options = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
