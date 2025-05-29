@@ -111,7 +111,6 @@ TxtFileComparator <- R6Class(
       file2_contents_whole <- file2_contents_list[[1]]
 
       context <- 2
-      #if ("full" == get_nested(options, "details", "mode")) {
       if ("full" == super$vrf_option_value(options, "details.mode")) {
         context <- -1
       }

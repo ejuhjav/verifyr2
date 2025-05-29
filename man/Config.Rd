@@ -51,7 +51,6 @@ config$save()
 \item \href{#method-Config-save}{\code{Config$save()}}
 \item \href{#method-Config-get_default_config}{\code{Config$get_default_config()}}
 \item \href{#method-Config-get_default_schema}{\code{Config$get_default_schema()}}
-\item \href{#method-Config-print}{\code{Config$print()}}
 \item \href{#method-Config-clone}{\code{Config$clone()}}
 }
 }
@@ -144,16 +143,6 @@ data, the schema contains property descriptions as well as all possible values
 for the configuration properties.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Config$get_default_schema()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Config-print"></a>}}
-\if{latex}{\out{\hypertarget{method-Config-print}{}}}
-\subsection{Method \code{print()}}{
-Method for printing the configuration object contents.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Config$print(...)}\if{html}{\out{</div>}}
 }
 
 }

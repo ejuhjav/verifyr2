@@ -146,30 +146,22 @@ Config <- R6::R6Class(
     get_default_schema = function() {
       list(
         rtf = list(
-          description = "RTF Output Configuration",
+          description = "RTF comparison (summary and details)",
           mode = list(
-            description = "RTF Mode",
+            description = "Mode",
             options = c("raw", "content"),
             default = "content"
           )
         ),
         details = list(
-          description = "Detail Level",
+          description = "Details comparison",
           mode = list(
-            description = "Details Mode",
+            description = "Mode",
             options = c("full", "summary"),
             default = "summary"
           )
         )
       )
-    },
-
-    #' @description
-    #' Method for printing the configuration object contents.
-    #'
-    print = function(...) {
-      cat("Current Configuration:\n")
-      print(self$config)
     }
   )
 )

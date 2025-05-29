@@ -570,43 +570,7 @@ server <- function(input, output, session) {
 
   list_of_files <- shiny::eventReactive(input$go, {
     dt_comparators_list <<- list()
-
-    if (input$compare_tabs == "tabs_folder") {
-      if (file.exists(input$folder1) && file.exists(input$folder2)) {
-        set_visibility("comparison_comments_container", FALSE)
-        shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
-        set_reactive_text("summary_text", "")
-
-        verifyr2::list_folder_files(
-          input$folder1,
-          input$folder2,
-          input$file_name_pattern
-        )
-      } else {
-        set_reactive_text(
-          "summary_text",
-          "No folder selected or folders do not exist"
-        )
-        NULL
-      }
-    } else {
-      if (file.exists(input$file1) && file.exists(input$file2)) {
-        set_visibility("comparison_comments_container", FALSE)
-        shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
-        set_reactive_text("summary_text", "")
-
-        verifyr2::list_files(
-          input$file1,
-          input$file2
-        )
-      } else {
-        set_reactive_text(
-          "summary_text",
-          "No files selected or files do not exist"
-        )
-        NULL
-      }
-    }
+    list_files(input, summary_text)
   })
 
   shiny::observeEvent(input$details_tabs, {
@@ -667,8 +631,7 @@ server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$configure, {
-    schema <- config$schema
-    ui_elems <- generate_config_ui_inputs(config$schema, config)
+    ui_elems <- generate_config_ui_grouped(config$schema, config)
 
     shiny::showModal(shiny::modalDialog(
       shiny::tags$h2("Comparison configuration"),
@@ -676,18 +639,18 @@ server <- function(input, output, session) {
 
       footer = shiny::tagList(
         shiny::actionButton("reset_config_modal", "Reset"),
-        shiny::actionButton("submit_use", "Apply"),
-        shiny::actionButton("submit_save_use", "Save and Apply"),
+        shiny::actionButton("submit_apply", "Apply"),
+        shiny::actionButton("submit_apply_save", "Apply and Save"),
         shiny::modalButton("Cancel")
       )
     ))
   })
 
-  shiny::observeEvent(input$submit_use, {
+  shiny::observeEvent(input$submit_apply, {
     apply_config_form_inputs(input, config$schema, config, save = FALSE)
   })
 
-  shiny::observeEvent(input$submit_save_use, {
+  shiny::observeEvent(input$submit_apply_save, {
     apply_config_form_inputs(input, config$schema, config, save = TRUE)
   })
 
@@ -799,6 +762,45 @@ server <- function(input, output, session) {
 
   set_reactive_text <- function(reactive_id, text, class = "") {
     do.call(reactive_id, list(text))
+  }
+}
+
+list_files <- function(input, summary_text) {
+  if (input$compare_tabs == "tabs_folder") {
+    if (file.exists(input$folder1) && file.exists(input$folder2)) {
+      set_visibility("comparison_comments_container", FALSE)
+      shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
+      set_reactive_text(summary_text, "")
+
+      verifyr2::list_folder_files(
+        input$folder1,
+        input$folder2,
+        input$file_name_pattern
+      )
+    } else {
+      set_reactive_text(
+        summary_text,
+        "No folder selected or folders do not exist"
+      )
+      return(NULL)
+    }
+  } else {
+    if (file.exists(input$file1) && file.exists(input$file2)) {
+      set_visibility("comparison_comments_container", FALSE)
+      shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
+      set_reactive_text(summary_text, "")
+
+      verifyr2::list_files(
+        input$file1,
+        input$file2
+      )
+    } else {
+      set_reactive_text(
+        summary_text,
+        "No files selected or files do not exist"
+      )
+      return(NULL)
+    }
   }
 }
 
