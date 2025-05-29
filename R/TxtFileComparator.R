@@ -111,7 +111,8 @@ TxtFileComparator <- R6Class(
       file2_contents_whole <- file2_contents_list[[1]]
 
       context <- 2
-      if ("full" == get_nested(options, "details", "mode")) {
+      #if ("full" == get_nested(options, "details", "mode")) {
+      if ("full" == super$vrf_option_value(options, "details.mode")) {
         context <- -1
       }
 
@@ -151,7 +152,7 @@ TxtFileComparator <- R6Class(
     #' directly by the user.
     #'
     #' @param contents file contents
-    #' @param omit    string pattern to omit from the comparison
+    #' @param omit     string pattern to omit from the comparison
     #' @param options  additional comparator parameters
     #'
     vrf_contents_inner = function(contents, omit, options) {

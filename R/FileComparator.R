@@ -76,7 +76,8 @@ FileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_details = function(omit = NULL, options = NULL) {
-      mode <- get_nested(options, "details", "mode")
+      #mode <- get_nested(options, "details", "mode")
+      mode <- self$vrf_option_value(options, "details.mode")
       if ("NA" == mode) {
         mode <- "summary"
       }
@@ -133,6 +134,21 @@ FileComparator <- R6Class(
     #'
     vrf_details_inner = function(omit, options) {
       stop("vrf_details_inner must be implemented in a subclass.")
+    },
+
+    #' @description
+    #' Method for getting specific value from the options. In the initial version,
+    #' returns 'NA' if null options is passed.
+    #'
+    #' @param options comparator parameters
+    #' @param key
+    #'
+    vrf_option_value = function(options, key) {
+      if (is.null(options)) {
+        return("NA")
+      }
+      value <- options$get(key)
+      return(value)
     }
   )
 )

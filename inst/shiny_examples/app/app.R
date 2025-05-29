@@ -162,8 +162,8 @@ search_container <- function() {
       shiny::fluidRow(
         shiny::column(12,
           shiny::actionButton("go", "Go"),
+          #shiny::actionButton("configure", "Configure"),
           shiny::actionButton("configure", "Configure"),
-          shiny::actionButton("configure2", "Configure2"),
         ),
       ),
     ),
@@ -289,12 +289,15 @@ get_comparator <- function(row_index, file1, file2) {
   return(comparator)
 }
 
-update_details_comparison <- function(input, output, session, config, row, row_index) {
+update_details_comparison <- function(input, output, session, cfg, row, row_index) {
   file1 <- paste0(row[1])
   file2 <- paste0(row[2])
 
-  options <- config$configuration
-  options$details$mode <- current_mode()
+  options <- cfg$clone(deep = TRUE)
+  options$set('details.mode', current_mode())
+
+  #options <- config$configuration
+  #options$details$mode <- current_mode()
 
   # empty and hide the display elements by default before redrawing the contents
   set_visibility("details_tabs", FALSE)
@@ -479,8 +482,8 @@ server <- function(input, output, session) {
   # Element initializations
   # ============================================================================
 
-  config_file <- paste0(fs::path_package("/config.json", package = "verifyr2"))
-  config_json <- jsonlite::fromJSON(config_file)
+  #config_file <- paste0(fs::path_package("/config.json", package = "verifyr2"))
+  #config_json <- jsonlite::fromJSON(config_file)
 
   roots  <- c(
     Home = fs::path_home(),
@@ -516,7 +519,7 @@ server <- function(input, output, session) {
     "the side-by-side details comparison."
   )
 
-  config <- shiny::reactiveValues(configuration = as.list(config_json))
+  #config <- shiny::reactiveValues(configuration = as.list(config_json))
   summary_text <- shiny::reactiveVal(default1)
   details_text <- shiny::reactiveVal(default2)
   file1_link <- shiny::reactiveVal("")
@@ -624,10 +627,12 @@ server <- function(input, output, session) {
         new_row_index <- input$process_row
         row <- summary_verify()[new_row_index, ]
 
-        update_details_comparison(input, output, session, config, row, new_row_index)
+        #update_details_comparison(input, output, session, config, row, new_row_index)
+        update_details_comparison(input, output, session, cfg, row, new_row_index)
       }
     } else {
-      current_mode(config$configuration$details$mode)
+      #current_mode(config$configuration$details$mode)
+      current_mode(cfg$get('details.mode'))
     }
   })
 
@@ -671,62 +676,49 @@ server <- function(input, output, session) {
     shiny::updateTextAreaInput(session, "details_out_comments", value = "")
   })
 
+  #shiny::observeEvent(input$configure, {
+    #shiny::showModal(shiny::modalDialog(
+      #shiny::tags$h2("Comparison configuration"),
+      #shiny::selectInput(
+        #"rtf_mode",
+        #"RTF comparison mode",
+        #choices = c("raw", "content"),
+        #selected = config$configuration$rtf$mode
+      #),
+
+      #shiny::selectInput(
+        #"details_mode",
+        #"Details comparison mode",
+        #choices = c("full", "summary"),
+        #selected = config$configuration$details$mode
+      #),
+
+      #shiny::p(
+        #paste0(
+          #"The default configuration values can be",
+          #"initialized in the inst/config.json file."
+        #)
+      #),
+
+      #footer = shiny::tagList(
+        #shiny::actionButton("submit", "Save"),
+        #shiny::modalButton("Cancel")
+      #)
+    #))
+  #})
+
+  #shiny::observeEvent(input$submit, {
+    #shiny::removeModal()
+    #config$configuration$rtf$mode <- input$rtf_mode
+    #config$configuration$details$mode <- input$details_mode
+  #})
+
   shiny::observeEvent(input$configure, {
-    shiny::showModal(shiny::modalDialog(
-      shiny::tags$h2("Comparison configuration"),
-      shiny::selectInput(
-        "rtf_mode",
-        "RTF comparison mode",
-        choices = c("raw", "content"),
-        selected = config$configuration$rtf$mode
-      ),
-
-      shiny::selectInput(
-        "details_mode",
-        "Details comparison mode",
-        choices = c("full", "summary"),
-        selected = config$configuration$details$mode
-      ),
-
-      shiny::p(
-        paste0(
-          "The default configuration values can be",
-          "initialized in the inst/config.json file."
-        )
-      ),
-
-      footer = shiny::tagList(
-        shiny::actionButton("submit", "Save"),
-        shiny::modalButton("Cancel")
-      )
-    ))
-  })
-
-  shiny::observeEvent(input$submit, {
-    shiny::removeModal()
-    config$configuration$rtf$mode <- input$rtf_mode
-    config$configuration$details$mode <- input$details_mode
-  })
-
-  shiny::observeEvent(input$configure2, {
     schema <- cfg$schema
-
-    #print(cfg)
-    #print(schema)
-
-    #ui_elems <- lapply(names(schema), function(group) {
-      #lapply(names(schema[[group]]), function(key) {
-        #full_key <- paste(group, key, sep = ".")
-        #desc <- schema[[group]][[key]]$description
-        #opts <- schema[[group]][[key]]$options
-        #shiny::selectInput(full_key, label = desc, choices = opts, selected = cfg$get(full_key))
-      #})
-    #})
-
     ui_elems <- generate_config_ui_inputs(cfg$schema, cfg)
 
     shiny::showModal(shiny::modalDialog(
-      shiny::tags$h2("Comparison configuration V2"),
+      shiny::tags$h2("Comparison configuration"),
       tagList(ui_elems),
 
       footer = shiny::tagList(
@@ -818,7 +810,8 @@ server <- function(input, output, session) {
                 comparator <- get_comparator(row_index, file1, file2)
                 result <- comparator$vrf_summary(
                   omit    = omitted,
-                  options = config$configuration
+                  options = cfg
+                  #options = config$configuration
                 )
 
                 # Update progress
@@ -861,7 +854,8 @@ server <- function(input, output, session) {
 
     # list side-by-side comparison
     set_reactive_text("details_text", "")
-    update_details_comparison(input, output, session, config, row, new_row_index)
+    update_details_comparison(input, output, session, cfg, row, new_row_index)
+    #update_details_comparison(input, output, session, config, row, new_row_index)
 
     # set up the file download links for the compared files
     update_download_links(output, row, file1_link, file2_link)
@@ -880,7 +874,7 @@ server <- function(input, output, session) {
 
 `%||%` <- function(a, b) if (!is.null(a)) a else b
 
-generate_config_ui_inputs <- function(schema, config, prefix = "") {
+generate_config_ui_inputs <- function(schema, cfg, prefix = "") {
   inputs <- list()
   
   for (key in names(schema)) {
@@ -893,11 +887,11 @@ generate_config_ui_inputs <- function(schema, config, prefix = "") {
         inputId = full_key,
         label = entry$description,
         choices = entry$options,
-        selected = config$get(full_key)
+        selected = cfg$get(full_key)
       )
     } else if (is.list(entry)) {
       # Recurse
-      sub_inputs <- generate_config_ui_inputs(entry, config, full_key)
+      sub_inputs <- generate_config_ui_inputs(entry, cfg, full_key)
       inputs <- c(inputs, sub_inputs)
     }
   }
@@ -905,7 +899,7 @@ generate_config_ui_inputs <- function(schema, config, prefix = "") {
   inputs
 }
 
-generate_config_ui_grouped <- function(schema, config, prefix = "") {
+generate_config_ui_grouped <- function(schema, cfg, prefix = "") {
   groups <- list()
 
   for (group in names(schema)) {
@@ -925,10 +919,10 @@ generate_config_ui_grouped <- function(schema, config, prefix = "") {
           inputId = full_key,
           label = entry$description,
           choices = entry$options,
-          selected = config$get(full_key)
+          selected = cfg$get(full_key)
         )
       } else if (is.list(entry)) {
-        sub_inputs <- generate_config_ui_inputs(entry, config, full_key)
+        sub_inputs <- generate_config_ui_inputs(entry, cfg, full_key)
         inputs <- c(inputs, sub_inputs)
       }
     }

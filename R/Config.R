@@ -41,26 +41,6 @@ get_nested_value <- function(config, key) {
   config
 }
 
-set_nested <- function(config, key, value) {
-  parts   <- strsplit(key, "\\.")[[1]]
-  current <- config
-
-  for (i in seq_along(parts)) {
-    part <- parts[[i]]
-
-    if (i == length(parts)) {
-      current[[part]] <- value
-    } else {
-      if (is.null(current[[part]]) || !is.list(current[[part]])) {
-        current[[part]] <- list()
-      }
-      current <- current[[part]]
-    }
-  }
-  config <- modifyList(config, current)
-  return(config)
-}
-
 set_nested_value <- function(config, key, value) {
   parts <- strsplit(key, ".", fixed = TRUE)[[1]]
   if (length(parts) == 1) {
@@ -71,41 +51,20 @@ set_nested_value <- function(config, key, value) {
   config
 }
 
-#get_default_config <- function() {
-  #list(
-    #rtf = list(mode = "content"),
-    #details = list(mode = "summary")
-  #)
-#}
-
 Config <- R6::R6Class("Config",
-  #public = list(
-    #config = NULL,
-    #schema = NULL,
-
-    #initialize = function(path = NULL) {
-      #self$schema <- get_config_schema()
-      #defaults <- self$get_defaults_from_schema()
-      #if (!is.null(path) && file.exists(path)) {
-        #file_config <- jsonlite::fromJSON(path, simplifyVector = FALSE)
-        #self$config <- merge_config(defaults, file_config)
-      #} else {
-        #self$config <- defaults
-      #}
-    #},
-
   public = list(
     config = NULL,
     schema = NULL,
     config_path = NULL,
 
-    initialize = function() {
+    initialize = function(load_config = TRUE) {
       self$schema <- self$get_default_schema()
       self$config_path <- file.path(rappdirs::user_config_dir("verifyr2"), "config.json")
       self$config <- self$get_default_config()
 
       # Load config from file if exists
-      if (file.exists(self$config_path)) {
+      if (load_config && file.exists(self$config_path)) {
+        print("WOOOOO");
         file_config <- jsonlite::read_json(self$config_path, simplifyVector = TRUE)
         self$config <- merge_config(self$config, file_config)
       }
