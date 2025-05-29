@@ -34,11 +34,11 @@ config$save()
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{config}}{local property for storing the current configuration data}
-
 \item{\code{schema}}{local property for storing the configuration schema}
 
-\item{\code{config_path}}{local property for storing the stored configuration json file path}
+\item{\code{config}}{local property for storing the current configuration data}
+
+\item{\code{path}}{local property for storing the stored configuration json file path}
 }
 \if{html}{\out{</div>}}
 }
@@ -62,13 +62,15 @@ Constructor for initializing the configuration. Checks the local machine
 for existing configuration file is load_config = TRUE. Ensures that all
 the project configuration values are included.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Config$new(load_config = TRUE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Config$new(load_config = TRUE, config_path = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{load_config}}{load configuration from local machine if available}
+
+\item{\code{config_path}}{location of the used/stored configuration json file}
 }
 \if{html}{\out{</div>}}
 }
@@ -115,8 +117,7 @@ item children are separated with a dot in the key notation.
 \if{html}{\out{<a id="method-Config-save"></a>}}
 \if{latex}{\out{\hypertarget{method-Config-save}{}}}
 \subsection{Method \code{save()}}{
-Method for saving the current configuration data into local machine. The
-save location and file name is currently hard coded.
+Method for saving the current configuration data into local machine.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Config$save()}\if{html}{\out{</div>}}
 }

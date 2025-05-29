@@ -1,9 +1,10 @@
-`%||%` <- function(a, b) if (!is.null(a)) a else b
 
 merge_config <- function(defaults, overrides) {
   for (name in names(defaults)) {
     if (!is.list(defaults[[name]]) || is.null(overrides[[name]])) {
-      overrides[[name]] <- overrides[[name]] %||% defaults[[name]]
+      if (is.null(overrides[[name]])) {
+        overrides[[name]] <- defaults[[name]]
+      }
     } else {
       overrides[[name]] <- merge_config(defaults[[name]], overrides[[name]])
     }
@@ -13,6 +14,7 @@ merge_config <- function(defaults, overrides) {
 
 get_nested_value <- function(config, key) {
   parts <- strsplit(key, ".", fixed = TRUE)[[1]]
+
   for (p in parts) {
     config <- config[[p]]
   }
@@ -21,6 +23,7 @@ get_nested_value <- function(config, key) {
 
 set_nested_value <- function(config, key, value) {
   parts <- strsplit(key, ".", fixed = TRUE)[[1]]
+
   if (length(parts) == 1) {
     config[[parts[1]]] <- value
   } else {
@@ -56,18 +59,18 @@ set_nested_value <- function(config, key, value) {
 #' @import rappdirs
 #' @importFrom R6 R6Class
 #'
-#' @field config      local property for storing the current configuration data
-#' @field schema      local property for storing the configuration schema
-#' @field config_path local property for storing the stored configuration json file path
+#' @field schema local property for storing the configuration schema
+#' @field config local property for storing the current configuration data
+#' @field path   local property for storing the stored configuration json file path
 #'
 #' @export
 #'
 Config <- R6::R6Class(
   "Config",
   public = list(
-    config      = NULL,
-    schema      = NULL,
-    config_path = NULL,
+    schema = NULL,
+    config = NULL,
+    path   = NULL,
 
     #' @description
     #' Constructor for initializing the configuration. Checks the local machine
@@ -75,15 +78,21 @@ Config <- R6::R6Class(
     #' the project configuration values are included.
     #'
     #' @param load_config load configuration from local machine if available
+    #' @param config_path location of the used/stored configuration json file
     #'
-    initialize = function(load_config = TRUE) {
+    initialize = function(load_config = TRUE, config_path = NULL) {
       self$schema <- self$get_default_schema()
-      self$config_path <- file.path(rappdirs::user_config_dir("verifyr2"), "config.json")
       self$config <- self$get_default_config()
 
+      if (is.null(config_path)) {
+        self$path <- file.path(rappdirs::user_config_dir("verifyr2"), "config.json")
+      } else {
+        self$path <- config_path
+      }
+
       # Load config from file if exists
-      if (load_config && file.exists(self$config_path)) {
-        file_config <- jsonlite::read_json(self$config_path, simplifyVector = TRUE)
+      if (load_config && file.exists(self$path)) {
+        file_config <- jsonlite::read_json(self$path, simplifyVector = TRUE)
         self$config <- merge_config(self$config, file_config)
       }
     },
@@ -110,13 +119,12 @@ Config <- R6::R6Class(
     },
 
     #' @description
-    #' Method for saving the current configuration data into local machine. The
-    #' save location and file name is currently hard coded.
+    #' Method for saving the current configuration data into local machine.
     #'
     save = function() {
-      dir.create(dirname(self$config_path), showWarnings = FALSE, recursive = TRUE)
-      jsonlite::write_json(self$config, self$config_path, pretty = TRUE, auto_unbox = TRUE)
-      message("Configuration saved to: ", normalizePath(self$config_path))
+      dir.create(dirname(self$path), showWarnings = FALSE, recursive = TRUE)
+      jsonlite::write_json(self$config, self$path, pretty = TRUE, auto_unbox = TRUE)
+      message("Configuration saved to: ", normalizePath(self$path))
     },
 
     #' @description
@@ -129,6 +137,7 @@ Config <- R6::R6Class(
 
       for (group in names(self$schema)) {
         defaults[[group]] <- list()
+
         for (key in names(self$schema[[group]])) {
           if (key != "description") {
             defaults[[group]][[key]] <- self$schema[[group]][[key]]$default

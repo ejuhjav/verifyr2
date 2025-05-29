@@ -833,7 +833,11 @@ generate_config_ui_grouped <- function(schema, config, prefix = "") {
 
   for (group in names(schema)) {
     entries    <- schema[[group]]
-    group_desc <- entries$description %||% group
+    group_desc <- group
+
+    if (!is.null(entries$description)) {
+      group_desc <- entries$description
+    }
 
     # Exclude "description" key itself from leaf scanning
     keys <- setdiff(names(entries), "description")
