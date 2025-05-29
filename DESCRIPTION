@@ -17,6 +17,7 @@ Imports:
     mime,
     pdftools,
     R6,
+    rappdirs,
     shiny,
     stringr,
     striprtf,

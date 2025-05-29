@@ -3,6 +3,8 @@
 #' \code{verifyr2::run_example} returns simple Shiny App where user can see how
 #' the verifyr2 functions work
 
+cfg <- Config$new()
+
 # the datatable contents with summary comparisons and comments
 dt_file_list <- NULL
 
@@ -161,6 +163,7 @@ search_container <- function() {
         shiny::column(12,
           shiny::actionButton("go", "Go"),
           shiny::actionButton("configure", "Configure"),
+          shiny::actionButton("configure2", "Configure2"),
         ),
       ),
     ),
@@ -705,6 +708,72 @@ server <- function(input, output, session) {
     config$configuration$details$mode <- input$details_mode
   })
 
+  shiny::observeEvent(input$configure2, {
+    schema <- cfg$schema
+
+    #print(cfg)
+    #print(schema)
+
+    #ui_elems <- lapply(names(schema), function(group) {
+      #lapply(names(schema[[group]]), function(key) {
+        #full_key <- paste(group, key, sep = ".")
+        #desc <- schema[[group]][[key]]$description
+        #opts <- schema[[group]][[key]]$options
+        #shiny::selectInput(full_key, label = desc, choices = opts, selected = cfg$get(full_key))
+      #})
+    #})
+
+    ui_elems <- generate_config_ui_inputs(cfg$schema, cfg)
+
+    shiny::showModal(shiny::modalDialog(
+      shiny::tags$h2("Comparison configuration V2"),
+      tagList(ui_elems),
+
+      footer = shiny::tagList(
+        shiny::actionButton("reset_config_modal", "Reset"),
+        shiny::actionButton("submit_use", "Apply"),
+        shiny::actionButton("submit_save_use", "Save and Apply"),
+        shiny::modalButton("Cancel")
+      )
+    ))
+  })
+
+  observeEvent(input$submit_use, {
+    apply_config_form_inputs(input, cfg$schema, cfg, save = FALSE)
+  })
+
+  observeEvent(input$submit_save_use, {
+    apply_config_form_inputs(input, cfg$schema, cfg, save = TRUE)
+  })
+
+  observeEvent(input$reset_config_modal, {
+    keys <- names(generate_config_ui_inputs(cfg$schema, cfg))
+    for (key in keys) {
+      updateSelectInput(session, key, selected = cfg$get(key))
+    }
+  })
+
+  observeEvent(input$submit2, {
+    schema <- cfg$schema
+
+    for (group in names(schema)) {
+      for (key in names(schema[[group]])) {
+        full_key <- paste(group, key, sep = ".")
+        print(full_key)
+        val <- input[[full_key]]
+        print(val)
+        if (!is.null(val)) {
+          print("SETTING")
+          cfg$set(full_key, val)
+        }
+      }
+    }
+    showNotification("Configuration saved", type = "message")
+    print("************************************")
+    print(cfg$print())
+    shiny::removeModal()
+  })
+
   summary_verify <- shiny::reactive({
     shiny::req(list_of_files())
 
@@ -807,6 +876,89 @@ server <- function(input, output, session) {
   set_reactive_text <- function(reactive_id, text, class = "") {
     do.call(reactive_id, list(text))
   }
+}
+
+`%||%` <- function(a, b) if (!is.null(a)) a else b
+
+generate_config_ui_inputs <- function(schema, config, prefix = "") {
+  inputs <- list()
+  
+  for (key in names(schema)) {
+    full_key <- if (prefix == "") key else paste(prefix, key, sep = ".")
+    entry <- schema[[key]]
+    
+    if (is.list(entry) && !is.null(entry$options) && !is.null(entry$description)) {
+      # Leaf node
+      inputs[[full_key]] <- shiny::selectInput(
+        inputId = full_key,
+        label = entry$description,
+        choices = entry$options,
+        selected = config$get(full_key)
+      )
+    } else if (is.list(entry)) {
+      # Recurse
+      sub_inputs <- generate_config_ui_inputs(entry, config, full_key)
+      inputs <- c(inputs, sub_inputs)
+    }
+  }
+  
+  inputs
+}
+
+generate_config_ui_grouped <- function(schema, config, prefix = "") {
+  groups <- list()
+
+  for (group in names(schema)) {
+    entries <- schema[[group]]
+    group_desc <- entries$description %||% group  # use group name if no description
+    # Exclude "description" key itself from leaf scanning
+    keys <- setdiff(names(entries), "description")
+
+    inputs <- list()
+    for (key in keys) {
+      full_key <- paste(group, key, sep = ".")
+      entry <- entries[[key]]
+
+      # Recurse if it's nested
+      if (is.list(entry) && !is.null(entry$options) && !is.null(entry$description)) {
+        inputs[[full_key]] <- shiny::selectInput(
+          inputId = full_key,
+          label = entry$description,
+          choices = entry$options,
+          selected = config$get(full_key)
+        )
+      } else if (is.list(entry)) {
+        sub_inputs <- generate_config_ui_inputs(entry, config, full_key)
+        inputs <- c(inputs, sub_inputs)
+      }
+    }
+
+    groups[[group]] <- shiny::tagList(
+      shiny::tags$h4(group_desc),
+      inputs
+    )
+  }
+
+  groups
+}
+
+apply_config_form_inputs <- function(input, schema, cfg, save = FALSE) {
+  keys <- names(generate_config_ui_inputs(schema, cfg))
+  for (key in keys) {
+    val <- input[[key]]
+    if (!is.null(val)) {
+      cfg$set(key, val)
+    }
+  }
+
+  if (save) {
+    cfg$save()
+    showNotification("Configuration saved and applied", type = "message")
+  } else {
+    showNotification("Configuration applied", type = "message")
+  }
+
+  shiny::removeModal()
 }
 
 shiny::shinyApp(ui, server)
