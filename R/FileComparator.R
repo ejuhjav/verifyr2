@@ -76,7 +76,6 @@ FileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_details = function(omit = NULL, options = NULL) {
-      #mode <- get_nested(options, "details", "mode")
       mode <- self$vrf_option_value(options, "details.mode")
       if ("NA" == mode) {
         mode <- "summary"

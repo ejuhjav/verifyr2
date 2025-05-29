@@ -162,7 +162,6 @@ search_container <- function() {
       shiny::fluidRow(
         shiny::column(12,
           shiny::actionButton("go", "Go"),
-          #shiny::actionButton("configure", "Configure"),
           shiny::actionButton("configure", "Configure"),
         ),
       ),
@@ -294,10 +293,7 @@ update_details_comparison <- function(input, output, session, cfg, row, row_inde
   file2 <- paste0(row[2])
 
   options <- cfg$clone(deep = TRUE)
-  options$set('details.mode', current_mode())
-
-  #options <- config$configuration
-  #options$details$mode <- current_mode()
+  options$set("details.mode", current_mode())
 
   # empty and hide the display elements by default before redrawing the contents
   set_visibility("details_tabs", FALSE)
@@ -482,9 +478,6 @@ server <- function(input, output, session) {
   # Element initializations
   # ============================================================================
 
-  #config_file <- paste0(fs::path_package("/config.json", package = "verifyr2"))
-  #config_json <- jsonlite::fromJSON(config_file)
-
   roots  <- c(
     Home = fs::path_home(),
     Examples = fs::path_package("verifyr2", "extdata")
@@ -519,7 +512,6 @@ server <- function(input, output, session) {
     "the side-by-side details comparison."
   )
 
-  #config <- shiny::reactiveValues(configuration = as.list(config_json))
   summary_text <- shiny::reactiveVal(default1)
   details_text <- shiny::reactiveVal(default2)
   file1_link <- shiny::reactiveVal("")
@@ -627,12 +619,10 @@ server <- function(input, output, session) {
         new_row_index <- input$process_row
         row <- summary_verify()[new_row_index, ]
 
-        #update_details_comparison(input, output, session, config, row, new_row_index)
         update_details_comparison(input, output, session, cfg, row, new_row_index)
       }
     } else {
-      #current_mode(config$configuration$details$mode)
-      current_mode(cfg$get('details.mode'))
+      current_mode(cfg$get("details.mode"))
     }
   })
 
@@ -676,50 +666,13 @@ server <- function(input, output, session) {
     shiny::updateTextAreaInput(session, "details_out_comments", value = "")
   })
 
-  #shiny::observeEvent(input$configure, {
-    #shiny::showModal(shiny::modalDialog(
-      #shiny::tags$h2("Comparison configuration"),
-      #shiny::selectInput(
-        #"rtf_mode",
-        #"RTF comparison mode",
-        #choices = c("raw", "content"),
-        #selected = config$configuration$rtf$mode
-      #),
-
-      #shiny::selectInput(
-        #"details_mode",
-        #"Details comparison mode",
-        #choices = c("full", "summary"),
-        #selected = config$configuration$details$mode
-      #),
-
-      #shiny::p(
-        #paste0(
-          #"The default configuration values can be",
-          #"initialized in the inst/config.json file."
-        #)
-      #),
-
-      #footer = shiny::tagList(
-        #shiny::actionButton("submit", "Save"),
-        #shiny::modalButton("Cancel")
-      #)
-    #))
-  #})
-
-  #shiny::observeEvent(input$submit, {
-    #shiny::removeModal()
-    #config$configuration$rtf$mode <- input$rtf_mode
-    #config$configuration$details$mode <- input$details_mode
-  #})
-
   shiny::observeEvent(input$configure, {
     schema <- cfg$schema
     ui_elems <- generate_config_ui_inputs(cfg$schema, cfg)
 
     shiny::showModal(shiny::modalDialog(
       shiny::tags$h2("Comparison configuration"),
-      tagList(ui_elems),
+      shiny::tagList(ui_elems),
 
       footer = shiny::tagList(
         shiny::actionButton("reset_config_modal", "Reset"),
@@ -730,39 +683,34 @@ server <- function(input, output, session) {
     ))
   })
 
-  observeEvent(input$submit_use, {
+  shiny::observeEvent(input$submit_use, {
     apply_config_form_inputs(input, cfg$schema, cfg, save = FALSE)
   })
 
-  observeEvent(input$submit_save_use, {
+  shiny::observeEvent(input$submit_save_use, {
     apply_config_form_inputs(input, cfg$schema, cfg, save = TRUE)
   })
 
-  observeEvent(input$reset_config_modal, {
+  shiny::observeEvent(input$reset_config_modal, {
     keys <- names(generate_config_ui_inputs(cfg$schema, cfg))
     for (key in keys) {
-      updateSelectInput(session, key, selected = cfg$get(key))
+      shiny::updateSelectInput(session, key, selected = cfg$get(key))
     }
   })
 
-  observeEvent(input$submit2, {
+  shiny::observeEvent(input$submit2, {
     schema <- cfg$schema
 
     for (group in names(schema)) {
       for (key in names(schema[[group]])) {
         full_key <- paste(group, key, sep = ".")
-        print(full_key)
         val <- input[[full_key]]
-        print(val)
         if (!is.null(val)) {
-          print("SETTING")
           cfg$set(full_key, val)
         }
       }
     }
-    showNotification("Configuration saved", type = "message")
-    print("************************************")
-    print(cfg$print())
+    shiny::showNotification("Configuration saved", type = "message")
     shiny::removeModal()
   })
 
@@ -811,7 +759,6 @@ server <- function(input, output, session) {
                 result <- comparator$vrf_summary(
                   omit    = omitted,
                   options = cfg
-                  #options = config$configuration
                 )
 
                 # Update progress
@@ -855,7 +802,6 @@ server <- function(input, output, session) {
     # list side-by-side comparison
     set_reactive_text("details_text", "")
     update_details_comparison(input, output, session, cfg, row, new_row_index)
-    #update_details_comparison(input, output, session, config, row, new_row_index)
 
     # set up the file download links for the compared files
     update_download_links(output, row, file1_link, file2_link)
@@ -876,11 +822,11 @@ server <- function(input, output, session) {
 
 generate_config_ui_inputs <- function(schema, cfg, prefix = "") {
   inputs <- list()
-  
+
   for (key in names(schema)) {
     full_key <- if (prefix == "") key else paste(prefix, key, sep = ".")
     entry <- schema[[key]]
-    
+
     if (is.list(entry) && !is.null(entry$options) && !is.null(entry$description)) {
       # Leaf node
       inputs[[full_key]] <- shiny::selectInput(
@@ -895,8 +841,7 @@ generate_config_ui_inputs <- function(schema, cfg, prefix = "") {
       inputs <- c(inputs, sub_inputs)
     }
   }
-  
-  inputs
+  return(inputs)
 }
 
 generate_config_ui_grouped <- function(schema, cfg, prefix = "") {
@@ -932,8 +877,7 @@ generate_config_ui_grouped <- function(schema, cfg, prefix = "") {
       inputs
     )
   }
-
-  groups
+  return(groups)
 }
 
 apply_config_form_inputs <- function(input, schema, cfg, save = FALSE) {
@@ -947,9 +891,9 @@ apply_config_form_inputs <- function(input, schema, cfg, save = FALSE) {
 
   if (save) {
     cfg$save()
-    showNotification("Configuration saved and applied", type = "message")
+    shiny::showNotification("Configuration saved and applied", type = "message")
   } else {
-    showNotification("Configuration applied", type = "message")
+    shiny::showNotification("Configuration applied", type = "message")
   }
 
   shiny::removeModal()

@@ -39,6 +39,7 @@ error.
 \item \href{#method-FileComparator-vrf_details}{\code{FileComparator$vrf_details()}}
 \item \href{#method-FileComparator-vrf_summary_inner}{\code{FileComparator$vrf_summary_inner()}}
 \item \href{#method-FileComparator-vrf_details_inner}{\code{FileComparator$vrf_details_inner()}}
+\item \href{#method-FileComparator-vrf_option_value}{\code{FileComparator$vrf_option_value()}}
 \item \href{#method-FileComparator-clone}{\code{FileComparator$clone()}}
 }
 }
@@ -145,6 +146,26 @@ shouldn't be called directly by the user.
 \item{\code{omit}}{string pattern to omit from the comparison (default = NULL)}
 
 \item{\code{options}}{additional comparator parameters}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-FileComparator-vrf_option_value"></a>}}
+\if{latex}{\out{\hypertarget{method-FileComparator-vrf_option_value}{}}}
+\subsection{Method \code{vrf_option_value()}}{
+Method for getting specific value from the options. In the initial version,
+returns 'NA' if null options is passed.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_option_value(options, key)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{options}}{comparator parameters}
+
+\item{\code{key}}{}
 }
 \if{html}{\out{</div>}}
 }

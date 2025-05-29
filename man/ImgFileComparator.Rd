@@ -60,9 +60,10 @@ comparator <- ImgFileComparator$new(NULL, NULL, image1_raw, image2_raw)
 }
 }
 \if{html}{\out{
-<details open><summary>Inherited methods</summary>
+<details><summary>Inherited methods</summary>
 <ul>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_details"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_details'><code>verifyr2::FileComparator$vrf_details()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_option_value"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_option_value'><code>verifyr2::FileComparator$vrf_option_value()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_summary"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_summary'><code>verifyr2::FileComparator$vrf_summary()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="BinaryFileComparator" data-id="vrf_contents"><a href='../../verifyr2/html/BinaryFileComparator.html#method-BinaryFileComparator-vrf_contents'><code>verifyr2::BinaryFileComparator$vrf_contents()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="BinaryFileComparator" data-id="vrf_contents_inner"><a href='../../verifyr2/html/BinaryFileComparator.html#method-BinaryFileComparator-vrf_contents_inner'><code>verifyr2::BinaryFileComparator$vrf_contents_inner()</code></a></span></li>
