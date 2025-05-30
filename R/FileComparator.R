@@ -17,6 +17,11 @@
 #'
 #' @export
 #'
+
+# Disable cyclomatic complexity lint for the R6 class definition as lintr considers
+# the whole class definition as a single function.
+#
+# nolint start: cyclocomp_linter
 FileComparator <- R6Class(
   "FileComparator",
   public <- list(
@@ -226,3 +231,4 @@ FileComparator <- R6Class(
     }
   )
 )
+# nolint end: cyclocomp_linter

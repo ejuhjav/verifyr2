@@ -65,7 +65,7 @@ BinaryFileComparator <- R6Class(
     #' @param options  additional comparator parameters
     #'
     vrf_contents_inner = function(contents, omit, options) {
-      self$vrf_add_debug("BinaryFileComparator::vrf_contents_inner", options)
+      self$vrf_add_debug("BinaryFileComparator::vrf_contents_inner")
       return(list(contents, contents))
     },
 
@@ -127,7 +127,7 @@ BinaryFileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_details_inner = function(omit, options) {
-      self$vrf_add_debug("BinaryFileComparator::vrf_details_inner", options)
+      self$vrf_add_debug("BinaryFileComparator::vrf_details_inner")
       result <- list(
         type = "text",
         contents = "Binary file without applicable comparator; unable to compare details."
