@@ -229,7 +229,7 @@ test_that(paste(
 
   omit       <- "additional row"
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = omit, options = options)
+  result     <- comparator$vrf_summary(omit = omit)
 
   expect_equal(result, "No differences.")
 })
@@ -244,7 +244,7 @@ test_that(paste(
 
   omit       <- "additional row"
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = omit, options = options)
+  result     <- comparator$vrf_summary(omit = omit)
 
   expect_equal(result, "No differences.")
 })

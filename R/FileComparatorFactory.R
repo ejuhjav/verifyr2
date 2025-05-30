@@ -18,6 +18,9 @@
 #' comparator$vrf_summary()
 #' comparator$vrf_details()
 #'
+#' @include BinaryFileComparator.R
+#' @include TxtFileComparator.R
+#'
 #' @export
 #'
 create_comparator <- function(file1, file2) {

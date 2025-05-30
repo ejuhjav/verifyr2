@@ -49,11 +49,16 @@ PdfFileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_contents = function(file, omit, options) {
+      self$vrf_open_debug("PdfFileComparator::vrf_contents", options)
+
       content <- pdftools::pdf_text(file)
       content <- paste(content, collapse = "")
       content <- strsplit(content, "\n")[[1]]
 
-      return(self$vrf_contents_inner(content, omit, options))
+      result <- self$vrf_contents_inner(content, omit, options)
+
+      self$vrf_close_debug()
+      return(result)
     }
   )
 )

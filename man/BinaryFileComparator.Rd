@@ -43,10 +43,14 @@ comparator <- BinaryFileComparator$new(file1, file2)
 }
 }
 \if{html}{\out{
-<details open><summary>Inherited methods</summary>
+<details><summary>Inherited methods</summary>
 <ul>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="initialize"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-initialize'><code>verifyr2::FileComparator$initialize()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_add_debug"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_add_debug'><code>verifyr2::FileComparator$vrf_add_debug()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_add_debug_files"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_add_debug_files'><code>verifyr2::FileComparator$vrf_add_debug_files()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_close_debug"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_close_debug'><code>verifyr2::FileComparator$vrf_close_debug()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_details"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_details'><code>verifyr2::FileComparator$vrf_details()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_open_debug"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_open_debug'><code>verifyr2::FileComparator$vrf_open_debug()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_option_value"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_option_value'><code>verifyr2::FileComparator$vrf_option_value()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_summary"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_summary'><code>verifyr2::FileComparator$vrf_summary()</code></a></span></li>
 </ul>

@@ -28,6 +28,8 @@ error.
 \item{\code{summary_comparison}}{local property for storing summary comparison result}
 
 \item{\code{details_comparison}}{local property for storing details comparison result}
+
+\item{\code{debugger}}{local property for storing the debugger instance}
 }
 \if{html}{\out{</div>}}
 }
@@ -40,6 +42,10 @@ error.
 \item \href{#method-FileComparator-vrf_summary_inner}{\code{FileComparator$vrf_summary_inner()}}
 \item \href{#method-FileComparator-vrf_details_inner}{\code{FileComparator$vrf_details_inner()}}
 \item \href{#method-FileComparator-vrf_option_value}{\code{FileComparator$vrf_option_value()}}
+\item \href{#method-FileComparator-vrf_open_debug}{\code{FileComparator$vrf_open_debug()}}
+\item \href{#method-FileComparator-vrf_add_debug}{\code{FileComparator$vrf_add_debug()}}
+\item \href{#method-FileComparator-vrf_add_debug_files}{\code{FileComparator$vrf_add_debug_files()}}
+\item \href{#method-FileComparator-vrf_close_debug}{\code{FileComparator$vrf_close_debug()}}
 \item \href{#method-FileComparator-clone}{\code{FileComparator$clone()}}
 }
 }
@@ -165,10 +171,70 @@ returns 'NA' if null options is passed.
 \describe{
 \item{\code{options}}{comparator parameters}
 
-\item{\code{key}}{}
+\item{\code{key}}{key to search from the parameters}
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-FileComparator-vrf_open_debug"></a>}}
+\if{latex}{\out{\hypertarget{method-FileComparator-vrf_open_debug}{}}}
+\subsection{Method \code{vrf_open_debug()}}{
+Wrapper method for the opening a new debugging instance with Debugger
+class if debugging is enabled in options. class. Creates the used
+debugger instance if needed.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_open_debug(message, options = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{message}}{message to debug to console}
+
+\item{\code{options}}{comparator parameters}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-FileComparator-vrf_add_debug"></a>}}
+\if{latex}{\out{\hypertarget{method-FileComparator-vrf_add_debug}{}}}
+\subsection{Method \code{vrf_add_debug()}}{
+Wrapper method for the adding a new debugging message with Debugger
+class.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_add_debug(message)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{message}}{message to debug to console}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-FileComparator-vrf_add_debug_files"></a>}}
+\if{latex}{\out{\hypertarget{method-FileComparator-vrf_add_debug_files}{}}}
+\subsection{Method \code{vrf_add_debug_files()}}{
+Special method for adding the compared files into debugger stack.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_add_debug_files()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-FileComparator-vrf_close_debug"></a>}}
+\if{latex}{\out{\hypertarget{method-FileComparator-vrf_close_debug}{}}}
+\subsection{Method \code{vrf_close_debug()}}{
+Wrapper method for the stopping (closing) current debugging instance with
+Debugger class.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_close_debug()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-FileComparator-clone"></a>}}

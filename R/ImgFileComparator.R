@@ -67,19 +67,31 @@ ImgFileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_details_inner = function(omit, options) {
+      self$vrf_open_debug("ImgFileComparator::vrf_details_inner", options)
+
       if (is.null(self$image1_raw) || is.null(self$image2_raw)) {
-        return(self$vrf_details_inner_from_files())
+        result <- self$vrf_details_inner_from_files(options)
+
+        self$vrf_close_debug()
+        return(result)
       }
 
-      return(self$vrf_details_inner_from_raw())
+      result <- self$vrf_details_inner_from_raw(options)
+
+      self$vrf_close_debug()
+      return(result)
     },
 
     #' @description
     #' Internal method for comparing the earlier populated raw image contents in
     #' details and generating the difference highlight image in case differences
     #' are found.
+    #'
+    #' @param options additional comparator parameters
     #*
-    vrf_details_inner_from_raw = function() {
+    vrf_details_inner_from_raw = function(options) {
+      self$vrf_open_debug("ImgFileComparator::vrf_details_inner_from_raw", options)
+
       image1_raw <- self$image1_raw
       image2_raw <- self$image2_raw
       image3_base64 <- NULL
@@ -106,6 +118,7 @@ ImgFileComparator <- R6Class(
         )
       )
 
+      self$vrf_close_debug()
       return(list(result))
     },
 
@@ -117,14 +130,18 @@ ImgFileComparator <- R6Class(
     #' version can be used depending on what data is available from the earlier
     #' method calls to the same comparator instance.
     #'
-    #' @param file1 first file to compare
-    #' @param file2 second file to compare
+    #' @param options additional comparator parameters
     #'
-    vrf_details_inner_from_files = function(file1, file2) {
+    vrf_details_inner_from_files = function(options) {
+      self$vrf_open_debug("ImgFileComparator::vrf_details_inner_from_files", options)
+
       self$image1_raw <- readBin(self$file1, what = "raw", n = file.info(self$file1)$size)
       self$image2_raw <- readBin(self$file2, what = "raw", n = file.info(self$file2)$size)
 
-      return(self$vrf_details_inner_from_raw())
+      result <- self$vrf_details_inner_from_raw(options)
+
+      self$vrf_close_debug()
+      return(result)
     }
   )
 )

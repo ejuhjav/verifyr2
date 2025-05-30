@@ -174,6 +174,14 @@ Config <- R6::R6Class(
             options = c("full", "summary"),
             default = "summary"
           )
+        ),
+        generic = list(
+          description = "Generic options",
+          debug = list(
+            description = "Debugging enabled",
+            options = c("yes", "no"),
+            default = "no"
+          )
         )
       )
     }

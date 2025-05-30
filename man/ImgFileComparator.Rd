@@ -62,7 +62,11 @@ comparator <- ImgFileComparator$new(NULL, NULL, image1_raw, image2_raw)
 \if{html}{\out{
 <details><summary>Inherited methods</summary>
 <ul>
+<li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_add_debug"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_add_debug'><code>verifyr2::FileComparator$vrf_add_debug()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_add_debug_files"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_add_debug_files'><code>verifyr2::FileComparator$vrf_add_debug_files()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_close_debug"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_close_debug'><code>verifyr2::FileComparator$vrf_close_debug()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_details"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_details'><code>verifyr2::FileComparator$vrf_details()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_open_debug"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_open_debug'><code>verifyr2::FileComparator$vrf_open_debug()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_option_value"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_option_value'><code>verifyr2::FileComparator$vrf_option_value()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_summary"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_summary'><code>verifyr2::FileComparator$vrf_summary()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="BinaryFileComparator" data-id="vrf_contents"><a href='../../verifyr2/html/BinaryFileComparator.html#method-BinaryFileComparator-vrf_contents'><code>verifyr2::BinaryFileComparator$vrf_contents()</code></a></span></li>
@@ -129,9 +133,16 @@ Internal method for comparing the earlier populated raw image contents in
 details and generating the difference highlight image in case differences
 are found.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_details_inner_from_raw()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_details_inner_from_raw(options)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{options}}{additional comparator parameters}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ImgFileComparator-vrf_details_inner_from_files"></a>}}
@@ -144,15 +155,13 @@ methods are intended to improve the performance so that best suiting method
 version can be used depending on what data is available from the earlier
 method calls to the same comparator instance.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_details_inner_from_files(file1, file2)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_details_inner_from_files(options)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{file1}}{first file to compare}
-
-\item{\code{file2}}{second file to compare}
+\item{\code{options}}{additional comparator parameters}
 }
 \if{html}{\out{</div>}}
 }

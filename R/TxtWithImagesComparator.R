@@ -43,6 +43,8 @@ TxtWithImagesFileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_summary_inner = function(omit, options) {
+      self$vrf_open_debug("TxtWithImagesComparator::vrf_summary_inner" , options)
+
       result <- super$vrf_summary_inner(omit, options)
       file1_contents_list <- self$file1_contents_list
       file2_contents_list <- self$file2_contents_list
@@ -82,6 +84,7 @@ TxtWithImagesFileComparator <- R6Class(
         result <- paste0(result, " ", result_images)
       }
 
+      self$vrf_close_debug()
       return(result)
     },
 
@@ -95,6 +98,8 @@ TxtWithImagesFileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_details_inner = function(omit, options) {
+      self$vrf_open_debug("TxtWithImagesComparator::vrf_details_inner" , options)
+
       result <- super$vrf_details_inner(omit, options)
       file1_contents_list <- self$file1_contents_list
       file2_contents_list <- self$file2_contents_list
@@ -131,6 +136,7 @@ TxtWithImagesFileComparator <- R6Class(
         }
       }
 
+      self$vrf_close_debug()
       return(result)
     },
 
