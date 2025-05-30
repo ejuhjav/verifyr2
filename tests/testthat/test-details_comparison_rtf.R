@@ -128,3 +128,28 @@ test_that(paste(
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
 })
+
+################################################################################
+# Test logging enabled
+################################################################################
+
+test_that(paste(
+  "Prints expected logs to console when debugging is enabled"
+), {
+  file1 <- testthat::test_path(base, "base_with_image.rtf")
+  file2 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
+
+  config <- Config$new(FALSE)
+  config$set("generic.debug", "yes")
+  config$set("rtf.mode", "content")
+
+  output <- capture.output({
+    comparator <- create_comparator(file1, file2)
+    result     <- comparator$vrf_details(options = config)[[1]]
+  })
+
+  expect_true(any(grepl("[DEBUG] 'FileComparator::vrf_details, mode: summary' (execution time", output, fixed = TRUE)))
+  expect_true(any(grepl("[DEBUG]   'File 1: test_outputs/rtf/base_with_image.rtf'", output, fixed = TRUE)))
+  expect_true(any(grepl("[DEBUG]   'File 2: test_outputs/rtf/changes_one_row_content_one_image.rtf'", output, fixed = TRUE)))
+  expect_true(any(grepl("[DEBUG]   'TxtWithImagesComparator::vrf_details_inner' (execution time", output, fixed = TRUE)))
+})

@@ -1,4 +1,7 @@
 {
+  "generic": {
+    "debug": "yes"
+  },
   "rtf": {
     "mode": "raw",
     "images": "no"

@@ -62,14 +62,6 @@ Debugger <- R6Class("Debugger",
         duration   = NULL,
         is_message = FALSE
       )
-
-      if (length(self$stack) != 0) {
-        parent <- self$stack[[length(self$stack)]]
-        parent$children[[length(parent$children) + 1]] <- entry
-        self$stack[[length(self$stack)]] <- parent
-      }
-
-      # Push the new entry onto the stack
       self$stack[[length(self$stack) + 1]] <- entry
     },
 

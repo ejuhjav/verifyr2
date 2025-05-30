@@ -55,7 +55,7 @@ FileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_summary = function(omit = NULL, options = NULL) {
-      self$vrf_open_debug("vrf_summary", options)
+      self$vrf_open_debug("FileComparator::vrf_summary", options)
       self$vrf_add_debug_files()
 
       if (!is.null(self$summary_comparison)) {
@@ -96,7 +96,7 @@ FileComparator <- R6Class(
         mode <- "summary"
       }
 
-      self$vrf_open_debug(paste("vrf_details, mode: ", mode), options)
+      self$vrf_open_debug(paste("FileComparator::vrf_details, mode:", mode), options)
       self$vrf_add_debug_files()
 
       if (!is.null(self$details_comparison[[mode]])) {
