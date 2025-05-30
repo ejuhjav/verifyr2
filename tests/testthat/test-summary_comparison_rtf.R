@@ -560,7 +560,8 @@ test_that(paste(
 test_that(paste(
   "Returns 'File content has changes in 1 place(s). 1/1 embedded images",
   "have differences.' for files with a single different row in content",
-  "and differences in the single embedded image (content mode)"
+  "and differences in the single embedded image (content mode and images",
+  "enabled)"
 ), {
   file1 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
   file2 <- testthat::test_path(base, "base_with_image.rtf")
@@ -575,4 +576,22 @@ test_that(paste(
     "File content has changes in 1 place(s).",
     "1/1 embedded images have differences."
   ))
+})
+
+test_that(paste(
+  "Returns 'File content has changes in 1 place(s)' for files with",
+  "with a single different row in content and differences in the single",
+  "embedded image (content mode and images disabled)"
+), {
+  file1 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
+  file2 <- testthat::test_path(base, "base_with_image.rtf")
+
+  options <- Config$new(FALSE)
+  options$set("rtf.mode", "content")
+  options$set("rtf.images", "no")
+
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
+
+  expect_equal(result, "File content has changes in 1 place(s).")
 })
