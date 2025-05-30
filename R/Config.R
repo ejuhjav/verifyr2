@@ -1,12 +1,12 @@
 
-merge_config <- function(defaults, overrides) {
+merge_values <- function(defaults, overrides) {
   for (name in names(defaults)) {
     if (!is.list(defaults[[name]]) || is.null(overrides[[name]])) {
       if (is.null(overrides[[name]])) {
         overrides[[name]] <- defaults[[name]]
       }
     } else {
-      overrides[[name]] <- merge_config(defaults[[name]], overrides[[name]])
+      overrides[[name]] <- merge_values(defaults[[name]], overrides[[name]])
     }
   }
   return(overrides)
@@ -93,7 +93,7 @@ Config <- R6::R6Class(
       # Load config from file if exists
       if (load_config && file.exists(self$path)) {
         file_config <- jsonlite::read_json(self$path, simplifyVector = TRUE)
-        self$config <- merge_config(self$config, file_config)
+        self$config <- merge_values(self$config, file_config)
       }
     },
 
@@ -160,6 +160,11 @@ Config <- R6::R6Class(
             description = "Mode",
             options = c("raw", "content"),
             default = "content"
+          ),
+          images = list(
+            description = "Process embedded images",
+            options = c("yes", "no"),
+            default = "yes"
           )
         ),
         details = list(

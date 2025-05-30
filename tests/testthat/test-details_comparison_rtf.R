@@ -95,6 +95,24 @@ test_that(paste(
 })
 
 test_that(paste(
+  "Returns S4 comparison object for two files with differences in content",
+  "(content mode and images disabled)"
+), {
+  file1 <- testthat::test_path(base, "base_with_image.rtf")
+  file2 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
+
+  config <- Config$new(FALSE)
+  config$set("rtf.mode", "content")
+  config$set("rtf.images", "no")
+
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_details(options = config)[[1]]
+
+  expect_equal(result$type, "text")
+  expect_equal(typeof(result$contents), "S4")
+})
+
+test_that(paste(
   "Returns S4 comparison object for two files with differences in footer",
   "(raw mode)"
 ), {
