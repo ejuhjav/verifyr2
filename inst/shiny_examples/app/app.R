@@ -3,7 +3,13 @@
 #' \code{verifyr2::run_example} returns simple Shiny App where user can see how
 #' the verifyr2 functions work
 
+# initialize the configuration and possible debug override option
 config <- Config$new()
+debug  <- getOption("verifyr2.debug", default = FALSE)
+
+if (isTRUE(debug)) {
+  config$set("generic.debug", "yes")
+}
 
 # the datatable contents with summary comparisons and comments
 dt_file_list <- NULL
