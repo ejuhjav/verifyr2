@@ -40,10 +40,8 @@ RtfFileComparator <- R6Class(
     #' only by the comparator classes in the processing and shouldn't be called
     #' directly by the user.
     #'
-    #' For RtfComparator, the file contents are returned based on the mode
-    #' parameter if available. "raw" meaning that the rtf file contents are
-    #' returned as normal raw text contents, and "content" meaning that only rtf
-    #' file content parts are returned.
+    #' For RtfComparator, only the RTF file content part is returned for
+    #' comparison.
     #'
     #' @param file    file for which to get the contents
     #' @param omit    string pattern to omit from the comparison
@@ -52,15 +50,7 @@ RtfFileComparator <- R6Class(
     vrf_contents = function(file, omit, options) {
       self$vrf_open_debug("RtfFileComparator::vrf_contents", options)
 
-      # In raw mode we call directly the TxtFileComparator implementation of the vrf_contents
-      if ("raw" == super$vrf_option_value(options, "rtf.mode")) {
-        result <- super$vrf_contents(file, omit, options)
-
-        self$vrf_close_debug()
-        return(result)
-      }
-
-      # In content mode, we get the rtf text content
+      # Get the RTF text content
       contents <- striprtf::read_rtf(file = file)
       result   <- self$vrf_contents_inner(contents, omit, options)
 
@@ -77,12 +67,6 @@ RtfFileComparator <- R6Class(
     #'
     vrf_images = function(file, options) {
       self$vrf_open_debug("RtfFileComparator::vrf_images", options)
-
-      # in raw mode no image details are extracted separately
-      if ("raw" == super$vrf_option_value(options, "rtf.mode")) {
-        self$vrf_close_debug()
-        return(list())
-      }
 
       # return empty list if embedded image processing is disabled
       if ("no" == super$vrf_option_value(options, "rtf.images")) {
