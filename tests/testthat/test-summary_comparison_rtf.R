@@ -7,327 +7,49 @@ base <- "test_outputs/rtf"
 
 test_that(paste(
   "Returns 'File(s) not available; unable to compare.'",
-  "if both files do not exist",
-  "(raw mode)"
-), {
-  file1 <- testthat::test_path(base, "nonexisting1.rtf")
-  file2 <- testthat::test_path(base, "nonexisting2.rtf")
-
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "raw")
-
-  comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
-
-  expect_equal(result, "File(s) not available; unable to compare.")
-})
-
-test_that(paste(
-  "Returns 'File(s) not available; unable to compare.'",
-  "if one file does not exist",
-  "(content mode)"
+  "if one file does not exist"
 ), {
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "nonexisting.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
-
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
 
 ################################################################################
-# RAW comparison - WITHOUT omits
+# WITHOUT omits
 ################################################################################
 
 test_that(paste(
-  "Returns 'No differences.' for identical files",
-  "(raw mode)"
-), {
-  file1 <- testthat::test_path(base, "base.rtf")
-  file2 <- testthat::test_path(base, "copy.rtf")
-
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "raw")
-
-  comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
-
-  expect_equal(result, "No differences.")
-})
-
-test_that(paste(
-  "Returns 'Different number of lines in compared content.'",
-  "for files with additional line in the content",
-  "(raw mode)"
-), {
-  file1 <- testthat::test_path(base, "base.rtf")
-  file2 <- testthat::test_path(base, "addition_one_row_content.rtf")
-
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "raw")
-
-  comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
-
-  expect_equal(result, "Different number of lines in compared content.")
-})
-
-test_that(paste(
-  "Returns 'Different number of lines in compared content.'",
-  "for files with additional line in the footer",
-  "(raw mode)"
-), {
-  file1 <- testthat::test_path(base, "base.rtf")
-  file2 <- testthat::test_path(base, "addition_one_row_footer.rtf")
-
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "raw")
-
-  comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
-
-  expect_equal(result, "Different number of lines in compared content.")
-})
-
-test_that(paste(
-  "Returns 'File content has changes in 3 place(s).'",
-  "for files with a single different rtf (3 rows in raw text) row in content",
-  "(raw mode)"
-), {
-  file1 <- testthat::test_path(base, "changes_one_row_content.rtf")
-  file2 <- testthat::test_path(base, "base.rtf")
-
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "raw")
-
-  comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
-
-  expect_equal(result, "File content has changes in 3 place(s).")
-})
-
-test_that(paste(
-  "Returns 'File content has changes in 1 place(s).'",
-  "for files with a single different row in footer",
-  "(raw mode)"
-), {
-  file1 <- testthat::test_path(base, "base.rtf")
-  file2 <- testthat::test_path(base, "changes_one_row_footer.rtf")
-
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "raw")
-
-  comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
-
-  expect_equal(result, "File content has changes in 1 place(s).")
-})
-
-test_that(paste(
-  "Returns 'File content has changes in 4 place(s).'",
-  "for files with two different rows in content",
-  "(raw mode)"
-), {
-  file1 <- testthat::test_path(base, "changes_two_rows_content.rtf")
-  file2 <- testthat::test_path(base, "base.rtf")
-
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "raw")
-
-  comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
-
-  expect_equal(result, "File content has changes in 4 place(s).")
-})
-
-test_that(paste(
-  "Returns 'File content has changes in 2 place(s).'",
-  "for files with two different rows in footer",
-  "(raw mode)"
-), {
-  file1 <- testthat::test_path(base, "base.rtf")
-  file2 <- testthat::test_path(base, "changes_two_rows_footer.rtf")
-
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "raw")
-
-  comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
-
-  expect_equal(result, "File content has changes in 2 place(s).")
-})
-
-################################################################################
-# RAW comparison - WITH omits
-################################################################################
-
-test_that(paste(
-  "Returns 'No differences.'",
-  "with 'omit' parameter that is not present in either file",
-  "(raw mode)"
-), {
-  file1 <- testthat::test_path(base, "base.rtf")
-  file2 <- testthat::test_path(base, "copy.rtf")
-
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "raw")
-
-  comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "Nothing", options = options)
-
-  expect_equal(result, "No differences.")
-})
-
-test_that(paste(
-  "Returns 'Different number of lines in compared content.'",
-  "with 'omit' catching the row name cell in additional row in content",
-  "(raw mode)"
-), {
-  file1 <- testthat::test_path(base, "base.rtf")
-  file2 <- testthat::test_path(base, "addition_one_row_content.rtf")
-
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "raw")
-
-  omit       <- "Additional Row"
-  comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = omit, options = options)
-
-  expect_equal(result, "Different number of lines in compared content.")
-})
-
-test_that(paste(
-  "Returns 'No differences.'",
-  "with 'omit' catching the single additional row in footer",
-  "(raw mode)"
-), {
-  file1 <- testthat::test_path(base, "base.rtf")
-  file2 <- testthat::test_path(base, "addition_one_row_footer.rtf")
-
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "raw")
-
-  omit       <- "Additional footer row"
-  comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = omit, options = options)
-
-  expect_equal(result, "No differences.")
-})
-
-test_that(paste(
-  "Returns 'Different number of lines in compared content.'",
-  "with 'omit' catching the two row cells in additional row in content",
-  "(raw mode)"
-), {
-  file1 <- testthat::test_path(base, "base.rtf")
-  file2 <- testthat::test_path(base, "addition_two_rows_content.rtf")
-
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "raw")
-
-  omit       <- "Additional Row"
-  comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = omit, options = options)
-
-  expect_equal(result, "Different number of lines in compared content.")
-})
-
-test_that(paste(
-  "Returns 'Different number of lines in compared content.'",
-  "with 'omit' catching one of the row cells in additional row in content",
-  "(raw mode)"
-), {
-  file1 <- testthat::test_path(base, "base.rtf")
-  file2 <- testthat::test_path(base, "addition_two_rows_content.rtf")
-
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "raw")
-
-  omit       <- "Additional Row 1"
-  comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = omit, options = options)
-
-  expect_equal(result, "Different number of lines in compared content.")
-})
-
-test_that(paste(
-  "Returns 'No differences.'",
-  "with 'omit' catching both of the additional rows in footer",
-  "(raw mode)"
-), {
-  file1 <- testthat::test_path(base, "base.rtf")
-  file2 <- testthat::test_path(base, "addition_two_rows_footer.rtf")
-
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "raw")
-
-  omit       <- "Additional footer row"
-  comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = omit, options = options)
-
-  expect_equal(result, "No differences.")
-})
-
-test_that(paste(
-  "Returns 'Different number of lines in compared content.'",
-  "with 'omit' parameter caching one of the two additional rows in footer",
-  "(raw mode)"
-), {
-  file1 <- testthat::test_path(base, "base.rtf")
-  file2 <- testthat::test_path(base, "addition_two_rows_footer.rtf")
-
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "raw")
-
-  omit       <- "Additional footer row 1"
-  comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = omit, options = options)
-
-  expect_equal(result, "Different number of lines in compared content.")
-})
-
-################################################################################
-# CONTENT comparison & WITHOUT omits
-################################################################################
-
-test_that(paste(
-  "Returns 'No differences.' for identical files (content mode)"
+  "Returns 'No differences.' for identical files"
 ), {
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "base.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
-
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "No differences.")
 })
 
 test_that(paste(
   "Returns 'Different number of lines in compared content.'",
-  "for files with additional line in the content (content mode)"
+  "for files with additional line in the content"
 ), {
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_one_row_content.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
-
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "Different number of lines in compared content.")
 })
 
 test_that(paste(
   "Returns 'Different number of lines in compared content.'",
-  "for files with additional line in the content (content mode, default)"
+  "for files with additional line in the content"
 ), {
   file1 <- testthat::test_path(base, "addition_one_row_content.rtf")
   file2 <- testthat::test_path(base, "base.rtf")
@@ -340,23 +62,20 @@ test_that(paste(
 
 test_that(paste(
   "Returns 'No differences.'",
-  "for files with additional line in the footer (content mode)"
+  "for files with additional line in the footer"
 ), {
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_one_row_footer.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
-
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "No differences.")
 })
 
 test_that(paste(
   "Returns 'No differences.'",
-  "for files with additional line in the footer (content mode, default)"
+  "for files with additional line in the footer"
 ), {
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_one_row_footer.rtf")
@@ -369,170 +88,134 @@ test_that(paste(
 
 test_that(paste(
   "Returns 'File content has changes in 1 place(s).'",
-  "for files with a single different row in content (content mode)"
+  "for files with a single different row in content"
 ), {
   file1 <- testthat::test_path(base, "changes_one_row_content.rtf")
   file2 <- testthat::test_path(base, "base.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
-
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "File content has changes in 1 place(s).")
 })
 
 test_that(paste(
   "Returns 'No differences.'",
-  "for files with a single different row in footer (content mode)"
+  "for files with a single different row in footer"
 ), {
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "changes_one_row_footer.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
-
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "No differences.")
 })
 
 test_that(paste(
   "Returns 'File content has changes in 2 place(s).'",
-  "for files with two different rows in content (content mode)"
+  "for files with two different rows in content"
 ), {
   file1 <- testthat::test_path(base, "changes_two_rows_content.rtf")
   file2 <- testthat::test_path(base, "base.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
-
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "File content has changes in 2 place(s).")
 })
 
 test_that(paste(
   "Return 'No differences.'",
-  "for files with two different rows in footer (content mode)"
+  "for files with two different rows in footer"
 ), {
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "changes_two_rows_footer.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
-
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "No differences.")
 })
 
 ################################################################################
-# CONTENT comparison & WITH omits
+# WITH omits
 ################################################################################
 
 test_that(paste(
   "Returns 'No differences.'",
-  "with 'omit' parameter that is not present in either file",
-  "(content mode)"
+  "with 'omit' parameter that is not present in either file"
 ), {
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "copy.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
-
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "Nothing", options = options)
+  result     <- comparator$vrf_summary(omit = "Nothing")
 
   expect_equal(result, "No differences.")
 })
 
 test_that(paste(
   "Return 'No differences.'",
-  "with 'omit' catching the one row cells in changed rows in content",
-  "(content mode)"
+  "with 'omit' catching the one row cells in changed rows in content"
 ), {
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "changes_one_row_content.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
-
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "setosa", options = options)
+  result     <- comparator$vrf_summary(omit = "setosa")
 
   expect_equal(result, "No differences.")
 })
 
 test_that(paste(
   "Returns 'No differences.'",
-  "with 'omit' catching the row name cell in additional row in content",
-  "(content mode)"
+  "with 'omit' catching the row name cell in additional row in content"
 ), {
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_one_row_content.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
-
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "setosa", options = options)
+  result     <- comparator$vrf_summary(omit = "setosa")
 
   expect_equal(result, "No differences.")
 })
 
 test_that(paste(
   "Returns 'No differences.'",
-  "with 'omit' catching the two row cells in additional row in content",
-  "(content mode)"
+  "with 'omit' catching the two row cells in additional row in content"
 ), {
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_two_rows_content.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
-
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "unknown", options = options)
+  result     <- comparator$vrf_summary(omit = "unknown")
 
   expect_equal(result, "No differences.")
 })
 
 test_that(paste(
   "Returns 'Different number of lines in compared content.'",
-  "with 'omit' catching one of the row cells in additional row in content",
-  "(content mode)"
+  "with 'omit' catching one of the row cells in additional row in content"
 ), {
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "addition_two_rows_content.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
-
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "unknown1", options = options)
+  result     <- comparator$vrf_summary(omit = "unknown1")
 
   expect_equal(result, "Different number of lines in compared content.")
 })
 
 test_that(paste(
   "Returns 'File content has changes in 1 place(s).'",
-  "with 'omit' catching one of the row cells in changed rows in content",
-  "(content mode)"
+  "with 'omit' catching one of the row cells in changed rows in content"
 ), {
   file1 <- testthat::test_path(base, "base.rtf")
   file2 <- testthat::test_path(base, "changes_two_rows_content.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
-
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "setosa", options = options)
+  result     <- comparator$vrf_summary(omit = "setosa")
 
   expect_equal(result, "File content has changes in 1 place(s).")
 })
@@ -543,16 +226,13 @@ test_that(paste(
 
 test_that(paste(
   "Returns 'No differences. No differences in embedded images.'",
-  "for identical files (content mode)"
+  "for identical files"
 ), {
   file1 <- testthat::test_path(base, "base_with_image.rtf")
   file2 <- testthat::test_path(base, "base_with_image.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
-
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, "No differences. No differences in embedded images.")
 })
@@ -560,17 +240,13 @@ test_that(paste(
 test_that(paste(
   "Returns 'File content has changes in 1 place(s). 1/1 embedded images",
   "have differences.' for files with a single different row in content",
-  "and differences in the single embedded image (content mode and images",
-  "enabled)"
+  "and differences in the single embedded image (images enabled)"
 ), {
   file1 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
   file2 <- testthat::test_path(base, "base_with_image.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
-
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
+  result     <- comparator$vrf_summary()
 
   expect_equal(result, paste(
     "File content has changes in 1 place(s).",
@@ -581,13 +257,12 @@ test_that(paste(
 test_that(paste(
   "Returns 'File content has changes in 1 place(s)' for files with",
   "with a single different row in content and differences in the single",
-  "embedded image (content mode and images disabled)"
+  "embedded image (images disabled)"
 ), {
   file1 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
   file2 <- testthat::test_path(base, "base_with_image.rtf")
 
   options <- Config$new(FALSE)
-  options$set("rtf.mode", "content")
   options$set("rtf.images", "no")
 
   comparator <- create_comparator(file1, file2)

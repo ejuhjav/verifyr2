@@ -48,8 +48,8 @@ set_nested_value <- function(config, key, value) {
 #'
 #' # Getting and setting configuration values
 #'
-#' value <- config$get("rtf.mode")
-#' config$set("rtf.mode", "raw")
+#' value <- config$get("defailts.mode")
+#' config$set("details.mode", "full")
 #'
 #' # Saving the current configuration to local machine
 #'
@@ -164,11 +164,6 @@ Config <- R6::R6Class(
         ),
         rtf = list(
           description = "RTF comparison (summary and details)",
-          mode = list(
-            description = "Mode",
-            options = c("raw", "content"),
-            default = "content"
-          ),
           images = list(
             description = "Process embedded images",
             options = c("yes", "no"),
