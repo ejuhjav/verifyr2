@@ -71,10 +71,8 @@ more specialized comparator classes. This method is intended to be called
 only by the comparator classes in the processing and shouldn't be called
 directly by the user.
 
-For RtfComparator, the file contents are returned based on the mode
-parameter if available. "raw" meaning that the rtf file contents are
-returned as normal raw text contents, and "content" meaning that only rtf
-file content parts are returned.
+For RtfComparator, only the RTF file content part is returned for
+comparison.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RtfFileComparator$vrf_contents(file, omit, options)}\if{html}{\out{</div>}}
 }

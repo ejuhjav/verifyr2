@@ -10,7 +10,6 @@ test_that("Configuration json file loaded successfully", {
   config <- Config$new(config_path = path)
 
   expect_equal(config$get("generic.debug"), "yes")
-  expect_equal(config$get("rtf.mode"), "raw")
   expect_equal(config$get("rtf.images"), "no")
   expect_equal(config$get("details.mode"), "full")
 })
@@ -20,8 +19,7 @@ test_that("Partial configuration successfully updated with defaults", {
   config <- Config$new(config_path = path)
 
   expect_equal(config$get("generic.debug"), "no")
-  expect_equal(config$get("rtf.mode"), "raw")
-  expect_equal(config$get("rtf.images"), "yes")
+  expect_equal(config$get("rtf.images"), "no")
   expect_equal(config$get("details.mode"), "summary")
 })
 

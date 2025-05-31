@@ -3,7 +3,6 @@
     "debug": "yes"
   },
   "rtf": {
-    "mode": "raw",
     "images": "no"
   },
   "details": {

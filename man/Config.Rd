@@ -23,8 +23,8 @@ config <- Config$new()
 
 # Getting and setting configuration values
 
-value <- config$get("rtf.mode")
-config$set("rtf.mode", "raw")
+value <- config$get("defailts.mode")
+config$set("details.mode", "full")
 
 # Saving the current configuration to local machine
 

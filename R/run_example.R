@@ -5,7 +5,7 @@
 #'
 #' @export
 #'
-#' @param debug option to override debug configuration (TRUE only) 
+#' @param debug option to override debug configuration (TRUE only)
 #'
 run_example <- function(debug = FALSE) {
   appDir <- system.file("shiny_examples", "app", package = "verifyr2")
