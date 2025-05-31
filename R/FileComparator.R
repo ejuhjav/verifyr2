@@ -13,9 +13,15 @@
 #' @field file2_contents_list local property for storing extracted file2 contents
 #' @field summary_comparison  local property for storing summary comparison result
 #' @field details_comparison  local property for storing details comparison result
+#' @field debugger            local property for storing the debugger instance
 #'
 #' @export
 #'
+
+# Disable cyclomatic complexity lint for the R6 class definition as lintr considers
+# the whole class definition as a single function.
+#
+# nolint start: cyclocomp_linter
 FileComparator <- R6Class(
   "FileComparator",
   public <- list(
@@ -25,6 +31,7 @@ FileComparator <- R6Class(
     file2_contents_list = NULL,
     summary_comparison  = NULL,
     details_comparison  = NULL,
+    debugger = NULL,
 
     #' @description
     #' Initialize a FileComparator instance
@@ -48,21 +55,29 @@ FileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_summary = function(omit = NULL, options = NULL) {
+      self$vrf_open_debug("FileComparator::vrf_summary", options)
+      self$vrf_add_debug_files()
+
       if (!is.null(self$summary_comparison)) {
+        self$vrf_add_debug("Returning previously calculated comparison results")
         return(self$summary_comparison)
       }
 
       if (!file.exists(self$file1) || !file.exists(self$file2)) {
+        self$vrf_add_debug("One of both of the files not available, unable perform comparison")
         result <- "File(s) not available; unable to compare."
       } else {
         tryCatch({
           result <- self$vrf_summary_inner(omit, options)
         }, error = function(e) {
+          self$vrf_add_debug(paste("Processing failed with exception: ", conditionMessage(e)))
           result <- paste0("Error reading file contents: ", conditionMessage(e))
         })
       }
 
       self$summary_comparison <- result
+      self$vrf_close_debug()
+
       return(result)
     },
 
@@ -81,11 +96,16 @@ FileComparator <- R6Class(
         mode <- "summary"
       }
 
+      self$vrf_open_debug(paste("FileComparator::vrf_details, mode:", mode), options)
+      self$vrf_add_debug_files()
+
       if (!is.null(self$details_comparison[[mode]])) {
+        self$vrf_add_debug("Returning previously calculated comparison results")
         return(self$details_comparison[[mode]])
       }
 
       if (!file.exists(self$file1) || !file.exists(self$file2)) {
+        self$vrf_add_debug("One of both of the files not available, unable perform comparison")
         result <- list(
           list(
             type = "text",
@@ -96,6 +116,7 @@ FileComparator <- R6Class(
         tryCatch({
           result <- self$vrf_details_inner(omit, options)
         }, error = function(e) {
+          self$vrf_add_debug(paste("Processing failed with exception: ", conditionMessage(e)))
           result <- list(
             list(
               type = "text",
@@ -106,6 +127,8 @@ FileComparator <- R6Class(
       }
 
       self$details_comparison[[mode]] <- result
+      self$vrf_close_debug()
+
       return(result)
     },
 
@@ -140,7 +163,7 @@ FileComparator <- R6Class(
     #' returns 'NA' if null options is passed.
     #'
     #' @param options comparator parameters
-    #' @param key
+    #' @param key     key to search from the parameters
     #'
     vrf_option_value = function(options, key) {
       if (is.null(options)) {
@@ -148,6 +171,64 @@ FileComparator <- R6Class(
       }
       value <- options$get(key)
       return(value)
+    },
+
+    #' @description
+    #' Wrapper method for the opening a new debugging instance with Debugger
+    #' class if debugging is enabled in options. class. Creates the used
+    #' debugger instance if needed.
+    #'
+    #' @param message message to debug to console
+    #' @param options comparator parameters
+    #'
+    vrf_open_debug = function(message, options = NULL) {
+      if ("yes" != self$vrf_option_value(options, "generic.debug")) {
+        return()
+      }
+
+      if (is.null(self$debugger)) {
+        self$debugger <- Debugger$new()
+      }
+
+      self$debugger$open_debug(message)
+    },
+
+    #' @description
+    #' Wrapper method for the adding a new debugging message with Debugger
+    #' class.
+    #'
+    #' @param message message to debug to console
+    #'
+    vrf_add_debug = function(message) {
+      if (is.null(self$debugger)) {
+        return()
+      }
+
+      self$debugger$add_debug(message)
+    },
+
+    #' @description
+    #' Special method for adding the compared files into debugger stack.
+    #'
+    vrf_add_debug_files = function() {
+      if (is.null(self$debugger)) {
+        return()
+      }
+
+      self$debugger$add_debug(paste("File 1:", self$file1))
+      self$debugger$add_debug(paste("File 2:", self$file2))
+    },
+
+    #' @description
+    #' Wrapper method for the stopping (closing) current debugging instance with
+    #' Debugger class.
+    #'
+    vrf_close_debug = function() {
+      if (is.null(self$debugger)) {
+        return()
+      }
+      self$debugger$close_debug()
     }
   )
 )
+# nolint end: cyclocomp_linter

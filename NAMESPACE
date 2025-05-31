@@ -3,6 +3,7 @@
 export("%>%")
 export(BinaryFileComparator)
 export(Config)
+export(Debugger)
 export(FileComparator)
 export(ImgFileComparator)
 export(PdfFileComparator)

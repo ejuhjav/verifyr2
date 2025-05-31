@@ -42,8 +42,13 @@ BinaryFileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_contents = function(file, omit, options) {
+      self$vrf_open_debug("BinaryFileComparator::vrf_contents", options)
+
       contents <- readLines(file, warn = FALSE)
-      return(self$vrf_contents_inner(contents, omit, options))
+      result   <- self$vrf_contents_inner(contents, omit, options)
+
+      self$vrf_close_debug()
+      return(result)
     },
 
     #' @description
@@ -60,6 +65,7 @@ BinaryFileComparator <- R6Class(
     #' @param options  additional comparator parameters
     #'
     vrf_contents_inner = function(contents, omit, options) {
+      self$vrf_add_debug("BinaryFileComparator::vrf_contents_inner")
       return(list(contents, contents))
     },
 
@@ -76,10 +82,13 @@ BinaryFileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_summary_inner = function(omit, options) {
+      self$vrf_open_debug("BinaryFileComparator::vrf_summary_inner", options)
+
       file_info1 <- file.info(self$file1)
       file_info2 <- file.info(self$file2)
 
       if (file_info1$size != file_info2$size) {
+        self$vrf_close_debug()
         return("Different file sizes for compared files.")
       }
 
@@ -100,9 +109,11 @@ BinaryFileComparator <- R6Class(
       file2_contents_omit <- file2_contents_list[[2]]
 
       if (!identical(file1_contents_omit, file2_contents_omit)) {
+        self$vrf_close_debug()
         return("Different content in compared files.")
       }
 
+      self$vrf_close_debug()
       return("No differences.")
     },
 
@@ -116,6 +127,7 @@ BinaryFileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_details_inner = function(omit, options) {
+      self$vrf_add_debug("BinaryFileComparator::vrf_details_inner")
       result <- list(
         type = "text",
         contents = "Binary file without applicable comparator; unable to compare details."

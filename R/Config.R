@@ -154,6 +154,14 @@ Config <- R6::R6Class(
     #'
     get_default_schema = function() {
       list(
+        generic = list(
+          description = "Generic options",
+          debug = list(
+            description = "Debugging enabled",
+            options = c("yes", "no"),
+            default = "no"
+          )
+        ),
         rtf = list(
           description = "RTF comparison (summary and details)",
           mode = list(

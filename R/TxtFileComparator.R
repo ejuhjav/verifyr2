@@ -46,6 +46,8 @@ TxtFileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_summary_inner = function(omit, options) {
+      self$vrf_open_debug("TxtFileComparator::vrf_summary_inner" , options)
+
       file1_contents_list <- self$file1_contents_list
       file2_contents_list <- self$file2_contents_list
 
@@ -81,6 +83,7 @@ TxtFileComparator <- R6Class(
         result <- paste0("File content has changes in ", count, " place(s).")
       }
 
+      self$vrf_close_debug()
       return(result)
     },
 
@@ -94,6 +97,8 @@ TxtFileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_details_inner = function(omit, options) {
+      self$vrf_open_debug("TxtFileComparator::vrf_details_inner" , options)
+
       file1_contents_list <- self$file1_contents_list
       file2_contents_list <- self$file2_contents_list
 
@@ -138,6 +143,7 @@ TxtFileComparator <- R6Class(
         )
       )
 
+      self$vrf_close_debug()
       return(result)
     },
 
@@ -155,6 +161,8 @@ TxtFileComparator <- R6Class(
     #' @param options  additional comparator parameters
     #'
     vrf_contents_inner = function(contents, omit, options) {
+      self$vrf_open_debug("TxtFileComparator::vrf_contents_inner" , options)
+
       contents_omit <- contents
 
       if (!is.null(omit) && "" != paste0(omit)) {
@@ -165,6 +173,7 @@ TxtFileComparator <- R6Class(
         )
       }
 
+      self$vrf_close_debug()
       return(list(contents, contents_omit))
     }
   )

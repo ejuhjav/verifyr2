@@ -50,15 +50,21 @@ RtfFileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_contents = function(file, omit, options) {
+      self$vrf_open_debug("RtfFileComparator::vrf_contents", options)
+
       # In raw mode we call directly the TxtFileComparator implementation of the vrf_contents
       if ("raw" == super$vrf_option_value(options, "rtf.mode")) {
-        return(super$vrf_contents(file, omit, options))
+        result <- super$vrf_contents(file, omit, options)
+
+        self$vrf_close_debug()
+        return(result)
       }
 
       # In content mode, we get the rtf text content
       contents <- striprtf::read_rtf(file = file)
       result   <- self$vrf_contents_inner(contents, omit, options)
 
+      self$vrf_close_debug()
       return(result)
     },
 
@@ -70,13 +76,17 @@ RtfFileComparator <- R6Class(
     #' @param options additional comparator parameters
     #'
     vrf_images = function(file, options) {
+      self$vrf_open_debug("RtfFileComparator::vrf_images", options)
+
       # in raw mode no image details are extracted separately
       if ("raw" == super$vrf_option_value(options, "rtf.mode")) {
+        self$vrf_close_debug()
         return(list())
       }
 
       # return empty list if embedded image processing is disabled
       if ("no" == super$vrf_option_value(options, "rtf.images")) {
+        self$vrf_close_debug()
         return(list())
       }
 
@@ -102,6 +112,8 @@ RtfFileComparator <- R6Class(
           }
         }
       }
+
+      self$vrf_close_debug()
       return(result)
     }
   )

@@ -4,13 +4,17 @@
 #' the verifyr2 functions work
 #'
 #' @export
-
-run_example <- function() {
+#'
+#' @param debug option to override debug configuration (TRUE only) 
+#'
+run_example <- function(debug = FALSE) {
   appDir <- system.file("shiny_examples", "app", package = "verifyr2")
+
   if (appDir == "") {
     stop("Could not find example directory. Try re-installing `verifyr2`.",
          call. = FALSE)
   }
 
+  options(verifyr2.debug = debug)
   shiny::runApp(appDir, display.mode = "normal")
 }
