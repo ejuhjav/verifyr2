@@ -49,6 +49,6 @@ test_that(paste(
 
   expect_equal(result$type, "text")
   expect_equal(result$contents, paste(
-    "Binary file without applicable comparator; unable to compare details."
+    "Binary file without applicable comparator."
   ))
 })

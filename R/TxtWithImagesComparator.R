@@ -1,8 +1,8 @@
 #' TxtWithImageFileComparator.R
 #'
 #' "Abstract"  comparator for txt based comparator classes that can additionally
-#' contain embedded images. This abstraction level contains generic logic for handling
-#' embedded images and storing the related data.
+#' contain embedded images. This abstraction level contains generic logic for
+#' handling embedded images and storing the related data.
 #'
 #' @import stringr
 #'
@@ -12,8 +12,8 @@
 #' @field file2_images_raw local property for storing image2 raw data
 #'
 
-# Disable cyclomatic complexity lint for the R6 class definition as lintr considers
-# the whole class definition as a single function.
+# Disable cyclomatic complexity lint for the R6 class definition as lintr
+# considers the whole class definition as a single function.
 #
 # nolint start: cyclocomp_linter
 TxtWithImagesFileComparator <- R6Class(
@@ -34,16 +34,16 @@ TxtWithImagesFileComparator <- R6Class(
     },
 
     #' @description
-    #' Method for comparing the inner part for the details query. This method can be
-    #' overwritten by more specialized comparator classes. This method is intended
-    #' to be called only by the comparator classes in the processing and shouldn't
-    #' be called directly by the user.
+    #' Method for comparing the inner part for the details query. This method
+    #' can be overwritten by more specialized comparator classes. This method is
+    #' intended to be called only by the comparator classes in the processing
+    #' and shouldn't be called directly by the user.
     #'
     #' @param omit    string pattern to omit from the comparison
     #' @param options additional comparator parameters
     #'
     vrf_summary_inner = function(omit, options) {
-      self$vrf_open_debug("TxtWithImagesComparator::vrf_summary_inner" , options)
+      self$vrf_open_debug("TxtWithImages::vrf_summary_inner" , options)
 
       result <- super$vrf_summary_inner(omit, options)
       file1_contents_list <- self$file1_contents_list
@@ -66,8 +66,9 @@ TxtWithImagesFileComparator <- R6Class(
           # Number of found embedded images differs between the files.
           result_images <- "Different amount of embedded images."
         } else {
-          # Number of found embedded images is the same; calculate how many of the embedded
-          # images has changed (based on raw file data) compared to total count.
+          # Number of found embedded images is the same; calculate how many of
+          # the embedded images has changed (based on raw file data) compared to
+          # total count.
           matches <- 0
           total <- length(self$file1_images_raw)
 
@@ -89,16 +90,16 @@ TxtWithImagesFileComparator <- R6Class(
     },
 
     #' @description
-    #' Method for comparing the inner part for the details query. This method can
-    #' be overwritten by more specialized comparator classes. This method is
-    #' intended to be called only by the comparator classes in the processing and
-    #' shouldn't be called directly by the user.
+    #' Method for comparing the inner part for the details query. This method
+    #' can be overwritten by more specialized comparator classes. This method is
+    #' intended to be called only by the comparator classes in the processing
+    #' and shouldn't be called directly by the user.
     #'
     #' @param omit    string pattern to omit from the comparison
     #' @param options additional comparator parameters
     #'
     vrf_details_inner = function(omit, options) {
-      self$vrf_open_debug("TxtWithImagesComparator::vrf_details_inner" , options)
+      self$vrf_open_debug("TxtWithImages::vrf_details_inner" , options)
 
       result <- super$vrf_details_inner(omit, options)
       file1_contents_list <- self$file1_contents_list
@@ -117,14 +118,14 @@ TxtWithImagesFileComparator <- R6Class(
       # content getter.
       if (0 != length(self$file1_images_raw) && 0 != length(self$file2_images_raw)) {
 
-        # Only display the differences if there is the same amount of images found
-        # from the compared files. Otherwise it would require additional logic to
-        # decide which files should be compared with each others (which is something
-        # that could be developed further with size etc comparisons).
+        # Only display the differences if there is the same amount of images
+        # found from the compared files. Otherwise it would require additional
+        # logic to decide which files should be compared with each others (which
+        # is something that could be developed further with size comparisons).
         if (length(self$file1_images_raw) == length(self$file2_images_raw)) {
           for (index in seq_along(self$file1_images_raw)) {
-            # Manually create a ImgFileComparator instance for every embedded image
-            # found and call the details comparison based on existing bin data.
+            # Manually create a ImgFileComparator instance for every embedded
+            # image and call the details comparison based on existing bin data.
             comparator <- ImgFileComparator$new(
               NULL,
               NULL,
@@ -141,8 +142,8 @@ TxtWithImagesFileComparator <- R6Class(
     },
 
     #' @description
-    #' "Abstract" method for getting the raw image hex vector array from the given
-    #' source file.
+    #' "Abstract" method for getting the raw image hex vector array from the
+    #' given source file.
     #'
     #' @param file file for which to get the embedded image details
     #'

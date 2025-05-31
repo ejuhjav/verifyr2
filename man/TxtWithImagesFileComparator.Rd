@@ -10,8 +10,8 @@ TxtWithImageFileComparator.R
 }
 \details{
 "Abstract"  comparator for txt based comparator classes that can additionally
-contain embedded images. This abstraction level contains generic logic for handling
-embedded images and storing the related data.
+contain embedded images. This abstraction level contains generic logic for
+handling embedded images and storing the related data.
 }
 \section{Super classes}{
 \code{\link[verifyr2:FileComparator]{verifyr2::FileComparator}} -> \code{\link[verifyr2:BinaryFileComparator]{verifyr2::BinaryFileComparator}} -> \code{\link[verifyr2:TxtFileComparator]{verifyr2::TxtFileComparator}} -> \code{TxtWithImagesFileComparator}
@@ -74,10 +74,10 @@ Initialize a TxtWithImagesFileComparator instance
 \if{html}{\out{<a id="method-TxtWithImagesFileComparator-vrf_summary_inner"></a>}}
 \if{latex}{\out{\hypertarget{method-TxtWithImagesFileComparator-vrf_summary_inner}{}}}
 \subsection{Method \code{vrf_summary_inner()}}{
-Method for comparing the inner part for the details query. This method can be
-overwritten by more specialized comparator classes. This method is intended
-to be called only by the comparator classes in the processing and shouldn't
-be called directly by the user.
+Method for comparing the inner part for the details query. This method
+can be overwritten by more specialized comparator classes. This method is
+intended to be called only by the comparator classes in the processing
+and shouldn't be called directly by the user.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TxtWithImagesFileComparator$vrf_summary_inner(omit, options)}\if{html}{\out{</div>}}
 }
@@ -96,10 +96,10 @@ be called directly by the user.
 \if{html}{\out{<a id="method-TxtWithImagesFileComparator-vrf_details_inner"></a>}}
 \if{latex}{\out{\hypertarget{method-TxtWithImagesFileComparator-vrf_details_inner}{}}}
 \subsection{Method \code{vrf_details_inner()}}{
-Method for comparing the inner part for the details query. This method can
-be overwritten by more specialized comparator classes. This method is
-intended to be called only by the comparator classes in the processing and
-shouldn't be called directly by the user.
+Method for comparing the inner part for the details query. This method
+can be overwritten by more specialized comparator classes. This method is
+intended to be called only by the comparator classes in the processing
+and shouldn't be called directly by the user.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TxtWithImagesFileComparator$vrf_details_inner(omit, options)}\if{html}{\out{</div>}}
 }
@@ -118,8 +118,8 @@ shouldn't be called directly by the user.
 \if{html}{\out{<a id="method-TxtWithImagesFileComparator-vrf_images"></a>}}
 \if{latex}{\out{\hypertarget{method-TxtWithImagesFileComparator-vrf_images}{}}}
 \subsection{Method \code{vrf_images()}}{
-"Abstract" method for getting the raw image hex vector array from the given
-source file.
+"Abstract" method for getting the raw image hex vector array from the
+given source file.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TxtWithImagesFileComparator$vrf_images(file)}\if{html}{\out{</div>}}
 }

@@ -8,8 +8,8 @@
 #'
 #' @include BinaryFileComparator.R
 #'
-#' @field image1_raw local property for storing the already extracted raw data for image1.
-#' @field image2_raw local property for storing the already extracted raw data for image2.
+#' @field image1_raw extracted raw data for image1.
+#' @field image2_raw extracted raw data for image2.
 #'
 #' @examples
 #'
@@ -46,28 +46,28 @@ ImgFileComparator <- R6Class(
     #' @description
     #' Initialize a ImgFileComparator instance
     #'
-    #' @param file1      First file to compare.
-    #' @param file2      Second file to compare.
-    #' @param image1_raw First image in raw format to compare.
-    #' @param image2_raw Second image in raw format to compare.
+    #' @param file1 First file to compare.
+    #' @param file2 Second file to compare.
+    #' @param raw1  First image in raw format to compare.
+    #' @param raw2  Second image in raw format to compare.
     #'
-    initialize = function(file1 = NULL, file2 = NULL, image1_raw = NULL, image2_raw = NULL) {
-      self$image1_raw <- image1_raw
-      self$image2_raw <- image2_raw
+    initialize = function(file1 = NULL, file2 = NULL, raw1 = NULL, raw2 = NULL) {
+      self$image1_raw <- raw1
+      self$image2_raw <- raw2
       super$initialize(file1, file2)
     },
 
     #' @description
-    #' Method for comparing the inner part for the details query. This method can
-    #' be overwritten by more specialized comparator classes. This method is
-    #' intended to be called only by the comparator classes in the processing and
-    #' shouldn't be called directly by the user.
+    #' Method for comparing the inner part for the details query. This method
+    #' can be overwritten by more specialized comparator classes. This method is
+    #' intended to be called only by the comparator classes in the processing
+    #' and shouldn't be called directly by the user.
     #'
     #' @param omit    string pattern to omit from the comparison
     #' @param options additional comparator parameters
     #'
     vrf_details_inner = function(omit, options) {
-      self$vrf_open_debug("ImgFileComparator::vrf_details_inner", options)
+      self$vrf_open_debug("Img::vrf_details_inner", options)
 
       if (is.null(self$image1_raw) || is.null(self$image2_raw)) {
         result <- self$vrf_details_inner_from_files(options)
@@ -90,8 +90,9 @@ ImgFileComparator <- R6Class(
     #' @param options additional comparator parameters
     #*
     vrf_details_inner_from_raw = function(options) {
-      self$vrf_open_debug("ImgFileComparator::vrf_details_inner_from_raw", options)
+      self$vrf_open_debug("Img::vrf_details_inner_from_raw", options)
 
+      png_prefix <- "data:image/png;base64,"
       image1_raw <- self$image1_raw
       image2_raw <- self$image2_raw
       image3_base64 <- NULL
@@ -100,14 +101,15 @@ ImgFileComparator <- R6Class(
         image1 <- magick::image_read(image1_raw)
         image2 <- magick::image_read(image2_raw)
 
-        difference    <- magick::image_compare(image1, image2, metric = "AE")
-        highlighted   <- magick::image_composite(image1, difference, operator = "atop")
-        image3_raw    <- magick::image_write(highlighted, format = "png")
-        image3_base64 <- paste0("data:image/png;base64,", base64enc::base64encode(image3_raw))
+        diff      <- magick::image_compare(image1, image2, metric = "AE")
+        highlight <- magick::image_composite(image1, diff, operator = "atop")
+
+        image3_raw    <- magick::image_write(highlight, format = "png")
+        image3_base64 <- paste0(png_prefix, base64enc::base64encode(image3_raw))
       }
 
-      image1_base64 <- paste0("data:image/png;base64,", base64enc::base64encode(image1_raw))
-      image2_base64 <- paste0("data:image/png;base64,", base64enc::base64encode(image2_raw))
+      image1_base64 <- paste0(png_prefix, base64enc::base64encode(image1_raw))
+      image2_base64 <- paste0(png_prefix, base64enc::base64encode(image2_raw))
 
       result <- list(
         type = "image",
@@ -123,20 +125,23 @@ ImgFileComparator <- R6Class(
     },
 
     #' @description
-    #' Method for comparing the inner part for the details query with the file names
-    #' as the base arguments. This is a part of a group of image processing functions
-    #' that work with different image abstractions (file, image, raw image). These
-    #' methods are intended to improve the performance so that best suiting method
-    #' version can be used depending on what data is available from the earlier
-    #' method calls to the same comparator instance.
+    #' Method for comparing the inner part for the details query with the file
+    #' names as the base arguments. This is a part of a group of image
+    #' processing functions that work with different image abstractions (file,
+    #' image, raw image). These methods are intended to improve the performance
+    #' so that best suiting method version can be used depending on what data is
+    #' available from the earlier method calls to the same comparator instance.
     #'
     #' @param options additional comparator parameters
     #'
     vrf_details_inner_from_files = function(options) {
-      self$vrf_open_debug("ImgFileComparator::vrf_details_inner_from_files", options)
+      self$vrf_open_debug("Img::vrf_details_inner_from_files", options)
 
-      self$image1_raw <- readBin(self$file1, what = "raw", n = file.info(self$file1)$size)
-      self$image2_raw <- readBin(self$file2, what = "raw", n = file.info(self$file2)$size)
+      file1_size <- file.info(self$file1)$size
+      self$image1_raw <- readBin(self$file1, what = "raw", n = file1_size)
+
+      file2_size <- file.info(self$file2)$size
+      self$image2_raw <- readBin(self$file2, what = "raw", n = file2_size)
 
       result <- self$vrf_details_inner_from_raw(options)
 

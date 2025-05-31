@@ -17,19 +17,19 @@ error.
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{file1}}{local property for storing file1}
+\item{\code{file1}}{file1}
 
-\item{\code{file2}}{local property for storing file2}
+\item{\code{file2}}{file2}
 
-\item{\code{file1_contents_list}}{local property for storing extracted file1 contents}
+\item{\code{file1_contents_list}}{file1 contents}
 
-\item{\code{file2_contents_list}}{local property for storing extracted file2 contents}
+\item{\code{file2_contents_list}}{file2 contents}
 
-\item{\code{summary_comparison}}{local property for storing summary comparison result}
+\item{\code{summary_comparison}}{summary comparison result}
 
-\item{\code{details_comparison}}{local property for storing details comparison result}
+\item{\code{details_comparison}}{details comparison result}
 
-\item{\code{debugger}}{local property for storing the debugger instance}
+\item{\code{debugger}}{debugger instance}
 }
 \if{html}{\out{</div>}}
 }
@@ -72,10 +72,10 @@ Initialize a FileComparator instance
 \if{html}{\out{<a id="method-FileComparator-vrf_summary"></a>}}
 \if{latex}{\out{\hypertarget{method-FileComparator-vrf_summary}{}}}
 \subsection{Method \code{vrf_summary()}}{
-Method for comparing the file summary information. This method is intended
-to be implemented only this class level. For comparator specific rules,
-the internal method vrf_summary_inner should be customized on lower
-levels instead.
+Method for comparing the file summary information. This method is
+intended to be implemented only this class level. For comparator
+specific rules, the internal method vrf_summary_inner should be
+customized on lower levels instead.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_summary(omit = NULL, options = NULL)}\if{html}{\out{</div>}}
 }
@@ -83,7 +83,7 @@ levels instead.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{omit}}{string pattern to omit from the comparison (default = NULL)}
+\item{\code{omit}}{string pattern to omit from the comparison}
 
 \item{\code{options}}{additional comparator parameters}
 }
@@ -94,10 +94,10 @@ levels instead.
 \if{html}{\out{<a id="method-FileComparator-vrf_details"></a>}}
 \if{latex}{\out{\hypertarget{method-FileComparator-vrf_details}{}}}
 \subsection{Method \code{vrf_details()}}{
-Method for comparing the file details information. This method is intended
-to be implemented only this class level. For comparator specific rules,
-the internal method vrf_summary_inner should be customized on lower
-levels instead.
+Method for comparing the file details information. This method is
+intended to be implemented only this class level. For comparator
+specific rules, the internal method vrf_summary_inner should be
+customized on lower levels instead.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_details(omit = NULL, options = NULL)}\if{html}{\out{</div>}}
 }
@@ -105,7 +105,7 @@ levels instead.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{omit}}{string pattern to omit from the comparison (default = NULL)}
+\item{\code{omit}}{string pattern to omit from the comparison}
 
 \item{\code{options}}{additional comparator parameters}
 }
@@ -116,10 +116,10 @@ levels instead.
 \if{html}{\out{<a id="method-FileComparator-vrf_summary_inner"></a>}}
 \if{latex}{\out{\hypertarget{method-FileComparator-vrf_summary_inner}{}}}
 \subsection{Method \code{vrf_summary_inner()}}{
-"Abstract" method for comparing the inner part for the summary. This method
-has to be overwritten by more specialized comparator classes. This method is
-intended to be called only by the comparator classes in the processing and
-shouldn't be called directly by the user.
+"Abstract" method for comparing the inner part for the summary. This
+method has to be overwritten by more specialized comparator classes. This
+method is intended to be called only by the comparator classes in the
+processing and shouldn't be called directly by the user.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_summary_inner(omit, options)}\if{html}{\out{</div>}}
 }
@@ -127,7 +127,7 @@ shouldn't be called directly by the user.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{omit}}{string pattern to omit from the comparison (default = NULL)}
+\item{\code{omit}}{string pattern to omit from the comparison}
 
 \item{\code{options}}{additional comparator parameters}
 }
@@ -139,9 +139,9 @@ shouldn't be called directly by the user.
 \if{latex}{\out{\hypertarget{method-FileComparator-vrf_details_inner}{}}}
 \subsection{Method \code{vrf_details_inner()}}{
 "Abstract" method for comparing the inner part for the detailsThis method
-has to be overwritten by more specialized comparator classes. This method is
-intended to be called only by the comparator classes in the processing and
-shouldn't be called directly by the user.
+has to be overwritten by more specialized comparator classes. This method
+is intended to be called only by the comparator classes in the processing
+and shouldn't be called directly by the user.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_details_inner(omit, options)}\if{html}{\out{</div>}}
 }
@@ -149,7 +149,7 @@ shouldn't be called directly by the user.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{omit}}{string pattern to omit from the comparison (default = NULL)}
+\item{\code{omit}}{string pattern to omit from the comparison}
 
 \item{\code{options}}{additional comparator parameters}
 }
@@ -160,8 +160,8 @@ shouldn't be called directly by the user.
 \if{html}{\out{<a id="method-FileComparator-vrf_option_value"></a>}}
 \if{latex}{\out{\hypertarget{method-FileComparator-vrf_option_value}{}}}
 \subsection{Method \code{vrf_option_value()}}{
-Method for getting specific value from the options. In the initial version,
-returns 'NA' if null options is passed.
+Method for getting specific value from the options. In the initial
+version, returns 'NA' if null options is passed.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_option_value(options, key)}\if{html}{\out{</div>}}
 }

@@ -92,15 +92,21 @@ test_that(paste(
 
   config <- Config$new(FALSE)
   config$set("generic.debug", "yes")
-  config$set("rtf.mode", "content")
 
   output <- capture.output({
     comparator <- create_comparator(file1, file2)
     result     <- comparator$vrf_details(options = config)[[1]]
   })
 
-  expect_true(any(grepl("[DEBUG] 'FileComparator::vrf_details, mode: summary' (execution time", output, fixed = TRUE)))
-  expect_true(any(grepl("[DEBUG]   'File 1: test_outputs/rtf/base_with_image.rtf'", output, fixed = TRUE)))
-  expect_true(any(grepl("[DEBUG]   'File 2: test_outputs/rtf/changes_one_row_content_one_image.rtf'", output, fixed = TRUE)))
-  expect_true(any(grepl("[DEBUG]   'TxtWithImagesComparator::vrf_details_inner' (execution time", output, fixed = TRUE)))
+  expected <- "'File::vrf_details, mode: summary' (execution time"
+  expect_content(expected, output)
+
+  expected <- "'File 1: test_outputs/rtf/base_with_image.rtf'"
+  expect_content(expected, output)
+
+  expected <- "'File 2: test_outputs/rtf/changes_one_row_content_one_image.rtf'"
+  expect_content(expected, output)
+
+  expected <- "'TxtWithImages::vrf_details_inner' (execution time"
+  expect_content(expected, output)
 })

@@ -61,10 +61,10 @@ comparator <- TxtFileComparator$new(file1, file2)
 \if{html}{\out{<a id="method-TxtFileComparator-vrf_summary_inner"></a>}}
 \if{latex}{\out{\hypertarget{method-TxtFileComparator-vrf_summary_inner}{}}}
 \subsection{Method \code{vrf_summary_inner()}}{
-Method for comparing the inner part for the details query. This method can be
-overwritten by more specialized comparator classes. This method is intended
-to be called only by the comparator classes in the processing and shouldn't
-be called directly by the user.
+Method for comparing the inner part for the details query. This method
+can be overwritten by more specialized comparator classes. This method is
+intended to be called only by the comparator classes in the processing
+and shouldn't be called directly by the user.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TxtFileComparator$vrf_summary_inner(omit, options)}\if{html}{\out{</div>}}
 }
@@ -83,10 +83,10 @@ be called directly by the user.
 \if{html}{\out{<a id="method-TxtFileComparator-vrf_details_inner"></a>}}
 \if{latex}{\out{\hypertarget{method-TxtFileComparator-vrf_details_inner}{}}}
 \subsection{Method \code{vrf_details_inner()}}{
-Method for comparing the inner part for the details query. This method can
-be overwritten by more specialized comparator classes. This method is
-intended to be called only by the comparator classes in the processing and
-shouldn't be called directly by the user.
+Method for comparing the inner part for the details query. This method
+can be overwritten by more specialized comparator classes. This method is
+intended to be called only by the comparator classes in the processing
+and shouldn't be called directly by the user.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TxtFileComparator$vrf_details_inner(omit, options)}\if{html}{\out{</div>}}
 }
@@ -106,12 +106,12 @@ shouldn't be called directly by the user.
 \if{latex}{\out{\hypertarget{method-TxtFileComparator-vrf_contents_inner}{}}}
 \subsection{Method \code{vrf_contents_inner()}}{
 Method for getting the inner part for the file contents query. The method
-returns the file contents in two separate vectors inside a list. The first
-vector is the file contents and the second one is the file contents with the
-rows matching the omit string excluded. This method can be overwritten by
-more specialized comparator classes. This method is intended to be called
-only by the comparator classes in the processing and shouldn't be called
-directly by the user.
+returns the file contents in two separate vectors inside a list. The
+first vector is the file contents and the second one is the file contents
+with the rows matching the omit string excluded. This method can be
+overwritten by more specialized comparator classes. This method is
+intended to be called only by the comparator classes in the processing
+and shouldn't be called directly by the user.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TxtFileComparator$vrf_contents_inner(contents, omit, options)}\if{html}{\out{</div>}}
 }

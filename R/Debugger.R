@@ -96,7 +96,8 @@ Debugger <- R6Class("Debugger",
       entry <- self$stack[[length(self$stack)]]
       self$stack <- self$stack[-length(self$stack)]
 
-      entry$duration <- round(as.numeric(difftime(Sys.time(), entry$start_time, units = "secs")) * 1000)
+      time_diff      <- difftime(Sys.time(), entry$start_time, units = "secs")
+      entry$duration <- round(as.numeric(time_diff) * 1000)
 
       if (length(self$stack) > 0) {
         parent <- self$stack[[length(self$stack)]]
@@ -121,7 +122,8 @@ Debugger <- R6Class("Debugger",
       if (isTRUE(entry$is_message)) {
         cat(indent, "'", entry$label, "'\n", sep = "")
       } else {
-        cat(indent, "'", entry$label, "' (execution time ", entry$duration, " ms)\n", sep = "")
+        execution_time <- paste0("(execution time ", entry$duration, " ms)")
+        cat(indent, "'", entry$label, "' ", execution_time, "\n", sep = "")
 
         for (child in entry$children) {
           self$print_debug_tree(child, depth + 1)
