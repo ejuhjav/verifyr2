@@ -296,7 +296,14 @@ get_comparator <- function(row_index, file1, file2) {
   return(comparator)
 }
 
-update_details_comparison <- function(input, output, session, config_param, row, row_index) {
+update_details_comparison <- function(
+  input,
+  output,
+  session,
+  config_param,
+  row,
+  row_index
+) {
   file1 <- paste0(row[1])
   file2 <- paste0(row[2])
 
@@ -491,8 +498,8 @@ set_visibility <- function(id, visible) {
     add <- "'custom_hidden'"
   }
 
-  selector <- paste0("$('#", id, "')")
-  shinyjs::runjs(paste0(selector, ".removeClass(", del, ").addClass(", add, ")"))
+  element <- paste0("$('#", id, "')")
+  shinyjs::runjs(paste0(element, ".removeClass(", del, ").addClass(", add, ")"))
 }
 
 set_reactive_text <- function(reactive_id, text, class = "") {
@@ -614,7 +621,14 @@ server <- function(input, output, session) {
         new_row_index <- input$process_row
         row <- summary_verify()[new_row_index, ]
 
-        update_details_comparison(input, output, session, config, row, new_row_index)
+        update_details_comparison(
+          input,
+          output,
+          session,
+          config,
+          row,
+          new_row_index
+        )
       }
     } else {
       current_mode(config$get("details.mode"))
@@ -709,7 +723,9 @@ server <- function(input, output, session) {
                 inputId = paste0("process_", row_id),
                 label   = "Compare",
                 class   = "process_button",
-                onclick = sprintf("Shiny.setInputValue('process_row', %d)", row_id)
+                onclick = sprintf(
+                  "Shiny.setInputValue('process_row', %d)", row_id
+                )
               )
             )
           }
@@ -779,7 +795,14 @@ server <- function(input, output, session) {
 
     # list side-by-side comparison
     set_reactive_text("details_text", "")
-    update_details_comparison(input, output, session, config, row, new_row_index)
+    update_details_comparison(
+      input,
+      output,
+      session,
+      config,
+      row,
+      new_row_index
+    )
 
     # set up the file download links for the compared files
     update_download_links(output, row, file1_link, file2_link)

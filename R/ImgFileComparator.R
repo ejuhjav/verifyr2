@@ -51,7 +51,12 @@ ImgFileComparator <- R6Class(
     #' @param raw1  First image in raw format to compare.
     #' @param raw2  Second image in raw format to compare.
     #'
-    initialize = function(file1 = NULL, file2 = NULL, raw1 = NULL, raw2 = NULL) {
+    initialize = function(
+      file1 = NULL,
+      file2 = NULL,
+      raw1  = NULL,
+      raw2  = NULL
+    ) {
       self$image1_raw <- raw1
       self$image2_raw <- raw2
       super$initialize(file1, file2)
