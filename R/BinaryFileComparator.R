@@ -29,20 +29,20 @@ BinaryFileComparator <- R6Class(
   public = list(
 
     #' @description
-    #' Method for getting the single file contents for the comparison. This method
-    #' returns the file contents in two separate vectors inside a list. The first
-    #' vector is the file contents and the second one is the file contents with the
-    #' rows matching the omit string excluded. This method can be overwritten by
-    #' more specialized comparator classes. This method is intended to be called
-    #' only by the comparator classes in the processing and shouldn not be called
-    #' directly by the user.
+    #' Method for getting the single file contents for the comparison. This
+    #' method returns the file contents in two separate vectors inside a list.
+    #' The first vector is the file contents and the second one is the file
+    #' contents with the rows matching the omit string excluded. This method
+    #' can be overwritten by more specialized comparator classes. This method
+    #' is intended to be called only by the comparator classes in the processing
+    #' and shouldn not be called directly by the user.
     #'
     #' @param file    file for which to get the contents
     #' @param omit    string pattern to omit from the comparison
     #' @param options additional comparator parameters
     #'
     vrf_contents = function(file, omit, options) {
-      self$vrf_open_debug("BinaryFileComparator::vrf_contents", options)
+      self$vrf_open_debug("Binary::vrf_contents", options)
 
       contents <- readLines(file, warn = FALSE)
       result   <- self$vrf_contents_inner(contents, omit, options)
@@ -53,36 +53,36 @@ BinaryFileComparator <- R6Class(
 
     #' @description
     #' Method for getting the inner part for the file contents query. The method
-    #' returns the file contents in two separate vectors inside a list. The first
-    #' vector is the file contents and the second one is the file contents with the
-    #' rows matching the omit string excluded. This method can be overwritten by
-    #' more specialized comparator classes. This method is intended to be called
-    #' only by the comparator classes in the processing and shouldn not be called
-    #' directly by the user.
+    #' returns the file contents in two separate vectors inside a list. The
+    #' first vector is the file contents and the second one is the file contents
+    #' with the rows matching the omit string excluded. This method can be
+    #' overwritten by more specialized comparator classes. This method is
+    #' intended to be called only by the comparator classes in the processing
+    #' and shouldn not be called directly by the user.
     #'
     #' @param contents file contents
-    #' @param omit    string pattern to omit from the comparison
+    #' @param omit     string pattern to omit from the comparison
     #' @param options  additional comparator parameters
     #'
     vrf_contents_inner = function(contents, omit, options) {
-      self$vrf_add_debug("BinaryFileComparator::vrf_contents_inner")
+      self$vrf_add_debug("Binary::vrf_contents_inner")
       return(list(contents, contents))
     },
 
     #' @description
     #' Method for comparing the inner part for the details query. The method
-    #' returns the file contents in two separate vectors inside a list. The first
-    #' vector is the file contents and the second one is the file contents with the
-    #' rows matching the omit string excluded. This method can be overwritten by
-    #' more specialized comparator classes. This method is intended to be called
-    #' only by the comparator classes in the processing and shouldn not be called
-    #' directly by the user.
+    #' returns the file contents in two separate vectors inside a list. The
+    #' first vector is the file contents and the second one is the file contents
+    #' with the rows matching the omit string excluded. This method can be
+    #' overwritten by more specialized comparator classes. This method is
+    #' intended to be called only by the comparator classes in the processing
+    #' and shouldn not be called directly by the user.
     #'
     #' @param omit    string pattern to omit from the comparison
     #' @param options additional comparator parameters
     #'
     vrf_summary_inner = function(omit, options) {
-      self$vrf_open_debug("BinaryFileComparator::vrf_summary_inner", options)
+      self$vrf_open_debug("Binary::vrf_summary_inner", options)
 
       file_info1 <- file.info(self$file1)
       file_info2 <- file.info(self$file2)
@@ -118,19 +118,19 @@ BinaryFileComparator <- R6Class(
     },
 
     #' @description
-    #' Method for comparing the inner part for the details query. This method can be
-    #' overwritten by more specialized comparator classes. This method is intended
-    #' to be called only by the comparator classes in the processing and shouldn't
-    #' be called directly by the user.
+    #' Method for comparing the inner part for the details query. This method
+    #' can be overwritten by more specialized comparator classes. This method is
+    #' intended to be called only by the comparator classes in the processing
+    #' and shouldn't be called directly by the user.
     #'
     #' @param omit    string pattern to omit from the comparison
     #' @param options additional comparator parameters
     #'
     vrf_details_inner = function(omit, options) {
-      self$vrf_add_debug("BinaryFileComparator::vrf_details_inner")
+      self$vrf_add_debug("Binary::vrf_details_inner")
       result <- list(
         type = "text",
-        contents = "Binary file without applicable comparator; unable to compare details."
+        contents = "Binary file without applicable comparator."
       )
       return(list(result))
     }

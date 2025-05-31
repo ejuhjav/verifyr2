@@ -7,19 +7,19 @@
 #'
 #' @importFrom R6 R6Class
 #'
-#' @field file1               local property for storing file1
-#' @field file2               local property for storing file2
-#' @field file1_contents_list local property for storing extracted file1 contents
-#' @field file2_contents_list local property for storing extracted file2 contents
-#' @field summary_comparison  local property for storing summary comparison result
-#' @field details_comparison  local property for storing details comparison result
-#' @field debugger            local property for storing the debugger instance
+#' @field file1               file1
+#' @field file2               file2
+#' @field file1_contents_list file1 contents
+#' @field file2_contents_list file2 contents
+#' @field summary_comparison  summary comparison result
+#' @field details_comparison  details comparison result
+#' @field debugger            debugger instance
 #'
 #' @export
 #'
 
-# Disable cyclomatic complexity lint for the R6 class definition as lintr considers
-# the whole class definition as a single function.
+# Disable cyclomatic complexity lint for the R6 class definition as lintr
+# considers the whole class definition as a single function.
 #
 # nolint start: cyclocomp_linter
 FileComparator <- R6Class(
@@ -46,16 +46,16 @@ FileComparator <- R6Class(
     },
 
     #' @description
-    #' Method for comparing the file summary information. This method is intended
-    #' to be implemented only this class level. For comparator specific rules,
-    #' the internal method vrf_summary_inner should be customized on lower
-    #' levels instead.
+    #' Method for comparing the file summary information. This method is
+    #' intended to be implemented only this class level. For comparator
+    #' specific rules, the internal method vrf_summary_inner should be
+    #' customized on lower levels instead.
     #'
-    #' @param omit    string pattern to omit from the comparison (default = NULL)
+    #' @param omit    string pattern to omit from the comparison
     #' @param options additional comparator parameters
     #'
     vrf_summary = function(omit = NULL, options = NULL) {
-      self$vrf_open_debug("FileComparator::vrf_summary", options)
+      self$vrf_open_debug("File::vrf_summary", options)
       self$vrf_add_debug_files()
 
       if (!is.null(self$summary_comparison)) {
@@ -82,12 +82,12 @@ FileComparator <- R6Class(
     },
 
     #' @description
-    #' Method for comparing the file details information. This method is intended
-    #' to be implemented only this class level. For comparator specific rules,
-    #' the internal method vrf_summary_inner should be customized on lower
-    #' levels instead.
+    #' Method for comparing the file details information. This method is
+    #' intended to be implemented only this class level. For comparator
+    #' specific rules, the internal method vrf_summary_inner should be
+    #' customized on lower levels instead.
     #'
-    #' @param omit    string pattern to omit from the comparison (default = NULL)
+    #' @param omit    string pattern to omit from the comparison
     #' @param options additional comparator parameters
     #'
     vrf_details = function(omit = NULL, options = NULL) {
@@ -96,7 +96,7 @@ FileComparator <- R6Class(
         mode <- "summary"
       }
 
-      self$vrf_open_debug(paste("FileComparator::vrf_details, mode:", mode), options)
+      self$vrf_open_debug(paste("File::vrf_details, mode:", mode), options)
       self$vrf_add_debug_files()
 
       if (!is.null(self$details_comparison[[mode]])) {
@@ -133,12 +133,12 @@ FileComparator <- R6Class(
     },
 
     #' @description
-    #' "Abstract" method for comparing the inner part for the summary. This method
-    #' has to be overwritten by more specialized comparator classes. This method is
-    #' intended to be called only by the comparator classes in the processing and
-    #' shouldn't be called directly by the user.
+    #' "Abstract" method for comparing the inner part for the summary. This
+    #' method has to be overwritten by more specialized comparator classes. This
+    #' method is intended to be called only by the comparator classes in the
+    #' processing and shouldn't be called directly by the user.
     #'
-    #' @param omit    string pattern to omit from the comparison (default = NULL)
+    #' @param omit    string pattern to omit from the comparison
     #' @param options additional comparator parameters
     #'
     vrf_summary_inner = function(omit, options) {
@@ -147,11 +147,11 @@ FileComparator <- R6Class(
 
     #' @description
     #' "Abstract" method for comparing the inner part for the detailsThis method
-    #' has to be overwritten by more specialized comparator classes. This method is
-    #' intended to be called only by the comparator classes in the processing and
-    #' shouldn't be called directly by the user.
+    #' has to be overwritten by more specialized comparator classes. This method
+    #' is intended to be called only by the comparator classes in the processing
+    #' and shouldn't be called directly by the user.
     #'
-    #' @param omit    string pattern to omit from the comparison (default = NULL)
+    #' @param omit    string pattern to omit from the comparison
     #' @param options additional comparator parameters
     #'
     vrf_details_inner = function(omit, options) {
@@ -159,8 +159,8 @@ FileComparator <- R6Class(
     },
 
     #' @description
-    #' Method for getting specific value from the options. In the initial version,
-    #' returns 'NA' if null options is passed.
+    #' Method for getting specific value from the options. In the initial
+    #' version, returns 'NA' if null options is passed.
     #'
     #' @param options comparator parameters
     #' @param key     key to search from the parameters

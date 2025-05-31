@@ -34,11 +34,11 @@ config$save()
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{schema}}{local property for storing the configuration schema}
+\item{\code{schema}}{configuration schema}
 
-\item{\code{config}}{local property for storing the current configuration data}
+\item{\code{config}}{current configuration data}
 
-\item{\code{path}}{local property for storing the stored configuration json file path}
+\item{\code{path}}{configuration json file path}
 }
 \if{html}{\out{</div>}}
 }
@@ -79,8 +79,8 @@ the project configuration values are included.
 \if{html}{\out{<a id="method-Config-get"></a>}}
 \if{latex}{\out{\hypertarget{method-Config-get}{}}}
 \subsection{Method \code{get()}}{
-Mehod for getting configuration value based on configuration key. Configuration
-item children are separated with a dot in the key notation.
+Mehod for getting configuration value based on configuration key.
+Configuratio item children are separated with a dot in the key notation.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Config$get(key)}\if{html}{\out{</div>}}
 }
@@ -97,8 +97,8 @@ item children are separated with a dot in the key notation.
 \if{html}{\out{<a id="method-Config-set"></a>}}
 \if{latex}{\out{\hypertarget{method-Config-set}{}}}
 \subsection{Method \code{set()}}{
-Mehod for setting configuration value based on configuration key. Configuration
-item children are separated with a dot in the key notation.
+Mehod for setting configuration value based on configuration key.
+Configuration item children are separated with a dot in the key notation.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Config$set(key, value)}\if{html}{\out{</div>}}
 }
@@ -127,9 +127,9 @@ Method for saving the current configuration data into local machine.
 \if{html}{\out{<a id="method-Config-get_default_config"></a>}}
 \if{latex}{\out{\hypertarget{method-Config-get_default_config}{}}}
 \subsection{Method \code{get_default_config()}}{
-Helper method for getting configuration default values. These default values
-will be used in the configuration in case the configuration properties are not
-present previously.
+Helper method for getting configuration default values. These default
+values will be used in the configuration in case the configuration
+properties are not present previously.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Config$get_default_config()}\if{html}{\out{</div>}}
 }
@@ -139,9 +139,9 @@ present previously.
 \if{html}{\out{<a id="method-Config-get_default_schema"></a>}}
 \if{latex}{\out{\hypertarget{method-Config-get_default_schema}{}}}
 \subsection{Method \code{get_default_schema()}}{
-Method for getting the full configuration schema. Apart from the configuration
-data, the schema contains property descriptions as well as all possible values
-for the configuration properties.
+Method for getting the full configuration schema. Apart from the
+configuration data, the schema contains property descriptions as well as
+all possible values for the configuration properties.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Config$get_default_schema()}\if{html}{\out{</div>}}
 }

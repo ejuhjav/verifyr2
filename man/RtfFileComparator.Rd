@@ -63,13 +63,13 @@ comparator <- RtfFileComparator$new(file1, file2)
 \if{html}{\out{<a id="method-RtfFileComparator-vrf_contents"></a>}}
 \if{latex}{\out{\hypertarget{method-RtfFileComparator-vrf_contents}{}}}
 \subsection{Method \code{vrf_contents()}}{
-Method for getting the single file contents for the comparison. The method
-returns the file contents in two separate vectors inside a list. The first
-vector is the file contents and the second one is the file contents with the
-rows matching the omit string excluded. This method can be overwritten by
-more specialized comparator classes. This method is intended to be called
-only by the comparator classes in the processing and shouldn't be called
-directly by the user.
+Method for getting the single file contents for the comparison. The
+method returns the file contents in two separate vectors inside a list.
+The first vector is the file contents and the second one is the file
+contents with the rows matching the omit string excluded. This method
+can be overwritten by more specialized comparator classes. This method
+is intended to be called only by the comparator classes in the processing
+and shouldn't be called directly by the user.
 
 For RtfComparator, only the RTF file content part is returned for
 comparison.
@@ -93,8 +93,8 @@ comparison.
 \if{html}{\out{<a id="method-RtfFileComparator-vrf_images"></a>}}
 \if{latex}{\out{\hypertarget{method-RtfFileComparator-vrf_images}{}}}
 \subsection{Method \code{vrf_images()}}{
-"Abstract" method for getting the raw image hex vector array from the given
-source file.
+"Abstract" method for getting the raw image hex vector array from the
+given source file.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RtfFileComparator$vrf_images(file, options)}\if{html}{\out{</div>}}
 }

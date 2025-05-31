@@ -11,7 +11,8 @@ test_that("Debugger printout", {
     debugger$close_debug()
   })
 
-  expect_true(any(grepl("[DEBUG] 'opened1' (execution time", output, fixed = TRUE)))
+  expected <- "[DEBUG] 'opened1' (execution time"
+  expect_content(expected, output)
 })
 
 test_that("Debugger printout with add method", {
@@ -23,8 +24,11 @@ test_that("Debugger printout with add method", {
     debugger$close_debug()
   })
 
-  expect_true(any(grepl("[DEBUG] 'opened2' (execution time", output, fixed = TRUE)))
-  expect_true(any(grepl("[DEBUG]   'additional2'", output, fixed = TRUE)))
+  expected <- "[DEBUG] 'opened2' (execution time"
+  expect_content(expected, output)
+
+  expected <- "[DEBUG]   'additional2'"
+  expect_content(expected, output)
 })
 
 test_that("Debugger printout with multiple levels", {
@@ -40,8 +44,15 @@ test_that("Debugger printout with multiple levels", {
     debugger$close_debug()
   })
 
-  expect_true(any(grepl("[DEBUG] 'opened3' (execution time", output, fixed = TRUE)))
-  expect_true(any(grepl("[DEBUG]   'internal-opened4' (execution time", output, fixed = TRUE)))
-  expect_true(any(grepl("[DEBUG]     'internal-opened5' (execution time", output, fixed = TRUE)))
-  expect_true(any(grepl("[DEBUG]     'additional3'", output, fixed = TRUE)))
+  expected <- "[DEBUG] 'opened3' (execution time"
+  expect_content(expected, output)
+
+  expected <- "[DEBUG]   'internal-opened4' (execution time"
+  expect_content(expected, output)
+
+  expected <- "[DEBUG]     'internal-opened5' (execution time"
+  expect_content(expected, output)
+
+  expected <- "[DEBUG]     'additional3'"
+  expect_content(expected, output)
 })

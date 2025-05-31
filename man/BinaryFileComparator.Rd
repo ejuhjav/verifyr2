@@ -60,13 +60,13 @@ comparator <- BinaryFileComparator$new(file1, file2)
 \if{html}{\out{<a id="method-BinaryFileComparator-vrf_contents"></a>}}
 \if{latex}{\out{\hypertarget{method-BinaryFileComparator-vrf_contents}{}}}
 \subsection{Method \code{vrf_contents()}}{
-Method for getting the single file contents for the comparison. This method
-returns the file contents in two separate vectors inside a list. The first
-vector is the file contents and the second one is the file contents with the
-rows matching the omit string excluded. This method can be overwritten by
-more specialized comparator classes. This method is intended to be called
-only by the comparator classes in the processing and shouldn not be called
-directly by the user.
+Method for getting the single file contents for the comparison. This
+method returns the file contents in two separate vectors inside a list.
+The first vector is the file contents and the second one is the file
+contents with the rows matching the omit string excluded. This method
+can be overwritten by more specialized comparator classes. This method
+is intended to be called only by the comparator classes in the processing
+and shouldn not be called directly by the user.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{BinaryFileComparator$vrf_contents(file, omit, options)}\if{html}{\out{</div>}}
 }
@@ -88,12 +88,12 @@ directly by the user.
 \if{latex}{\out{\hypertarget{method-BinaryFileComparator-vrf_contents_inner}{}}}
 \subsection{Method \code{vrf_contents_inner()}}{
 Method for getting the inner part for the file contents query. The method
-returns the file contents in two separate vectors inside a list. The first
-vector is the file contents and the second one is the file contents with the
-rows matching the omit string excluded. This method can be overwritten by
-more specialized comparator classes. This method is intended to be called
-only by the comparator classes in the processing and shouldn not be called
-directly by the user.
+returns the file contents in two separate vectors inside a list. The
+first vector is the file contents and the second one is the file contents
+with the rows matching the omit string excluded. This method can be
+overwritten by more specialized comparator classes. This method is
+intended to be called only by the comparator classes in the processing
+and shouldn not be called directly by the user.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{BinaryFileComparator$vrf_contents_inner(contents, omit, options)}\if{html}{\out{</div>}}
 }
@@ -115,12 +115,12 @@ directly by the user.
 \if{latex}{\out{\hypertarget{method-BinaryFileComparator-vrf_summary_inner}{}}}
 \subsection{Method \code{vrf_summary_inner()}}{
 Method for comparing the inner part for the details query. The method
-returns the file contents in two separate vectors inside a list. The first
-vector is the file contents and the second one is the file contents with the
-rows matching the omit string excluded. This method can be overwritten by
-more specialized comparator classes. This method is intended to be called
-only by the comparator classes in the processing and shouldn not be called
-directly by the user.
+returns the file contents in two separate vectors inside a list. The
+first vector is the file contents and the second one is the file contents
+with the rows matching the omit string excluded. This method can be
+overwritten by more specialized comparator classes. This method is
+intended to be called only by the comparator classes in the processing
+and shouldn not be called directly by the user.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{BinaryFileComparator$vrf_summary_inner(omit, options)}\if{html}{\out{</div>}}
 }
@@ -139,10 +139,10 @@ directly by the user.
 \if{html}{\out{<a id="method-BinaryFileComparator-vrf_details_inner"></a>}}
 \if{latex}{\out{\hypertarget{method-BinaryFileComparator-vrf_details_inner}{}}}
 \subsection{Method \code{vrf_details_inner()}}{
-Method for comparing the inner part for the details query. This method can be
-overwritten by more specialized comparator classes. This method is intended
-to be called only by the comparator classes in the processing and shouldn't
-be called directly by the user.
+Method for comparing the inner part for the details query. This method
+can be overwritten by more specialized comparator classes. This method is
+intended to be called only by the comparator classes in the processing
+and shouldn't be called directly by the user.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{BinaryFileComparator$vrf_details_inner(omit, options)}\if{html}{\out{</div>}}
 }

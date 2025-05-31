@@ -43,9 +43,9 @@ comparator <- ImgFileComparator$new(NULL, NULL, image1_raw, image2_raw)
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{image1_raw}}{local property for storing the already extracted raw data for image1.}
+\item{\code{image1_raw}}{extracted raw data for image1.}
 
-\item{\code{image2_raw}}{local property for storing the already extracted raw data for image2.}
+\item{\code{image2_raw}}{extracted raw data for image2.}
 }
 \if{html}{\out{</div>}}
 }
@@ -81,12 +81,7 @@ comparator <- ImgFileComparator$new(NULL, NULL, image1_raw, image2_raw)
 \subsection{Method \code{new()}}{
 Initialize a ImgFileComparator instance
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$new(
-  file1 = NULL,
-  file2 = NULL,
-  image1_raw = NULL,
-  image2_raw = NULL
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$new(file1 = NULL, file2 = NULL, raw1 = NULL, raw2 = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -96,9 +91,9 @@ Initialize a ImgFileComparator instance
 
 \item{\code{file2}}{Second file to compare.}
 
-\item{\code{image1_raw}}{First image in raw format to compare.}
+\item{\code{raw1}}{First image in raw format to compare.}
 
-\item{\code{image2_raw}}{Second image in raw format to compare.}
+\item{\code{raw2}}{Second image in raw format to compare.}
 }
 \if{html}{\out{</div>}}
 }
@@ -107,10 +102,10 @@ Initialize a ImgFileComparator instance
 \if{html}{\out{<a id="method-ImgFileComparator-vrf_details_inner"></a>}}
 \if{latex}{\out{\hypertarget{method-ImgFileComparator-vrf_details_inner}{}}}
 \subsection{Method \code{vrf_details_inner()}}{
-Method for comparing the inner part for the details query. This method can
-be overwritten by more specialized comparator classes. This method is
-intended to be called only by the comparator classes in the processing and
-shouldn't be called directly by the user.
+Method for comparing the inner part for the details query. This method
+can be overwritten by more specialized comparator classes. This method is
+intended to be called only by the comparator classes in the processing
+and shouldn't be called directly by the user.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_details_inner(omit, options)}\if{html}{\out{</div>}}
 }
@@ -148,12 +143,12 @@ are found.
 \if{html}{\out{<a id="method-ImgFileComparator-vrf_details_inner_from_files"></a>}}
 \if{latex}{\out{\hypertarget{method-ImgFileComparator-vrf_details_inner_from_files}{}}}
 \subsection{Method \code{vrf_details_inner_from_files()}}{
-Method for comparing the inner part for the details query with the file names
-as the base arguments. This is a part of a group of image processing functions
-that work with different image abstractions (file, image, raw image). These
-methods are intended to improve the performance so that best suiting method
-version can be used depending on what data is available from the earlier
-method calls to the same comparator instance.
+Method for comparing the inner part for the details query with the file
+names as the base arguments. This is a part of a group of image
+processing functions that work with different image abstractions (file,
+image, raw image). These methods are intended to improve the performance
+so that best suiting method version can be used depending on what data is
+available from the earlier method calls to the same comparator instance.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_details_inner_from_files(options)}\if{html}{\out{</div>}}
 }

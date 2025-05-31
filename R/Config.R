@@ -27,7 +27,8 @@ set_nested_value <- function(config, key, value) {
   if (length(parts) == 1) {
     config[[parts[1]]] <- value
   } else {
-    config[[parts[1]]] <- set_nested_value(config[[parts[1]]], paste(parts[-1], collapse = "."), value)
+    sub_key <- paste(parts[-1], collapse = ".")
+    config[[parts[1]]] <- set_nested_value(config[[parts[1]]], sub_key, value)
   }
   return(config)
 }
@@ -59,9 +60,9 @@ set_nested_value <- function(config, key, value) {
 #' @import rappdirs
 #' @importFrom R6 R6Class
 #'
-#' @field schema local property for storing the configuration schema
-#' @field config local property for storing the current configuration data
-#' @field path   local property for storing the stored configuration json file path
+#' @field schema configuration schema
+#' @field config current configuration data
+#' @field path   configuration json file path
 #'
 #' @export
 #'
@@ -85,7 +86,8 @@ Config <- R6::R6Class(
       self$config <- self$get_default_config()
 
       if (is.null(config_path)) {
-        self$path <- file.path(rappdirs::user_config_dir("verifyr2"), "config.json")
+        config_dir <- rappdirs::user_config_dir("verifyr2")
+        self$path  <- file.path(config_dir, "config.json")
       } else {
         self$path <- config_path
       }
@@ -98,8 +100,8 @@ Config <- R6::R6Class(
     },
 
     #' @description
-    #' Mehod for getting configuration value based on configuration key. Configuration
-    #' item children are separated with a dot in the key notation.
+    #' Mehod for getting configuration value based on configuration key.
+    #' Configuratio item children are separated with a dot in the key notation.
     #'
     #' @param key configuration property key for which to get the value
     #'
@@ -108,8 +110,8 @@ Config <- R6::R6Class(
     },
 
     #' @description
-    #' Mehod for setting configuration value based on configuration key. Configuration
-    #' item children are separated with a dot in the key notation.
+    #' Mehod for setting configuration value based on configuration key.
+    #' Configuration item children are separated with a dot in the key notation.
     #'
     #' @param key   configuration property key for which to get the value
     #' @param value value to set for the specified configuration key
@@ -123,14 +125,14 @@ Config <- R6::R6Class(
     #'
     save = function() {
       dir.create(dirname(self$path), showWarnings = FALSE, recursive = TRUE)
-      jsonlite::write_json(self$config, self$path, pretty = TRUE, auto_unbox = TRUE)
+      jsonlite::write_json(self$config, self$path, pretty = TRUE)
       message("Configuration saved to: ", normalizePath(self$path))
     },
 
     #' @description
-    #' Helper method for getting configuration default values. These default values
-    #' will be used in the configuration in case the configuration properties are not
-    #' present previously.
+    #' Helper method for getting configuration default values. These default
+    #' values will be used in the configuration in case the configuration
+    #' properties are not present previously.
     #'
     get_default_config = function() {
       defaults <- list()
@@ -148,9 +150,9 @@ Config <- R6::R6Class(
     },
 
     #' @description
-    #' Method for getting the full configuration schema. Apart from the configuration
-    #' data, the schema contains property descriptions as well as all possible values
-    #' for the configuration properties.
+    #' Method for getting the full configuration schema. Apart from the
+    #' configuration data, the schema contains property descriptions as well as
+    #' all possible values for the configuration properties.
     #'
     get_default_schema = function() {
       list(

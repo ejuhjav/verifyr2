@@ -27,8 +27,8 @@
 #' @export
 #'
 
-# Disable cyclomatic complexity lint for the R6 class definition as lintr considers
-# the whole class definition as a single function.
+# Disable cyclomatic complexity lint for the R6 class definition as lintr
+# considers the whole class definition as a single function.
 #
 # nolint start: cyclocomp_linter
 TxtFileComparator <- R6Class(
@@ -37,16 +37,16 @@ TxtFileComparator <- R6Class(
   public = list(
 
     #' @description
-    #' Method for comparing the inner part for the details query. This method can be
-    #' overwritten by more specialized comparator classes. This method is intended
-    #' to be called only by the comparator classes in the processing and shouldn't
-    #' be called directly by the user.
+    #' Method for comparing the inner part for the details query. This method
+    #' can be overwritten by more specialized comparator classes. This method is
+    #' intended to be called only by the comparator classes in the processing
+    #' and shouldn't be called directly by the user.
     #'
     #' @param omit    string pattern to omit from the comparison
     #' @param options additional comparator parameters
     #'
     vrf_summary_inner = function(omit, options) {
-      self$vrf_open_debug("TxtFileComparator::vrf_summary_inner" , options)
+      self$vrf_open_debug("Txt::vrf_summary_inner" , options)
 
       file1_contents_list <- self$file1_contents_list
       file2_contents_list <- self$file2_contents_list
@@ -88,16 +88,16 @@ TxtFileComparator <- R6Class(
     },
 
     #' @description
-    #' Method for comparing the inner part for the details query. This method can
-    #' be overwritten by more specialized comparator classes. This method is
-    #' intended to be called only by the comparator classes in the processing and
-    #' shouldn't be called directly by the user.
+    #' Method for comparing the inner part for the details query. This method
+    #' can be overwritten by more specialized comparator classes. This method is
+    #' intended to be called only by the comparator classes in the processing
+    #' and shouldn't be called directly by the user.
     #'
     #' @param omit    string pattern to omit from the comparison
     #' @param options additional comparator parameters
     #'
     vrf_details_inner = function(omit, options) {
-      self$vrf_open_debug("TxtFileComparator::vrf_details_inner" , options)
+      self$vrf_open_debug("Txt::vrf_details_inner" , options)
 
       file1_contents_list <- self$file1_contents_list
       file2_contents_list <- self$file2_contents_list
@@ -149,19 +149,19 @@ TxtFileComparator <- R6Class(
 
     #' @description
     #' Method for getting the inner part for the file contents query. The method
-    #' returns the file contents in two separate vectors inside a list. The first
-    #' vector is the file contents and the second one is the file contents with the
-    #' rows matching the omit string excluded. This method can be overwritten by
-    #' more specialized comparator classes. This method is intended to be called
-    #' only by the comparator classes in the processing and shouldn't be called
-    #' directly by the user.
+    #' returns the file contents in two separate vectors inside a list. The
+    #' first vector is the file contents and the second one is the file contents
+    #' with the rows matching the omit string excluded. This method can be
+    #' overwritten by more specialized comparator classes. This method is
+    #' intended to be called only by the comparator classes in the processing
+    #' and shouldn't be called directly by the user.
     #'
     #' @param contents file contents
     #' @param omit     string pattern to omit from the comparison
     #' @param options  additional comparator parameters
     #'
     vrf_contents_inner = function(contents, omit, options) {
-      self$vrf_open_debug("TxtFileComparator::vrf_contents_inner" , options)
+      self$vrf_open_debug("Txt::vrf_contents_inner" , options)
 
       contents_omit <- contents
 

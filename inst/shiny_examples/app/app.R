@@ -94,7 +94,9 @@ javascript_additions <- function() {
     shiny::tags$script(htmltools::HTML("
       Shiny.addCustomMessageHandler('highlightRow', function(message) {
         $('.dataTable tr').removeClass('row_highlighted');
-        $('.dataTable #process_' + message.row_id).closest('tr').addClass('row_highlighted');
+        $('.dataTable #process_' + message.row_id)
+          .closest('tr')
+          .addClass('row_highlighted');
       });
     "))
   )
@@ -322,7 +324,7 @@ update_details_comparison <- function(input, output, session, config_param, row,
     {
       comparator <- get_comparator(row_index, file1, file2)
       details <- comparator$vrf_details(
-        omit = input$omit_rows,
+        omit    = input$omit_rows,
         options = options
       )
 
@@ -396,14 +398,22 @@ update_details_comparison <- function(input, output, session, config_param, row,
               style = "display: inline-block; flex: 0 0 33.3333%;",
               shiny::tags$div(
                 class = "custom-img-diffobj-image-display",
-                shiny::tags$img(src = instance_data$content$image1, alt = "Image1", style = "width: 100%;")
+                shiny::tags$img(
+                  src   = instance_data$content$image1,
+                  alt   = "Image1",
+                  style = "width: 100%;"
+                )
               )
             ),
             shiny::tags$div(
               style = "display: inline-block; flex: 0 0 33.3333%;",
               shiny::tags$div(
                 class = "custom-img-diffobj-image-display",
-                shiny::tags$img(src = instance_data$content$image2, alt = "Image2", style = "width: 100%;")
+                shiny::tags$img(
+                  src   = instance_data$content$image2,
+                  alt   = "Image2",
+                  style = "width: 100%;"
+                )
               )
             ),
             shiny::tags$div(
@@ -411,10 +421,20 @@ update_details_comparison <- function(input, output, session, config_param, row,
               shiny::tags$div(
                 class = "custom-img-diffobj-image-display",
                 if (!is.null(instance_data$content$image3)) {
-                  shiny::tags$img(src = instance_data$content$image3, alt = "Difference Image", style = "width: 100%;")
+                  shiny::tags$img(
+                    src   = instance_data$content$image3,
+                    alt   = "Difference Image",
+                    style = "width: 100%;"
+                  )
                 } else {
                   shiny::tags$div(
-                    style = "background-color: #fff; justify-content: center; align-items: center; display: flex; height: 100%;",
+                    style = paste0(
+                      "background-color: #fff;",
+                      "justify-content: center;",
+                      "align-items: center;",
+                      "display: flex;",
+                      "height: 100%;"
+                    ),
                     shiny::tags$div(
                       style = "text-align: center",
                       "No differences"
@@ -464,10 +484,15 @@ update_file_selections <- function(input, session, roots) {
 
 set_visibility <- function(id, visible) {
   if (visible) {
-    shinyjs::runjs(paste0("$('#", id, "').removeClass('custom_hidden').addClass('custom_visible')"))
+    del <- "'custom_hiddon'"
+    add <- "'custom_visible'"
   } else {
-    shinyjs::runjs(paste0("$('#", id, "').removeClass('custom_visible').addClass('custom_hidden')"))
+    del <- "'custom_visible'"
+    add <- "'custom_hidden'"
   }
+
+  selector <- paste0("$('#", id, "')")
+  shinyjs::runjs(paste0(selector, ".removeClass(", del, ").addClass(", add, ")"))
 }
 
 set_reactive_text <- function(reactive_id, text, class = "") {
@@ -810,8 +835,6 @@ list_files <- function(input, summary_text) {
   }
 }
 
-`%||%` <- function(a, b) if (!is.null(a)) a else b
-
 generate_config_ui_inputs <- function(schema, config, prefix = "") {
   inputs <- list()
 
@@ -819,16 +842,18 @@ generate_config_ui_inputs <- function(schema, config, prefix = "") {
     full_key <- if (prefix == "") key else paste(prefix, key, sep = ".")
     entry    <- schema[[key]]
 
-    if (is.list(entry) && !is.null(entry$options) && !is.null(entry$description)) {
-      inputs[[full_key]] <- shiny::selectInput(
-        inputId  = full_key,
-        label    = entry$description,
-        choices  = entry$options,
-        selected = config$get(full_key)
-      )
-    } else if (is.list(entry)) {
-      sub_inputs <- generate_config_ui_inputs(entry, config, full_key)
-      inputs     <- c(inputs, sub_inputs)
+    if (is.list(entry)) {
+      if (!is.null(entry$options) && !is.null(entry$description)) {
+        inputs[[full_key]] <- shiny::selectInput(
+          inputId  = full_key,
+          label    = entry$description,
+          choices  = entry$options,
+          selected = config$get(full_key)
+        )
+      } else {
+        sub_inputs <- generate_config_ui_inputs(entry, config, full_key)
+        inputs     <- c(inputs, sub_inputs)
+      }
     }
   }
   return(inputs)
@@ -854,16 +879,18 @@ generate_config_ui_grouped <- function(schema, config, prefix = "") {
       entry    <- entries[[key]]
 
       # Recurse if it's nested
-      if (is.list(entry) && !is.null(entry$options) && !is.null(entry$description)) {
-        inputs[[full_key]] <- shiny::selectInput(
-          inputId  = full_key,
-          label    = entry$description,
-          choices  = entry$options,
-          selected = config$get(full_key)
-        )
-      } else if (is.list(entry)) {
-        sub_inputs <- generate_config_ui_inputs(entry, config, full_key)
-        inputs     <- c(inputs, sub_inputs)
+      if (is.list(entry)) {
+        if (!is.null(entry$options) && !is.null(entry$description)) {
+          inputs[[full_key]] <- shiny::selectInput(
+            inputId  = full_key,
+            label    = entry$description,
+            choices  = entry$options,
+            selected = config$get(full_key)
+          )
+        } else {
+          sub_inputs <- generate_config_ui_inputs(entry, config, full_key)
+          inputs     <- c(inputs, sub_inputs)
+        }
       }
     }
 

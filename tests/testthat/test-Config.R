@@ -28,12 +28,13 @@ test_that("Partial configuration successfully updated with defaults", {
 ################################################################################
 
 test_that("Configuration json file loaded successfully", {
-  path   <- testthat::test_path("test_tmp", paste0(as.integer(Sys.time()), ".json"))
-  config <- Config$new(load_config = FALSE)
+  file_name <- paste0(as.integer(Sys.time()), ".json")
+  file_path <- testthat::test_path("test_tmp", file_name)
+  config    <- Config$new(load_config = FALSE)
 
-  config$path <- path
+  config$path <- file_path
   config$save()
 
-  expect_equal(file.exists(path), TRUE)
-  unlink(path)
+  expect_equal(file.exists(file_path), TRUE)
+  unlink(file_path)
 })
