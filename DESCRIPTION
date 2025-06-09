@@ -13,7 +13,6 @@ Imports:
     diffobj,
     dplyr,
     jsonlite,
-    magick,
     magrittr,
     mime,
     pdftools,
@@ -26,6 +25,7 @@ Imports:
 Suggests: 
     DT,
     fs,
+    magick,
     shinyjs,
     shinyFiles,
     testthat (>= 3.0.0)

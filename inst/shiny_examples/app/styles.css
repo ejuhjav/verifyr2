@@ -19,6 +19,12 @@
     border-top: 0;
 }
 
+.modal-body {
+    .shiny-input-container {
+        width: 100%;
+    }
+}
+
 .form-group-custom {
     padding-right: 50px; 
     position: relative; 

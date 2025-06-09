@@ -4,7 +4,7 @@
 #' This comparator contains the custom handling for handling only img content
 #' part for the comparison.
 #'
-#' @import magick base64enc
+#' @import base64enc
 #'
 #' @include BinaryFileComparator.R
 #'
@@ -73,6 +73,18 @@ ImgFileComparator <- R6Class(
     #'
     vrf_details_inner = function(omit, options) {
       self$vrf_open_debug("Img::vrf_details_inner", options)
+
+      if ("no" == super$vrf_option_value(options, "generic.images")) {
+        result <- list(
+          list(
+            type = "text",
+            contents = "Image comparison disabled; no comparison done."
+          )
+        )
+
+        self$vrf_close_debug()
+        return(result)
+      }
 
       if (is.null(self$image1_raw) || is.null(self$image2_raw)) {
         result <- self$vrf_details_inner_from_files(options)
