@@ -26,7 +26,7 @@
 #'
 #' @export
 #'
-PdfFileComparator <- R6Class(
+PdfFileComparator <- R6::R6Class(
   "PdfFileComparator",
   inherit = TxtFileComparator,
   public = list(
