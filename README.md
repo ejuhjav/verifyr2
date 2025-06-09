@@ -18,6 +18,12 @@ such option would be to use the "devtools" package:
 > install_github("ejuhjav/verifyr2")
 ```
 
+When interested in the image comparison features, the magick package should be installed additionally:
+
+``` bash
+> install.packages("magick")
+```
+
 ## Shiny app usage ##
 
 ``` bash
@@ -39,6 +45,13 @@ instantiating an explicit comparator manually
 > comparator$vrf_summary()
 > comparator$vrf_details()
 ```
+
+## Optional features
+
+Image comparison features - comparing single images as well as supported embedded images in file contents - requires
+additional magick library to be installed. This is defined as an optional requirement for the verifyr2 package due to
+the additional OS level requirements of the package. For more details on the package installation, see
+[magick package](https://github.com/ropensci/magick).
 
 ## Adding support to additional file types
 

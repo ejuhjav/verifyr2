@@ -155,13 +155,18 @@ Config <- R6::R6Class(
     #' all possible values for the configuration properties.
     #'
     get_default_schema = function() {
-      list(
+      schema <- list(
         generic = list(
           description = "Generic options",
           debug = list(
             description = "Debugging enabled",
             options = c("yes", "no"),
             default = "no"
+          ),
+          images = list(
+            description = "Process embedded images",
+            options = c("yes", "no"),
+            default = "yes"
           )
         ),
         rtf = list(
@@ -181,6 +186,22 @@ Config <- R6::R6Class(
           )
         )
       )
+
+      if (!requireNamespace("magick", quietly = TRUE)) {
+        schema[["generic"]][["images"]] <- list(
+          description = "Process embedded images (missing magick library)",
+          options = c("no"),
+          default = "no"
+        )
+
+        schema[["rtf"]][["images"]] <- list(
+          description = "Process embedded images (missing magick library)",
+          options = c("no"),
+          default = "no"
+        )
+      }
+
+      return(schema)
     }
   )
 )
