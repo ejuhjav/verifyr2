@@ -41,6 +41,7 @@ error.
 \item \href{#method-FileComparator-vrf_details}{\code{FileComparator$vrf_details()}}
 \item \href{#method-FileComparator-vrf_summary_inner}{\code{FileComparator$vrf_summary_inner()}}
 \item \href{#method-FileComparator-vrf_details_inner}{\code{FileComparator$vrf_details_inner()}}
+\item \href{#method-FileComparator-vrf_details_supported}{\code{FileComparator$vrf_details_supported()}}
 \item \href{#method-FileComparator-vrf_option_value}{\code{FileComparator$vrf_option_value()}}
 \item \href{#method-FileComparator-vrf_open_debug}{\code{FileComparator$vrf_open_debug()}}
 \item \href{#method-FileComparator-vrf_add_debug}{\code{FileComparator$vrf_add_debug()}}
@@ -151,6 +152,26 @@ and shouldn't be called directly by the user.
 \describe{
 \item{\code{omit}}{string pattern to omit from the comparison}
 
+\item{\code{options}}{additional comparator parameters}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-FileComparator-vrf_details_supported"></a>}}
+\if{latex}{\out{\hypertarget{method-FileComparator-vrf_details_supported}{}}}
+\subsection{Method \code{vrf_details_supported()}}{
+Inherited method for indicating whether detailed comparison is available
+with the current comparator. Returns an empty string if the comparator is
+is supported, otherwise a string that will be concatenated with the
+summary string.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_details_supported(options)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
 \item{\code{options}}{additional comparator parameters}
 }
 \if{html}{\out{</div>}}

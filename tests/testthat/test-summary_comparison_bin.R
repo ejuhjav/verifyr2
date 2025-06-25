@@ -42,7 +42,7 @@ test_that(paste(
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary()
 
-  expect_equal(result, "No differences.")
+  expect_equal(result, "No differences. No details comparison available.")
 })
 
 test_that(paste(
@@ -55,7 +55,10 @@ test_that(paste(
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary()
 
-  expect_equal(result, "Different file sizes for compared files.")
+  expect_equal(result, paste(
+    "Different file sizes for compared files.",
+    "No details comparison available."
+  ))
 })
 
 test_that(paste(
@@ -68,5 +71,8 @@ test_that(paste(
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary()
 
-  expect_equal(result, "Different content in compared files.")
+  expect_equal(result, paste(
+    "Different content in compared files.",
+    "No details comparison available."
+  ))
 })

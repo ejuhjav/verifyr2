@@ -68,12 +68,19 @@ FileComparator <- R6Class(
         result <- "File(s) not available; unable to compare."
       } else {
         tryCatch({
-          result <- self$vrf_summary_inner(omit, options)
+          result   <- self$vrf_summary_inner(omit, options)
+          addition <- self$vrf_details_supported(options)
+
+          if ('' != addition) {
+            result <- paste(result, addition)
+          }
         }, error = function(e) {
           self$vrf_add_debug(paste("Processing failed with exception: ", conditionMessage(e)))
           result <- paste0("Error reading file contents: ", conditionMessage(e))
         })
+
       }
+
 
       self$summary_comparison <- result
       self$vrf_close_debug()
@@ -112,7 +119,16 @@ FileComparator <- R6Class(
             contents = "File(s) not available; unable to compare."
           )
         )
-      } else {
+      } else if ('' != self$vrf_details_supported(options)) {
+        self$vrf_add_debug("Details comparison not supported/enabled, unable perform comparison")
+        result <- list(
+          list(
+            type = "text",
+            contents = self$vrf_details_supported(options)
+          )
+        )
+      }
+      else {
         tryCatch({
           result <- self$vrf_details_inner(omit, options)
         }, error = function(e) {
@@ -156,6 +172,18 @@ FileComparator <- R6Class(
     #'
     vrf_details_inner = function(omit, options) {
       stop("vrf_details_inner must be implemented in a subclass.")
+    },
+
+    #' @description
+    #' Inherited method for indicating whether detailed comparison is available
+    #' with the current comparator. Returns an empty string if the comparator is
+    #' is supported, otherwise a string that will be concatenated with the
+    #' summary string.
+    #'
+    #' @param options additional comparator parameters
+    #'
+    vrf_details_supported = function(options) {
+      return("No details comparison available.")
     },
 
     #' @description

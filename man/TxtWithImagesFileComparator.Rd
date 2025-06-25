@@ -48,6 +48,7 @@ handling embedded images and storing the related data.
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="FileComparator" data-id="vrf_summary"><a href='../../verifyr2/html/FileComparator.html#method-FileComparator-vrf_summary'><code>verifyr2::FileComparator$vrf_summary()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="BinaryFileComparator" data-id="vrf_contents"><a href='../../verifyr2/html/BinaryFileComparator.html#method-BinaryFileComparator-vrf_contents'><code>verifyr2::BinaryFileComparator$vrf_contents()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="verifyr2" data-topic="TxtFileComparator" data-id="vrf_contents_inner"><a href='../../verifyr2/html/TxtFileComparator.html#method-TxtFileComparator-vrf_contents_inner'><code>verifyr2::TxtFileComparator$vrf_contents_inner()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="verifyr2" data-topic="TxtFileComparator" data-id="vrf_details_supported"><a href='../../verifyr2/html/TxtFileComparator.html#method-TxtFileComparator-vrf_details_supported'><code>verifyr2::TxtFileComparator$vrf_details_supported()</code></a></span></li>
 </ul>
 </details>
 }}

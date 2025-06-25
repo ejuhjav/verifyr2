@@ -56,6 +56,7 @@ comparator <- ImgFileComparator$new(NULL, NULL, image1_raw, image2_raw)
 \item \href{#method-ImgFileComparator-vrf_details_inner}{\code{ImgFileComparator$vrf_details_inner()}}
 \item \href{#method-ImgFileComparator-vrf_details_inner_from_raw}{\code{ImgFileComparator$vrf_details_inner_from_raw()}}
 \item \href{#method-ImgFileComparator-vrf_details_inner_from_files}{\code{ImgFileComparator$vrf_details_inner_from_files()}}
+\item \href{#method-ImgFileComparator-vrf_details_supported}{\code{ImgFileComparator$vrf_details_supported()}}
 \item \href{#method-ImgFileComparator-clone}{\code{ImgFileComparator$clone()}}
 }
 }
@@ -151,6 +152,26 @@ so that best suiting method version can be used depending on what data is
 available from the earlier method calls to the same comparator instance.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_details_inner_from_files(options)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{options}}{additional comparator parameters}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ImgFileComparator-vrf_details_supported"></a>}}
+\if{latex}{\out{\hypertarget{method-ImgFileComparator-vrf_details_supported}{}}}
+\subsection{Method \code{vrf_details_supported()}}{
+Inherited method for indicating whether detailed comparison is available
+with the current comparator. Returns an empty string if the comparator is
+is supported, otherwise a string that will be concatenated with the
+summary string.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_details_supported(options)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

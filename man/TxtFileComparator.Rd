@@ -39,6 +39,7 @@ comparator <- TxtFileComparator$new(file1, file2)
 \item \href{#method-TxtFileComparator-vrf_summary_inner}{\code{TxtFileComparator$vrf_summary_inner()}}
 \item \href{#method-TxtFileComparator-vrf_details_inner}{\code{TxtFileComparator$vrf_details_inner()}}
 \item \href{#method-TxtFileComparator-vrf_contents_inner}{\code{TxtFileComparator$vrf_contents_inner()}}
+\item \href{#method-TxtFileComparator-vrf_details_supported}{\code{TxtFileComparator$vrf_details_supported()}}
 \item \href{#method-TxtFileComparator-clone}{\code{TxtFileComparator$clone()}}
 }
 }
@@ -123,6 +124,26 @@ and shouldn't be called directly by the user.
 
 \item{\code{omit}}{string pattern to omit from the comparison}
 
+\item{\code{options}}{additional comparator parameters}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TxtFileComparator-vrf_details_supported"></a>}}
+\if{latex}{\out{\hypertarget{method-TxtFileComparator-vrf_details_supported}{}}}
+\subsection{Method \code{vrf_details_supported()}}{
+Inherited method for indicating whether detailed comparison is available
+with the current comparator. Returns an empty string if the comparator is
+is supported, otherwise a string that will be concatenated with the
+summary string.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TxtFileComparator$vrf_details_supported(options)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
 \item{\code{options}}{additional comparator parameters}
 }
 \if{html}{\out{</div>}}

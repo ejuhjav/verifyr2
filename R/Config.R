@@ -177,6 +177,14 @@ Config <- R6::R6Class(
             default = "yes"
           )
         ),
+        pdf = list(
+          description = "PDF comparison (summary)",
+          details = list(
+            description = "Process PDF detailed comparison",
+            options = c("yes", "no"),
+            default = "yes"
+          )
+        ),
         details = list(
           description = "Details comparison",
           mode = list(
@@ -196,6 +204,14 @@ Config <- R6::R6Class(
 
         schema[["rtf"]][["images"]] <- list(
           description = "Process embedded images (missing magick library)",
+          options = c("no"),
+          default = "no"
+        )
+      }
+
+      if (!requireNamespace("pdftools", quietly = TRUE)) {
+        schema[["pdf"]][["details"]] <- list(
+          description = "Process PDF details (missing pdftools library)",
           options = c("no"),
           default = "no"
         )

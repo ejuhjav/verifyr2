@@ -15,7 +15,6 @@ Imports:
     jsonlite,
     magrittr,
     mime,
-    pdftools,
     R6,
     rappdirs,
     shiny,
@@ -26,6 +25,7 @@ Suggests:
     DT,
     fs,
     magick,
+    pdftools,
     shinyjs,
     shinyFiles,
     testthat (>= 3.0.0)
