@@ -276,3 +276,32 @@ test_that(paste(
 
   expect_equal(result, "Different number of lines in compared content.")
 })
+
+################################################################################
+# Text file comparison - with PDF package missing
+################################################################################
+
+test_that(paste(
+  "Returns 'Different number of lines in compared content.",
+  "Pdf details comparison disabled.' when pdftools library ",
+  "is not available"
+), {
+  file1 <- testthat::test_path(base, "two_pages.pdf")
+  file2 <- testthat::test_path(base, "two_pages_addition_two_rows.pdf")
+
+  # mock the pdftools available method to return false to replicate situation
+  # that pdftools library is not installed.
+  local_mocked_bindings(
+    check_pdftools_available = function() FALSE
+  )
+
+  config <- Config$new(FALSE)
+
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = config, omit = "Nothing")
+
+  expect_equal(result, paste(
+    "Different number of lines in compared content.",
+    "Pdf details comparison disabled."
+  ))
+})
