@@ -33,6 +33,14 @@ set_nested_value <- function(config, key, value) {
   return(config)
 }
 
+check_magick_available <- function() {
+  requireNamespace("magick", quietly = TRUE)
+}
+
+check_pdftools_available <- function() {
+  requireNamespace("pdftools", quietly = TRUE)
+}
+
 #' Config.R
 #'
 #' Class for manging the library configuration options. Creates the default
@@ -177,6 +185,14 @@ Config <- R6::R6Class(
             default = "yes"
           )
         ),
+        pdf = list(
+          description = "PDF comparison (summary)",
+          details = list(
+            description = "Process PDF detailed comparison",
+            options = c("yes", "no"),
+            default = "yes"
+          )
+        ),
         details = list(
           description = "Details comparison",
           mode = list(
@@ -187,7 +203,7 @@ Config <- R6::R6Class(
         )
       )
 
-      if (!requireNamespace("magick", quietly = TRUE)) {
+      if (!check_magick_available()) {
         schema[["generic"]][["images"]] <- list(
           description = "Process embedded images (missing magick library)",
           options = c("no"),
@@ -196,6 +212,14 @@ Config <- R6::R6Class(
 
         schema[["rtf"]][["images"]] <- list(
           description = "Process embedded images (missing magick library)",
+          options = c("no"),
+          default = "no"
+        )
+      }
+
+      if (!check_pdftools_available()) {
+        schema[["pdf"]][["details"]] <- list(
+          description = "Process PDF details (missing pdftools library)",
           options = c("no"),
           default = "no"
         )
