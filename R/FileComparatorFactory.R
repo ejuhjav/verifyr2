@@ -51,7 +51,24 @@ create_comparator <- function(file1, file2) {
   # handle those separately
   mime_type <- mime::guess_type(file1)
 
-  if (startsWith(mime_type, "text/") || grepl(file_extension, c("Lst"))) {
+  text_like <- c(
+    "application/json",
+    "application/xml",
+    "application/javascript",
+    "application/x-yaml",
+    "application/sql",
+    "application/x-httpd-php",
+    "application/x-sh",
+    "application/csv",
+    "application/x-tex",
+    "application/x-markdown"
+  )
+
+  txt_type = startsWith(mime_type, "text/");
+  fix_type = mime_type %in% text_like;
+  lst_type = grepl(file_extension, c("Lst"))
+
+  if (txt_type || fix_type || lst_type) {
     return(TxtFileComparator$new(file1 = file1, file2 = file2))
   } else {
     return(BinaryFileComparator$new(file1 = file1, file2 = file2))
