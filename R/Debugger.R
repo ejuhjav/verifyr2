@@ -37,7 +37,7 @@
 #'
 #' @export
 #'
-Debugger <- R6Class("Debugger",
+Debugger <- R6::R6Class("Debugger",
   public = list(
     stack = list(),
 

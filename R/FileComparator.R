@@ -22,7 +22,7 @@
 # considers the whole class definition as a single function.
 #
 # nolint start: cyclocomp_linter
-FileComparator <- R6Class(
+FileComparator <- R6::R6Class(
   "FileComparator",
   public <- list(
     file1 = NULL,

@@ -36,7 +36,7 @@
 #'
 #' @export
 #'
-ImgFileComparator <- R6Class(
+ImgFileComparator <- R6::R6Class(
   "ImgFileComparator",
   inherit = BinaryFileComparator,
   public = list(

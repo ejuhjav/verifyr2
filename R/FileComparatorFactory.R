@@ -64,9 +64,9 @@ create_comparator <- function(file1, file2) {
     "application/x-markdown"
   )
 
-  txt_type = startsWith(mime_type, "text/");
-  fix_type = mime_type %in% text_like;
-  lst_type = grepl(file_extension, c("Lst"))
+  txt_type <- startsWith(mime_type, "text/")
+  fix_type <- mime_type %in% text_like
+  lst_type <- grepl(file_extension, c("Lst"))
 
   if (txt_type || fix_type || lst_type) {
     return(TxtFileComparator$new(file1 = file1, file2 = file2))

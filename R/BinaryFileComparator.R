@@ -23,7 +23,7 @@
 #'
 #' @export
 #'
-BinaryFileComparator <- R6Class(
+BinaryFileComparator <- R6::R6Class(
   "BinaryFileComparator",
   inherit = FileComparator,
   public = list(

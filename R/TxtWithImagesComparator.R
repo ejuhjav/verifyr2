@@ -16,7 +16,7 @@
 # considers the whole class definition as a single function.
 #
 # nolint start: cyclocomp_linter
-TxtWithImagesFileComparator <- R6Class(
+TxtWithImagesFileComparator <- R6::R6Class(
   "TxtWithImagesFileComparator",
   inherit = TxtFileComparator,
   public = list(

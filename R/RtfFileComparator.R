@@ -26,7 +26,7 @@
 #'
 #' @export
 #'
-RtfFileComparator <- R6Class(
+RtfFileComparator <- R6::R6Class(
   "RtfFileComparator",
   inherit = TxtWithImagesFileComparator,
   public = list(
