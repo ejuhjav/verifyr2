@@ -1,7 +1,7 @@
 Package: verifyr2
 Type: Package
-Title: Compare and verify file output changes
-Description: A package for file comparison algorithms and example shiny app for the comparison usage example.
+Title: Compare and verify file contents
+Description: Verifyr2 is an R package for extendable file comparison classes and methods including an example shiny app for combining the functions into a convenient application.
 Version: 1.0.0
 License: MIT + file LICENSE
 Authors@R: c(
