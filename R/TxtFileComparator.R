@@ -175,6 +175,18 @@ TxtFileComparator <- R6::R6Class(
 
       self$vrf_close_debug()
       return(list(contents, contents_omit))
+    },
+
+    #' @description
+    #' Inherited method for indicating whether detailed comparison is available
+    #' with the current comparator. Returns an empty string if the comparator is
+    #' is supported, otherwise a string that will be concatenated with the
+    #' summary string.
+    #'
+    #' @param options additional comparator parameters
+    #'
+    vrf_details_supported = function(options) {
+      return("")
     }
   )
 )

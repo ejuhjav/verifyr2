@@ -58,3 +58,30 @@ test_that(paste(
 
   expect_equal(result, "Different file sizes for compared files.")
 })
+
+################################################################################
+# comparison - with magick library not available
+################################################################################
+
+test_that(paste(
+  "Returns 'Different file sizes for compared files.",
+  "Image details comparison disabled.'"
+), {
+  file1 <- testthat::test_path(base, "base.jpg")
+  file2 <- testthat::test_path(base, "modified1.jpg")
+
+  # mock the magick available method to return false to replicate situation
+  # that magick library is not installed.
+  local_mocked_bindings(
+    check_magick_available = function() FALSE
+  )
+
+  config     <- Config$new(FALSE)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = config)
+
+  expect_equal(result, paste(
+    "Different file sizes for compared files.",
+    "Image details comparison disabled."
+  ))
+})

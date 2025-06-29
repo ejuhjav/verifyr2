@@ -240,7 +240,7 @@ test_that(paste(
 test_that(paste(
   "Returns 'File content has changes in 1 place(s). 1/1 embedded images",
   "have differences.' for files with a single different row in content",
-  "and differences in the single embedded image (images enabled)"
+  "and differences in the single embedded image"
 ), {
   file1 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
   file2 <- testthat::test_path(base, "base_with_image.rtf")
@@ -269,4 +269,48 @@ test_that(paste(
   result     <- comparator$vrf_summary(options = options)
 
   expect_equal(result, "File content has changes in 1 place(s).")
+})
+
+################################################################################
+# CONTENT comparison with images - magick library not available
+################################################################################
+
+test_that(paste(
+  "Returns 'File content has changes in 1 place(s)' for files with",
+  "with a single different row in content and differences in the single",
+  "embedded image (images disabled)"
+), {
+  file1 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
+  file2 <- testthat::test_path(base, "base_with_image.rtf")
+
+  options <- Config$new(FALSE)
+  options$set("rtf.images", "no")
+
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
+
+  expect_equal(result, "File content has changes in 1 place(s).")
+})
+
+test_that(paste(
+  "Returns 'File content has changes in 1 place(s).' for files with a single",
+  "different row in content and embedded image differences with magick",
+  "library not available"
+), {
+  file1 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
+  file2 <- testthat::test_path(base, "base_with_image.rtf")
+
+  # mock the magick available method to return false to replicate situation
+  # that magick library is not installed.
+  local_mocked_bindings(
+    check_magick_available = function() FALSE
+  )
+
+  options    <- Config$new(FALSE)
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(options = options)
+
+  expect_equal(result, paste(
+    "File content has changes in 1 place(s)."
+  ))
 })

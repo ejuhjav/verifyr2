@@ -18,6 +18,16 @@ such option would be to use the "devtools" package:
 > install_github("ejuhjav/verifyr2")
 ```
 
+When interested in additionally supported comparison features, the following packages can be installed additionally.
+
+``` bash
+> # image comparison functionality
+> install.packages("magick")
+>
+> # pdf comparison functionality
+> install.packages("pdftools")
+```
+
 ## Shiny app usage ##
 
 ``` bash
@@ -40,6 +50,18 @@ instantiating an explicit comparator manually
 > comparator$vrf_details()
 ```
 
+## Optional features
+
+Image comparison features - comparing single images as well as supported embedded images in file contents - requires
+additional magick library to be installed. This is defined as an optional requirement for the verifyr2 package due to
+the additional OS level requirements of the package. For more details on the package installation, see
+[magick package](https://github.com/ropensci/magick).
+
+PDF comparison features - reading PDF file contents as text for details comparison - requires additional pdftools
+library to be installed. This is defined as an optional requirement for the verifyr2 package due to
+the additional OS level requirements of the package. For more details on the package installation, see
+[pdftools package](https://github.com/ropensci/pdftools).
+
 ## Adding support to additional file types
 
 The file comparison logic is implemented with a generic structure that supports easy addition of
@@ -52,8 +74,6 @@ please note that the comparator class name prefix must match with the compared f
 
 ``` bash
 #' PdfFileComparator.R
-#'
-#' @import pdftools
 #'
 #' @include TxtFileComparator.R
 #'

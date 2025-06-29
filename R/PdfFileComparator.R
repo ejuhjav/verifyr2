@@ -4,8 +4,7 @@
 #' This comparator contains the custom handling for handling only PDF content
 #' part for the comparison.
 #'
-#' @import pdftools
-#'
+#' @include BinaryFileComparator.R
 #' @include TxtFileComparator.R
 #'
 #' @examples
@@ -40,17 +39,19 @@ PdfFileComparator <- R6::R6Class(
     #' is intended to be called only by the comparator classes in the processing
     #' and shouldn't be called directly by the user.
     #'
-    #' For PdfComparator, the file contents are returned based on the mode
-    #' parameter if available. "text" mode is the only supported option
-    #' initally. "text" mode will return only the text content part of the PDF
-    #' file.
-    #'
     #' @param file    file for which to get the contents
     #' @param omit    string pattern to omit from the comparison
     #' @param options additional comparator parameters
     #'
     vrf_contents = function(file, omit, options) {
       self$vrf_open_debug("Pdf::vrf_contents", options)
+
+      if ("no" == super$vrf_option_value(options, "pdf.details")) {
+        result <- super$vrf_contents(file, omit, options)
+
+        self$vrf_close_debug()
+        return(result)
+      }
 
       content <- pdftools::pdf_text(file)
       content <- paste(content, collapse = "")
@@ -60,6 +61,21 @@ PdfFileComparator <- R6::R6Class(
 
       self$vrf_close_debug()
       return(result)
+    },
+
+    #' @description
+    #' Inherited method for indicating whether detailed comparison is available
+    #' with the current comparator. Returns an empty string if the comparator is
+    #' is supported, otherwise a string that will be concatenated with the
+    #' summary string.
+    #'
+    #' @param options additional comparator parameters
+    #'
+    vrf_details_supported = function(options) {
+      if ("no" == super$vrf_option_value(options, "pdf.details")) {
+        return("Pdf details comparison disabled.")
+      }
+      return(super$vrf_details_supported(options))
     }
   )
 )

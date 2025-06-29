@@ -46,43 +46,46 @@ TxtWithImagesFileComparator <- R6::R6Class(
       self$vrf_open_debug("TxtWithImages::vrf_summary_inner" , options)
 
       result <- super$vrf_summary_inner(omit, options)
-      file1_contents_list <- self$file1_contents_list
-      file2_contents_list <- self$file2_contents_list
 
-      if (is.null(self$file1_images_raw)) {
-        self$file1_images_raw <- self$vrf_images(self$file1, options)
-      }
+      if ("no" != super$vrf_option_value(options, "generic.images")) {
+        file1_contents_list <- self$file1_contents_list
+        file2_contents_list <- self$file2_contents_list
 
-      if (is.null(self$file2_images_raw)) {
-        self$file2_images_raw <- self$vrf_images(self$file2, options)
-      }
+        if (is.null(self$file1_images_raw)) {
+          self$file1_images_raw <- self$vrf_images(self$file1, options)
+        }
 
-      # Generate additional summary string based on embedded image differences
-      # if applicable.
-      if (0 != length(self$file1_images_raw) && 0 != length(self$file2_images_raw)) {
-        result_images <- "No differences in embedded images."
+        if (is.null(self$file2_images_raw)) {
+          self$file2_images_raw <- self$vrf_images(self$file2, options)
+        }
 
-        if (length(self$file1_images_raw) != length(self$file2_images_raw)) {
-          # Number of found embedded images differs between the files.
-          result_images <- "Different amount of embedded images."
-        } else {
-          # Number of found embedded images is the same; calculate how many of
-          # the embedded images has changed (based on raw file data) compared to
-          # total count.
-          matches <- 0
-          total <- length(self$file1_images_raw)
+        # Generate additional summary string based on embedded image differences
+        # if applicable.
+        if (0 != length(self$file1_images_raw) && 0 != length(self$file2_images_raw)) {
+          result_images <- "No differences in embedded images."
+  
+          if (length(self$file1_images_raw) != length(self$file2_images_raw)) {
+            # Number of found embedded images differs between the files.
+            result_images <- "Different amount of embedded images."
+          } else {
+            # Number of found embedded images is the same; calculate how many of
+            # the embedded images has changed (based on raw file data) compared to
+            # total count.
+            matches <- 0
+            total <- length(self$file1_images_raw)
 
-          for (index in seq_along(self$file1_images_raw)) {
-            if (identical(self$file1_images_raw[[index]], self$file2_images_raw[[index]])) {
-              matches <- matches + 1
+            for (index in seq_along(self$file1_images_raw)) {
+              if (identical(self$file1_images_raw[[index]], self$file2_images_raw[[index]])) {
+                matches <- matches + 1
+              }
+            }
+
+            if (matches != length(self$file1_images_raw)) {
+              result_images <- paste0(total - matches, "/", total, " embedded images have differences.")
             }
           }
-
-          if (matches != length(self$file1_images_raw)) {
-            result_images <- paste0(total - matches, "/", total, " embedded images have differences.")
-          }
+          result <- paste0(result, " ", result_images)
         }
-        result <- paste0(result, " ", result_images)
       }
 
       self$vrf_close_debug()
@@ -102,37 +105,40 @@ TxtWithImagesFileComparator <- R6::R6Class(
       self$vrf_open_debug("TxtWithImages::vrf_details_inner" , options)
 
       result <- super$vrf_details_inner(omit, options)
-      file1_contents_list <- self$file1_contents_list
-      file2_contents_list <- self$file2_contents_list
 
-      if (is.null(self$file1_images_raw)) {
-        self$file1_images_raw <- self$vrf_images(self$file1, options)
-      }
+      if ("no" != super$vrf_option_value(options, "generic.images")) {
+        file1_contents_list <- self$file1_contents_list
+        file2_contents_list <- self$file2_contents_list
 
-      if (is.null(self$file2_images_raw)) {
-        self$file2_images_raw <- self$vrf_images(self$file2, options)
-      }
+        if (is.null(self$file1_images_raw)) {
+          self$file1_images_raw <- self$vrf_images(self$file1, options)
+        }
 
-      # Append the possible extended images into the result list if applicable.
-      # List of images is included in the fileX_contents_lists if found from
-      # content getter.
-      if (0 != length(self$file1_images_raw) && 0 != length(self$file2_images_raw)) {
+        if (is.null(self$file2_images_raw)) {
+          self$file2_images_raw <- self$vrf_images(self$file2, options)
+        }
 
-        # Only display the differences if there is the same amount of images
-        # found from the compared files. Otherwise it would require additional
-        # logic to decide which files should be compared with each others (which
-        # is something that could be developed further with size comparisons).
-        if (length(self$file1_images_raw) == length(self$file2_images_raw)) {
-          for (index in seq_along(self$file1_images_raw)) {
-            # Manually create a ImgFileComparator instance for every embedded
-            # image and call the details comparison based on existing bin data.
-            comparator <- ImgFileComparator$new(
-              NULL,
-              NULL,
-              self$file1_images_raw[[index]],
-              self$file2_images_raw[[index]]
-            )
-            result <- append(result, comparator$vrf_details_inner(omit, options))
+        # Append the possible extended images into the result list if applicable.
+        # List of images is included in the fileX_contents_lists if found from
+        # content getter.
+        if (0 != length(self$file1_images_raw) && 0 != length(self$file2_images_raw)) {
+
+          # Only display the differences if there is the same amount of images
+          # found from the compared files. Otherwise it would require additional
+          # logic to decide which files should be compared with each others (which
+          # is something that could be developed further with size comparisons).
+          if (length(self$file1_images_raw) == length(self$file2_images_raw)) {
+            for (index in seq_along(self$file1_images_raw)) {
+              # Manually create a ImgFileComparator instance for every embedded
+              # image and call the details comparison based on existing bin data.
+              comparator <- ImgFileComparator$new(
+                NULL,
+                NULL,
+                self$file1_images_raw[[index]],
+                self$file2_images_raw[[index]]
+              )
+              result <- append(result, comparator$vrf_details_inner(omit, options))
+            }
           }
         }
       }

@@ -37,6 +37,7 @@ comparator <- PdfFileComparator$new(file1, file2)
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-PdfFileComparator-vrf_contents}{\code{PdfFileComparator$vrf_contents()}}
+\item \href{#method-PdfFileComparator-vrf_details_supported}{\code{PdfFileComparator$vrf_details_supported()}}
 \item \href{#method-PdfFileComparator-clone}{\code{PdfFileComparator$clone()}}
 }
 }
@@ -68,11 +69,6 @@ contents with the rows matching the omit string excluded. This method
 can be overwritten by more specialized comparator classes. This method
 is intended to be called only by the comparator classes in the processing
 and shouldn't be called directly by the user.
-
-For PdfComparator, the file contents are returned based on the mode
-parameter if available. "text" mode is the only supported option
-initally. "text" mode will return only the text content part of the PDF
-file.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PdfFileComparator$vrf_contents(file, omit, options)}\if{html}{\out{</div>}}
 }
@@ -84,6 +80,26 @@ file.
 
 \item{\code{omit}}{string pattern to omit from the comparison}
 
+\item{\code{options}}{additional comparator parameters}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PdfFileComparator-vrf_details_supported"></a>}}
+\if{latex}{\out{\hypertarget{method-PdfFileComparator-vrf_details_supported}{}}}
+\subsection{Method \code{vrf_details_supported()}}{
+Inherited method for indicating whether detailed comparison is available
+with the current comparator. Returns an empty string if the comparator is
+is supported, otherwise a string that will be concatenated with the
+summary string.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PdfFileComparator$vrf_details_supported(options)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
 \item{\code{options}}{additional comparator parameters}
 }
 \if{html}{\out{</div>}}

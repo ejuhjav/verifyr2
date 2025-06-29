@@ -4,7 +4,7 @@
 #' This comparator contains the custom handling for handling only img content
 #' part for the comparison.
 #'
-#' @import magick base64enc
+#' @import base64enc
 #'
 #' @include BinaryFileComparator.R
 #'
@@ -51,7 +51,12 @@ ImgFileComparator <- R6::R6Class(
     #' @param raw1  First image in raw format to compare.
     #' @param raw2  Second image in raw format to compare.
     #'
-    initialize = function(file1 = NULL, file2 = NULL, raw1 = NULL, raw2 = NULL) {
+    initialize = function(
+      file1 = NULL,
+      file2 = NULL,
+      raw1  = NULL,
+      raw2  = NULL
+    ) {
       self$image1_raw <- raw1
       self$image2_raw <- raw2
       super$initialize(file1, file2)
@@ -68,6 +73,18 @@ ImgFileComparator <- R6::R6Class(
     #'
     vrf_details_inner = function(omit, options) {
       self$vrf_open_debug("Img::vrf_details_inner", options)
+
+      if ("no" == super$vrf_option_value(options, "generic.images")) {
+        result <- list(
+          list(
+            type = "text",
+            contents = "Image comparison disabled; no comparison done."
+          )
+        )
+
+        self$vrf_close_debug()
+        return(result)
+      }
 
       if (is.null(self$image1_raw) || is.null(self$image2_raw)) {
         result <- self$vrf_details_inner_from_files(options)
@@ -147,6 +164,21 @@ ImgFileComparator <- R6::R6Class(
 
       self$vrf_close_debug()
       return(result)
+    },
+
+    #' @description
+    #' Inherited method for indicating whether detailed comparison is available
+    #' with the current comparator. Returns an empty string if the comparator is
+    #' is supported, otherwise a string that will be concatenated with the
+    #' summary string.
+    #'
+    #' @param options additional comparator parameters
+    #'
+    vrf_details_supported = function(options) {
+      if ("no" == super$vrf_option_value(options, "generic.images")) {
+        return("Image details comparison disabled.")
+      }
+      return("")
     }
   )
 )
