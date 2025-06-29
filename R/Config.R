@@ -134,7 +134,6 @@ Config <- R6::R6Class(
     save = function() {
       dir.create(dirname(self$path), showWarnings = FALSE, recursive = TRUE)
       jsonlite::write_json(self$config, self$path, pretty = TRUE)
-      message("Configuration saved to: ", normalizePath(self$path))
     },
 
     #' @description

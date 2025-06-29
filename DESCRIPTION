@@ -25,6 +25,7 @@ Suggests:
     DT,
     fs,
     magick,
+    pkgload,
     pdftools,
     shinyjs,
     shinyFiles,
