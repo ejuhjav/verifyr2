@@ -39,15 +39,15 @@ PdfFileComparator <- R6::R6Class(
     #' is intended to be called only by the comparator classes in the processing
     #' and shouldn't be called directly by the user.
     #'
-    #' @param file    file for which to get the contents
-    #' @param omit    string pattern to omit from the comparison
-    #' @param options additional comparator parameters
+    #' @param file   file for which to get the contents
+    #' @param config configuration values
+    #' @param omit   string pattern to omit from the comparison
     #'
-    vrf_contents = function(file, omit, options) {
-      self$vrf_open_debug("Pdf::vrf_contents", options)
+    vrf_contents = function(file, config, omit) {
+      self$vrf_open_debug("Pdf::vrf_contents", config)
 
-      if ("no" == super$vrf_option_value(options, "pdf.details")) {
-        result <- super$vrf_contents(file, omit, options)
+      if ("no" == super$vrf_option_value(config, "pdf.details")) {
+        result <- super$vrf_contents(file, config, omit)
 
         self$vrf_close_debug()
         return(result)
@@ -57,10 +57,10 @@ PdfFileComparator <- R6::R6Class(
       content <- paste(content, collapse = "")
       content <- strsplit(content, "\n")[[1]]
 
-      result <- self$vrf_contents_inner(content, omit, options)
+      result <- self$vrf_contents_inner(content, config, omit)
 
       self$vrf_close_debug()
-      return(result)
+      result
     },
 
     #' @description
@@ -69,13 +69,13 @@ PdfFileComparator <- R6::R6Class(
     #' is supported, otherwise a string that will be concatenated with the
     #' summary string.
     #'
-    #' @param options additional comparator parameters
+    #' @param config configuration values
     #'
-    vrf_details_supported = function(options) {
-      if ("no" == super$vrf_option_value(options, "pdf.details")) {
+    vrf_details_supported = function(config) {
+      if ("no" == super$vrf_option_value(config, "pdf.details")) {
         return("Pdf details comparison disabled.")
       }
-      return(super$vrf_details_supported(options))
+      super$vrf_details_supported(config)
     }
   )
 )

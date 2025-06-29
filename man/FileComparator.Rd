@@ -78,15 +78,15 @@ intended to be implemented only this class level. For comparator
 specific rules, the internal method vrf_summary_inner should be
 customized on lower levels instead.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_summary(omit = NULL, options = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_summary(config, omit = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{omit}}{string pattern to omit from the comparison}
+\item{\code{config}}{configuration values}
 
-\item{\code{options}}{additional comparator parameters}
+\item{\code{omit}}{string pattern to omit from the comparison}
 }
 \if{html}{\out{</div>}}
 }
@@ -100,15 +100,15 @@ intended to be implemented only this class level. For comparator
 specific rules, the internal method vrf_summary_inner should be
 customized on lower levels instead.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_details(omit = NULL, options = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_details(config, omit = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{omit}}{string pattern to omit from the comparison}
+\item{\code{config}}{configuration values}
 
-\item{\code{options}}{additional comparator parameters}
+\item{\code{omit}}{string pattern to omit from the comparison}
 }
 \if{html}{\out{</div>}}
 }
@@ -122,15 +122,15 @@ method has to be overwritten by more specialized comparator classes. This
 method is intended to be called only by the comparator classes in the
 processing and shouldn't be called directly by the user.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_summary_inner(omit, options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_summary_inner(config, omit)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{omit}}{string pattern to omit from the comparison}
+\item{\code{config}}{configuration values}
 
-\item{\code{options}}{additional comparator parameters}
+\item{\code{omit}}{string pattern to omit from the comparison}
 }
 \if{html}{\out{</div>}}
 }
@@ -144,15 +144,15 @@ has to be overwritten by more specialized comparator classes. This method
 is intended to be called only by the comparator classes in the processing
 and shouldn't be called directly by the user.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_details_inner(omit, options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_details_inner(config, omit)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{omit}}{string pattern to omit from the comparison}
+\item{\code{config}}{configuration values}
 
-\item{\code{options}}{additional comparator parameters}
+\item{\code{omit}}{string pattern to omit from the comparison}
 }
 \if{html}{\out{</div>}}
 }
@@ -166,13 +166,13 @@ with the current comparator. Returns an empty string if the comparator is
 is supported, otherwise a string that will be concatenated with the
 summary string.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_details_supported(options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_details_supported(config)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{options}}{additional comparator parameters}
+\item{\code{config}}{configuration values}
 }
 \if{html}{\out{</div>}}
 }
@@ -181,16 +181,16 @@ summary string.
 \if{html}{\out{<a id="method-FileComparator-vrf_option_value"></a>}}
 \if{latex}{\out{\hypertarget{method-FileComparator-vrf_option_value}{}}}
 \subsection{Method \code{vrf_option_value()}}{
-Method for getting specific value from the options. In the initial
-version, returns 'NA' if null options is passed.
+Method for getting specific value from the config In the initial
+version, returns 'NA' if null con is passed.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_option_value(options, key)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_option_value(config, key)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{options}}{comparator parameters}
+\item{\code{config}}{configuration values}
 
 \item{\code{key}}{key to search from the parameters}
 }
@@ -202,10 +202,10 @@ version, returns 'NA' if null options is passed.
 \if{latex}{\out{\hypertarget{method-FileComparator-vrf_open_debug}{}}}
 \subsection{Method \code{vrf_open_debug()}}{
 Wrapper method for the opening a new debugging instance with Debugger
-class if debugging is enabled in options. class. Creates the used
+class if debugging is enabled in config class. Creates the used
 debugger instance if needed.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_open_debug(message, options = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FileComparator$vrf_open_debug(message, config)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -213,7 +213,7 @@ debugger instance if needed.
 \describe{
 \item{\code{message}}{message to debug to console}
 
-\item{\code{options}}{comparator parameters}
+\item{\code{config}}{configuration values}
 }
 \if{html}{\out{</div>}}
 }

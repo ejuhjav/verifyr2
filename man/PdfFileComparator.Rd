@@ -70,7 +70,7 @@ can be overwritten by more specialized comparator classes. This method
 is intended to be called only by the comparator classes in the processing
 and shouldn't be called directly by the user.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PdfFileComparator$vrf_contents(file, omit, options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PdfFileComparator$vrf_contents(file, config, omit)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -78,9 +78,9 @@ and shouldn't be called directly by the user.
 \describe{
 \item{\code{file}}{file for which to get the contents}
 
-\item{\code{omit}}{string pattern to omit from the comparison}
+\item{\code{config}}{configuration values}
 
-\item{\code{options}}{additional comparator parameters}
+\item{\code{omit}}{string pattern to omit from the comparison}
 }
 \if{html}{\out{</div>}}
 }
@@ -94,13 +94,13 @@ with the current comparator. Returns an empty string if the comparator is
 is supported, otherwise a string that will be concatenated with the
 summary string.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PdfFileComparator$vrf_details_supported(options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PdfFileComparator$vrf_details_supported(config)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{options}}{additional comparator parameters}
+\item{\code{config}}{configuration values}
 }
 \if{html}{\out{</div>}}
 }

@@ -51,11 +51,11 @@ FileComparator <- R6::R6Class(
     #' specific rules, the internal method vrf_summary_inner should be
     #' customized on lower levels instead.
     #'
-    #' @param omit    string pattern to omit from the comparison
-    #' @param options additional comparator parameters
+    #' @param config configuration values
+    #' @param omit   string pattern to omit from the comparison
     #'
-    vrf_summary = function(omit = NULL, options = NULL) {
-      self$vrf_open_debug("File::vrf_summary", options)
+    vrf_summary = function(config, omit = NULL) {
+      self$vrf_open_debug("File::vrf_summary", config)
       self$vrf_add_debug_files()
 
       if (!is.null(self$summary_comparison)) {
@@ -68,8 +68,8 @@ FileComparator <- R6::R6Class(
         result <- "File(s) not available; unable to compare."
       } else {
         tryCatch({
-          result   <- self$vrf_summary_inner(omit, options)
-          addition <- self$vrf_details_supported(options)
+          result   <- self$vrf_summary_inner(config, omit)
+          addition <- self$vrf_details_supported(config)
 
           if ('' != addition) {
             result <- paste(result, addition)
@@ -80,7 +80,6 @@ FileComparator <- R6::R6Class(
         })
 
       }
-
 
       self$summary_comparison <- result
       self$vrf_close_debug()
@@ -94,16 +93,16 @@ FileComparator <- R6::R6Class(
     #' specific rules, the internal method vrf_summary_inner should be
     #' customized on lower levels instead.
     #'
-    #' @param omit    string pattern to omit from the comparison
-    #' @param options additional comparator parameters
+    #' @param config configuration values
+    #' @param omit   string pattern to omit from the comparison
     #'
-    vrf_details = function(omit = NULL, options = NULL) {
-      mode <- self$vrf_option_value(options, "details.mode")
+    vrf_details = function(config, omit = NULL) {
+      mode <- self$vrf_option_value(config, "details.mode")
       if ("NA" == mode) {
         mode <- "summary"
       }
 
-      self$vrf_open_debug(paste("File::vrf_details, mode:", mode), options)
+      self$vrf_open_debug(paste("File::vrf_details, mode:", mode), config)
       self$vrf_add_debug_files()
 
       if (!is.null(self$details_comparison[[mode]])) {
@@ -119,18 +118,17 @@ FileComparator <- R6::R6Class(
             contents = "File(s) not available; unable to compare."
           )
         )
-      } else if ('' != self$vrf_details_supported(options)) {
+      } else if ('' != self$vrf_details_supported(config)) {
         self$vrf_add_debug("Details comparison not supported/enabled, unable perform comparison")
         result <- list(
           list(
             type = "text",
-            contents = self$vrf_details_supported(options)
+            contents = self$vrf_details_supported(config)
           )
         )
-      }
-      else {
+      } else {
         tryCatch({
-          result <- self$vrf_details_inner(omit, options)
+          result <- self$vrf_details_inner(config, omit)
         }, error = function(e) {
           self$vrf_add_debug(paste("Processing failed with exception: ", conditionMessage(e)))
           result <- list(
@@ -154,10 +152,10 @@ FileComparator <- R6::R6Class(
     #' method is intended to be called only by the comparator classes in the
     #' processing and shouldn't be called directly by the user.
     #'
-    #' @param omit    string pattern to omit from the comparison
-    #' @param options additional comparator parameters
+    #' @param config configuration values
+    #' @param omit   string pattern to omit from the comparison
     #'
-    vrf_summary_inner = function(omit, options) {
+    vrf_summary_inner = function(config, omit) {
       stop("vrf_summary_inner must be implemented in a subclass.")
     },
 
@@ -167,10 +165,10 @@ FileComparator <- R6::R6Class(
     #' is intended to be called only by the comparator classes in the processing
     #' and shouldn't be called directly by the user.
     #'
-    #' @param omit    string pattern to omit from the comparison
-    #' @param options additional comparator parameters
+    #' @param config configuration values
+    #' @param omit   string pattern to omit from the comparison
     #'
-    vrf_details_inner = function(omit, options) {
+    vrf_details_inner = function(config, omit) {
       stop("vrf_details_inner must be implemented in a subclass.")
     },
 
@@ -180,37 +178,37 @@ FileComparator <- R6::R6Class(
     #' is supported, otherwise a string that will be concatenated with the
     #' summary string.
     #'
-    #' @param options additional comparator parameters
+    #' @param config configuration values
     #'
-    vrf_details_supported = function(options) {
+    vrf_details_supported = function(config) {
       return("No details comparison available.")
     },
 
     #' @description
-    #' Method for getting specific value from the options. In the initial
-    #' version, returns 'NA' if null options is passed.
+    #' Method for getting specific value from the config In the initial
+    #' version, returns 'NA' if null con is passed.
     #'
-    #' @param options comparator parameters
-    #' @param key     key to search from the parameters
+    #' @param config configuration values
+    #' @param key    key to search from the parameters
     #'
-    vrf_option_value = function(options, key) {
-      if (is.null(options)) {
+    vrf_option_value = function(config, key) {
+      if (is.null(config)) {
         return("NA")
       }
-      value <- options$get(key)
+      value <- config$get(key)
       return(value)
     },
 
     #' @description
     #' Wrapper method for the opening a new debugging instance with Debugger
-    #' class if debugging is enabled in options. class. Creates the used
+    #' class if debugging is enabled in config class. Creates the used
     #' debugger instance if needed.
     #'
     #' @param message message to debug to console
-    #' @param options comparator parameters
+    #' @param config  configuration values
     #'
-    vrf_open_debug = function(message, options = NULL) {
-      if ("yes" != self$vrf_option_value(options, "generic.debug")) {
+    vrf_open_debug = function(message, config) {
+      if ("yes" != self$vrf_option_value(config, "generic.debug")) {
         return()
       }
 

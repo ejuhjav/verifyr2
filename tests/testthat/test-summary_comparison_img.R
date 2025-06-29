@@ -1,5 +1,6 @@
 
-base <- "test_outputs/img"
+base   <- "test_outputs/img"
+config <- Config$new(FALSE)
 
 ################################################################################
 # Generic file existence checks
@@ -13,7 +14,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting2.jpg")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -26,7 +27,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting.jpeg")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -42,9 +43,16 @@ test_that(paste(
   file2 <- testthat::test_path(base, "copy.png")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
-  expect_equal(result, "No differences.")
+  if (requireNamespace("magick", quietly = TRUE)) {
+    expect_equal(result, "No differences.")
+  } else {
+    expect_equal(result, paste(
+      "No differences.",
+      "Image details comparison disabled."
+    ))
+  }
 })
 
 test_that(paste(
@@ -54,9 +62,16 @@ test_that(paste(
   file2 <- testthat::test_path(base, "modified1.jpg")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
-  expect_equal(result, "Different file sizes for compared files.")
+  if (requireNamespace("magick", quietly = TRUE)) {
+    expect_equal(result, "Different file sizes for compared files.")
+  } else {
+    expect_equal(result, paste(
+      "Different file sizes for compared files.",
+      "Image details comparison disabled."
+    ))
+  }
 })
 
 ################################################################################
@@ -76,9 +91,9 @@ test_that(paste(
     check_magick_available = function() FALSE
   )
 
-  config     <- Config$new(FALSE)
-  comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = config)
+  config_local <- Config$new(FALSE)
+  comparator   <- create_comparator(file1, file2)
+  result       <- comparator$vrf_summary(config = config_local)
 
   expect_equal(result, paste(
     "Different file sizes for compared files.",

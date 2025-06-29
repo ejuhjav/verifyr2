@@ -43,7 +43,7 @@ list_folder_files <- function(folder1, folder2, pattern = NULL) {
   }
 
   print("one or both of the folders do not exist")
-  return(NULL)
+  NULL
 }
 
 folder_info <- function(folder, column_name, pattern) {
@@ -52,5 +52,5 @@ folder_info <- function(folder, column_name, pattern) {
   data   <- tibble::tibble(file = files)
   data[[column_name]] <- paths
 
-  return(data)
+  data
 }

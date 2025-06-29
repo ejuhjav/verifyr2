@@ -1,15 +1,29 @@
 
 merge_values <- function(defaults, overrides) {
+  result <- list()
+
   for (name in names(defaults)) {
-    if (!is.list(defaults[[name]]) || is.null(overrides[[name]])) {
-      if (is.null(overrides[[name]])) {
-        overrides[[name]] <- defaults[[name]]
+    def <- defaults[[name]]
+    over <- overrides[[name]]
+
+    has_defaults <- "default" %in% names(def)
+    has_options  <- "options" %in% names(def)
+
+    if (is.list(def) && has_defaults && has_options) {
+      if (!is.null(over) && over %in% def$options) {
+        result[[name]] <- over
+      } else {
+        result[[name]] <- def$default
       }
+    } else if (is.list(def)) {
+      if (!is.list(over)) over <- list()
+      result[[name]] <- merge_values(def, over)
     } else {
-      overrides[[name]] <- merge_values(defaults[[name]], overrides[[name]])
+      result[[name]] <- if (!is.null(over)) over else def
     }
   }
-  return(overrides)
+
+  result
 }
 
 get_nested_value <- function(config, key) {
@@ -18,7 +32,7 @@ get_nested_value <- function(config, key) {
   for (p in parts) {
     config <- config[[p]]
   }
-  return(config)
+  config
 }
 
 set_nested_value <- function(config, key, value) {
@@ -30,7 +44,7 @@ set_nested_value <- function(config, key, value) {
     sub_key <- paste(parts[-1], collapse = ".")
     config[[parts[1]]] <- set_nested_value(config[[parts[1]]], sub_key, value)
   }
-  return(config)
+  config
 }
 
 check_magick_available <- function() {
@@ -100,10 +114,10 @@ Config <- R6::R6Class(
         self$path <- config_path
       }
 
-      # Load config from file if exists
       if (load_config && file.exists(self$path)) {
         file_config <- jsonlite::read_json(self$path, simplifyVector = TRUE)
-        self$config <- merge_values(self$config, file_config)
+        self$config <- merge_values(self$get_default_schema(), file_config)
+        self$config <- self$get_default_config() |> merge_values(self$config)
       }
     },
 
@@ -153,7 +167,7 @@ Config <- R6::R6Class(
           }
         }
       }
-      return(defaults)
+      defaults
     },
 
     #' @description
@@ -224,7 +238,7 @@ Config <- R6::R6Class(
         )
       }
 
-      return(schema)
+      schema
     }
   )
 )

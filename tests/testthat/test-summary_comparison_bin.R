@@ -1,4 +1,6 @@
 
+config <- Config$new(FALSE)
+
 ################################################################################
 # Generic file existence checks
 ################################################################################
@@ -11,7 +13,7 @@ test_that(paste(
   file2 <- testthat::test_path("test_outputs/bin/nonexisting2.bin")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -24,7 +26,7 @@ test_that(paste(
   file2 <- testthat::test_path("test_outputs/bin/nonexisting.bin")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -40,7 +42,7 @@ test_that(paste(
   file2 <- testthat::test_path("test_outputs/bin/copy.bin")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "No differences. No details comparison available.")
 })
@@ -53,7 +55,7 @@ test_that(paste(
   file2 <- testthat::test_path("test_outputs/bin/modified.bin")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, paste(
     "Different file sizes for compared files.",
@@ -69,7 +71,7 @@ test_that(paste(
   file2 <- testthat::test_path("test_outputs/bin/modified_same_size.bin")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, paste(
     "Different content in compared files.",

@@ -108,15 +108,15 @@ can be overwritten by more specialized comparator classes. This method is
 intended to be called only by the comparator classes in the processing
 and shouldn't be called directly by the user.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_details_inner(omit, options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_details_inner(config, omit)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{omit}}{string pattern to omit from the comparison}
+\item{\code{config}}{configuration values}
 
-\item{\code{options}}{additional comparator parameters}
+\item{\code{omit}}{string pattern to omit from the comparison}
 }
 \if{html}{\out{</div>}}
 }
@@ -129,13 +129,13 @@ Internal method for comparing the earlier populated raw image contents in
 details and generating the difference highlight image in case differences
 are found.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_details_inner_from_raw(options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_details_inner_from_raw(config)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{options}}{additional comparator parameters}
+\item{\code{config}}{configuration values}
 }
 \if{html}{\out{</div>}}
 }
@@ -151,13 +151,13 @@ image, raw image). These methods are intended to improve the performance
 so that best suiting method version can be used depending on what data is
 available from the earlier method calls to the same comparator instance.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_details_inner_from_files(options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_details_inner_from_files(config)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{options}}{additional comparator parameters}
+\item{\code{config}}{configuration values}
 }
 \if{html}{\out{</div>}}
 }
@@ -171,13 +171,13 @@ with the current comparator. Returns an empty string if the comparator is
 is supported, otherwise a string that will be concatenated with the
 summary string.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_details_supported(options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_details_supported(config)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{options}}{additional comparator parameters}
+\item{\code{config}}{configuration values}
 }
 \if{html}{\out{</div>}}
 }

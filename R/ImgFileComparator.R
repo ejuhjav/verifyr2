@@ -68,13 +68,13 @@ ImgFileComparator <- R6::R6Class(
     #' intended to be called only by the comparator classes in the processing
     #' and shouldn't be called directly by the user.
     #'
-    #' @param omit    string pattern to omit from the comparison
-    #' @param options additional comparator parameters
+    #' @param config configuration values
+    #' @param omit   string pattern to omit from the comparison
     #'
-    vrf_details_inner = function(omit, options) {
-      self$vrf_open_debug("Img::vrf_details_inner", options)
+    vrf_details_inner = function(config, omit) {
+      self$vrf_open_debug("Img::vrf_details_inner", config)
 
-      if ("no" == super$vrf_option_value(options, "generic.images")) {
+      if ("no" == super$vrf_option_value(config, "generic.images")) {
         result <- list(
           list(
             type = "text",
@@ -87,16 +87,16 @@ ImgFileComparator <- R6::R6Class(
       }
 
       if (is.null(self$image1_raw) || is.null(self$image2_raw)) {
-        result <- self$vrf_details_inner_from_files(options)
+        result <- self$vrf_details_inner_from_files(config)
 
         self$vrf_close_debug()
         return(result)
       }
 
-      result <- self$vrf_details_inner_from_raw(options)
+      result <- self$vrf_details_inner_from_raw(config)
 
       self$vrf_close_debug()
-      return(result)
+      result
     },
 
     #' @description
@@ -104,10 +104,10 @@ ImgFileComparator <- R6::R6Class(
     #' details and generating the difference highlight image in case differences
     #' are found.
     #'
-    #' @param options additional comparator parameters
+    #' @param config configuration values
     #*
-    vrf_details_inner_from_raw = function(options) {
-      self$vrf_open_debug("Img::vrf_details_inner_from_raw", options)
+    vrf_details_inner_from_raw = function(config) {
+      self$vrf_open_debug("Img::vrf_details_inner_from_raw", config)
 
       png_prefix <- "data:image/png;base64,"
       image1_raw <- self$image1_raw
@@ -138,7 +138,7 @@ ImgFileComparator <- R6::R6Class(
       )
 
       self$vrf_close_debug()
-      return(list(result))
+      list(result)
     },
 
     #' @description
@@ -149,10 +149,10 @@ ImgFileComparator <- R6::R6Class(
     #' so that best suiting method version can be used depending on what data is
     #' available from the earlier method calls to the same comparator instance.
     #'
-    #' @param options additional comparator parameters
+    #' @param config configuration values
     #'
-    vrf_details_inner_from_files = function(options) {
-      self$vrf_open_debug("Img::vrf_details_inner_from_files", options)
+    vrf_details_inner_from_files = function(config) {
+      self$vrf_open_debug("Img::vrf_details_inner_from_files", config)
 
       file1_size <- file.info(self$file1)$size
       self$image1_raw <- readBin(self$file1, what = "raw", n = file1_size)
@@ -160,10 +160,10 @@ ImgFileComparator <- R6::R6Class(
       file2_size <- file.info(self$file2)$size
       self$image2_raw <- readBin(self$file2, what = "raw", n = file2_size)
 
-      result <- self$vrf_details_inner_from_raw(options)
+      result <- self$vrf_details_inner_from_raw(config)
 
       self$vrf_close_debug()
-      return(result)
+      result
     },
 
     #' @description
@@ -172,13 +172,13 @@ ImgFileComparator <- R6::R6Class(
     #' is supported, otherwise a string that will be concatenated with the
     #' summary string.
     #'
-    #' @param options additional comparator parameters
+    #' @param config configuration values
     #'
-    vrf_details_supported = function(options) {
-      if ("no" == super$vrf_option_value(options, "generic.images")) {
+    vrf_details_supported = function(config) {
+      if ("no" == super$vrf_option_value(config, "generic.images")) {
         return("Image details comparison disabled.")
       }
-      return("")
+      ""
     }
   )
 )

@@ -42,22 +42,22 @@ TxtFileComparator <- R6::R6Class(
     #' intended to be called only by the comparator classes in the processing
     #' and shouldn't be called directly by the user.
     #'
-    #' @param omit    string pattern to omit from the comparison
-    #' @param options additional comparator parameters
+    #' @param config configuration values
+    #' @param omit   string pattern to omit from the comparison
     #'
-    vrf_summary_inner = function(omit, options) {
-      self$vrf_open_debug("Txt::vrf_summary_inner" , options)
+    vrf_summary_inner = function(config, omit) {
+      self$vrf_open_debug("Txt::vrf_summary_inner" , config)
 
       file1_contents_list <- self$file1_contents_list
       file2_contents_list <- self$file2_contents_list
 
       if (is.null(file1_contents_list)) {
-        file1_contents_list <- self$vrf_contents(self$file1, omit, options)
+        file1_contents_list <- self$vrf_contents(self$file1, config, omit)
         self$file1_contents_list <- file1_contents_list
       }
 
       if (is.null(file2_contents_list)) {
-        file2_contents_list <- self$vrf_contents(self$file2, omit, options)
+        file2_contents_list <- self$vrf_contents(self$file2, config, omit)
         self$file2_contents_list <- file2_contents_list
       }
 
@@ -93,22 +93,22 @@ TxtFileComparator <- R6::R6Class(
     #' intended to be called only by the comparator classes in the processing
     #' and shouldn't be called directly by the user.
     #'
-    #' @param omit    string pattern to omit from the comparison
-    #' @param options additional comparator parameters
+    #' @param config configuration values
+    #' @param omit   string pattern to omit from the comparison
     #'
-    vrf_details_inner = function(omit, options) {
-      self$vrf_open_debug("Txt::vrf_details_inner" , options)
+    vrf_details_inner = function(config, omit) {
+      self$vrf_open_debug("Txt::vrf_details_inner" , config)
 
       file1_contents_list <- self$file1_contents_list
       file2_contents_list <- self$file2_contents_list
 
       if (is.null(file1_contents_list)) {
-        file1_contents_list <- self$vrf_contents(self$file1, omit, options)
+        file1_contents_list <- self$vrf_contents(self$file1, config, omit)
         self$file1_contents_list <- file1_contents_list
       }
 
       if (is.null(file2_contents_list)) {
-        file2_contents_list <- self$vrf_contents(self$file2, omit, options)
+        file2_contents_list <- self$vrf_contents(self$file2, config, omit)
         self$file2_contents_list <- file2_contents_list
       }
 
@@ -116,7 +116,7 @@ TxtFileComparator <- R6::R6Class(
       file2_contents_whole <- file2_contents_list[[1]]
 
       context <- 2
-      if ("full" == super$vrf_option_value(options, "details.mode")) {
+      if ("full" == super$vrf_option_value(config, "details.mode")) {
         context <- -1
       }
 
@@ -157,11 +157,11 @@ TxtFileComparator <- R6::R6Class(
     #' and shouldn't be called directly by the user.
     #'
     #' @param contents file contents
+    #' @param config   configuration values
     #' @param omit     string pattern to omit from the comparison
-    #' @param options  additional comparator parameters
     #'
-    vrf_contents_inner = function(contents, omit, options) {
-      self$vrf_open_debug("Txt::vrf_contents_inner" , options)
+    vrf_contents_inner = function(contents, config, omit) {
+      self$vrf_open_debug("Txt::vrf_contents_inner" , config)
 
       contents_omit <- contents
 
@@ -183,9 +183,9 @@ TxtFileComparator <- R6::R6Class(
     #' is supported, otherwise a string that will be concatenated with the
     #' summary string.
     #'
-    #' @param options additional comparator parameters
+    #' @param config configuration values
     #'
-    vrf_details_supported = function(options) {
+    vrf_details_supported = function(config) {
       return("")
     }
   )
@@ -283,5 +283,5 @@ my_finalizer <- function(x, x.chr, omit) {
 
   html_string <- paste(split, collapse = "<div class='diffobj-row'>")
 
-  return(diffobj::finalizeHtml(x, html_string))
+  diffobj::finalizeHtml(x, html_string)
 }

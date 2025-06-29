@@ -43,33 +43,39 @@ RtfFileComparator <- R6::R6Class(
     #' For RtfComparator, only the RTF file content part is returned for
     #' comparison.
     #'
-    #' @param file    file for which to get the contents
-    #' @param omit    string pattern to omit from the comparison
-    #' @param options additional comparator parameters
+    #' @param file   file for which to get the contents
+    #' @param config configuration values
+    #' @param omit   string pattern to omit from the comparison
     #'
-    vrf_contents = function(file, omit, options) {
-      self$vrf_open_debug("Rtf::vrf_contents", options)
+    vrf_contents = function(file, config, omit) {
+      self$vrf_open_debug("Rtf::vrf_contents", config)
 
       # Get the RTF text content
       contents <- striprtf::read_rtf(file = file)
-      result   <- self$vrf_contents_inner(contents, omit, options)
+      result   <- self$vrf_contents_inner(contents, config, omit)
 
       self$vrf_close_debug()
-      return(result)
+      result
     },
 
     #' @description
     #' "Abstract" method for getting the raw image hex vector array from the
     #' given source file.
     #'
-    #' @param file    file for which to get the embedded image details
-    #' @param options additional comparator parameters
+    #' @param file   file for which to get the embedded image details
+    #' @param config configuration values
     #'
-    vrf_images = function(file, options) {
-      self$vrf_open_debug("Rtf::vrf_images", options)
+    vrf_images = function(file, config) {
+      self$vrf_open_debug("Rtf::vrf_images", config)
 
       # return empty list if embedded image processing is disabled
-      if ("no" == super$vrf_option_value(options, "rtf.images")) {
+      if ("no" == super$vrf_option_value(config, "rtf.images")) {
+        self$vrf_close_debug()
+        return(list())
+      }
+
+      # return empty list if image processing is disabled
+      if ("no" == super$vrf_option_value(config, "generic.images")) {
         self$vrf_close_debug()
         return(list())
       }
@@ -98,7 +104,7 @@ RtfFileComparator <- R6::R6Class(
       }
 
       self$vrf_close_debug()
-      return(result)
+      result
     }
   )
 )

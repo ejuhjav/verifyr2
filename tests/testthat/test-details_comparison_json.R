@@ -1,5 +1,6 @@
 
-base <- "test_outputs/json"
+base   <- "test_outputs/json"
+config <- Config$new(FALSE)
 
 ################################################################################
 # Generic file existence checks
@@ -13,7 +14,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting2.json")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details()[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(result$contents, "File(s) not available; unable to compare.")
@@ -27,7 +28,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting.json")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details()[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(result$contents, "File(s) not available; unable to compare.")
@@ -47,7 +48,7 @@ test_that(paste(
   config$set("details.mode", "summary")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(options = config)[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
@@ -63,7 +64,7 @@ test_that(paste(
   config$set("details.mode", "full")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(options = config)[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")

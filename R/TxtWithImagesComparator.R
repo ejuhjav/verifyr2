@@ -39,24 +39,24 @@ TxtWithImagesFileComparator <- R6::R6Class(
     #' intended to be called only by the comparator classes in the processing
     #' and shouldn't be called directly by the user.
     #'
-    #' @param omit    string pattern to omit from the comparison
-    #' @param options additional comparator parameters
+    #' @param config configuration values
+    #' @param omit   string pattern to omit from the comparison
     #'
-    vrf_summary_inner = function(omit, options) {
-      self$vrf_open_debug("TxtWithImages::vrf_summary_inner" , options)
+    vrf_summary_inner = function(config, omit) {
+      self$vrf_open_debug("TxtWithImages::vrf_summary_inner" , config)
 
-      result <- super$vrf_summary_inner(omit, options)
+      result <- super$vrf_summary_inner(config, omit)
 
-      if ("no" != super$vrf_option_value(options, "generic.images")) {
+      if ("no" != super$vrf_option_value(config, "generic.images")) {
         file1_contents_list <- self$file1_contents_list
         file2_contents_list <- self$file2_contents_list
 
         if (is.null(self$file1_images_raw)) {
-          self$file1_images_raw <- self$vrf_images(self$file1, options)
+          self$file1_images_raw <- self$vrf_images(self$file1, config)
         }
 
         if (is.null(self$file2_images_raw)) {
-          self$file2_images_raw <- self$vrf_images(self$file2, options)
+          self$file2_images_raw <- self$vrf_images(self$file2, config)
         }
 
         # Generate additional summary string based on embedded image differences
@@ -98,24 +98,24 @@ TxtWithImagesFileComparator <- R6::R6Class(
     #' intended to be called only by the comparator classes in the processing
     #' and shouldn't be called directly by the user.
     #'
-    #' @param omit    string pattern to omit from the comparison
-    #' @param options additional comparator parameters
+    #' @param config configuration values
+    #' @param omit   string pattern to omit from the comparison
     #'
-    vrf_details_inner = function(omit, options) {
-      self$vrf_open_debug("TxtWithImages::vrf_details_inner" , options)
+    vrf_details_inner = function(config, omit) {
+      self$vrf_open_debug("TxtWithImages::vrf_details_inner" , config)
 
-      result <- super$vrf_details_inner(omit, options)
+      result <- super$vrf_details_inner(config, omit)
 
-      if ("no" != super$vrf_option_value(options, "generic.images")) {
+      if ("no" != super$vrf_option_value(config, "generic.images")) {
         file1_contents_list <- self$file1_contents_list
         file2_contents_list <- self$file2_contents_list
 
         if (is.null(self$file1_images_raw)) {
-          self$file1_images_raw <- self$vrf_images(self$file1, options)
+          self$file1_images_raw <- self$vrf_images(self$file1, config)
         }
 
         if (is.null(self$file2_images_raw)) {
-          self$file2_images_raw <- self$vrf_images(self$file2, options)
+          self$file2_images_raw <- self$vrf_images(self$file2, config)
         }
 
         # Append the possible extended images into the result list if applicable.
@@ -137,7 +137,7 @@ TxtWithImagesFileComparator <- R6::R6Class(
                 self$file1_images_raw[[index]],
                 self$file2_images_raw[[index]]
               )
-              result <- append(result, comparator$vrf_details_inner(omit, options))
+              result <- append(result, comparator$vrf_details_inner(config, omit))
             }
           }
         }
