@@ -299,7 +299,7 @@ get_comparator <- function(row_index, file1, file2) {
   dt_comparators_list[[row_index_str]] <- comparator
   dt_comparators_list <<- dt_comparators_list
 
-  return(comparator)
+  comparator
 }
 
 update_details_comparison <- function(
@@ -337,8 +337,8 @@ update_details_comparison <- function(
     {
       comparator <- get_comparator(row_index, file1, file2)
       details <- comparator$vrf_details(
-        omit    = input$omit_rows,
-        options = options
+        omit   = input$omit_rows,
+        config = options
       )
 
       shiny::incProgress(1)
@@ -757,8 +757,8 @@ server <- function(input, output, session) {
                 # Process a single row
                 comparator <- get_comparator(row_index, file1, file2)
                 result <- comparator$vrf_summary(
-                  omit    = omitted,
-                  options = config
+                  omit   = omitted,
+                  config = config
                 )
 
                 # Update progress
@@ -842,7 +842,7 @@ list_files <- function(input, summary_text) {
         summary_text,
         "No folder selected or folders do not exist"
       )
-      return(NULL)
+      NULL
     }
   } else {
     if (file.exists(input$file1) && file.exists(input$file2)) {
@@ -859,7 +859,7 @@ list_files <- function(input, summary_text) {
         summary_text,
         "No files selected or files do not exist"
       )
-      return(NULL)
+      NULL
     }
   }
 }

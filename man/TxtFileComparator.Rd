@@ -67,15 +67,15 @@ can be overwritten by more specialized comparator classes. This method is
 intended to be called only by the comparator classes in the processing
 and shouldn't be called directly by the user.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TxtFileComparator$vrf_summary_inner(omit, options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TxtFileComparator$vrf_summary_inner(config, omit)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{omit}}{string pattern to omit from the comparison}
+\item{\code{config}}{configuration values}
 
-\item{\code{options}}{additional comparator parameters}
+\item{\code{omit}}{string pattern to omit from the comparison}
 }
 \if{html}{\out{</div>}}
 }
@@ -89,15 +89,15 @@ can be overwritten by more specialized comparator classes. This method is
 intended to be called only by the comparator classes in the processing
 and shouldn't be called directly by the user.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TxtFileComparator$vrf_details_inner(omit, options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TxtFileComparator$vrf_details_inner(config, omit)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{omit}}{string pattern to omit from the comparison}
+\item{\code{config}}{configuration values}
 
-\item{\code{options}}{additional comparator parameters}
+\item{\code{omit}}{string pattern to omit from the comparison}
 }
 \if{html}{\out{</div>}}
 }
@@ -114,7 +114,7 @@ overwritten by more specialized comparator classes. This method is
 intended to be called only by the comparator classes in the processing
 and shouldn't be called directly by the user.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TxtFileComparator$vrf_contents_inner(contents, omit, options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TxtFileComparator$vrf_contents_inner(contents, config, omit)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -122,9 +122,9 @@ and shouldn't be called directly by the user.
 \describe{
 \item{\code{contents}}{file contents}
 
-\item{\code{omit}}{string pattern to omit from the comparison}
+\item{\code{config}}{configuration values}
 
-\item{\code{options}}{additional comparator parameters}
+\item{\code{omit}}{string pattern to omit from the comparison}
 }
 \if{html}{\out{</div>}}
 }
@@ -138,13 +138,13 @@ with the current comparator. Returns an empty string if the comparator is
 is supported, otherwise a string that will be concatenated with the
 summary string.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TxtFileComparator$vrf_details_supported(options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TxtFileComparator$vrf_details_supported(config)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{options}}{additional comparator parameters}
+\item{\code{config}}{configuration values}
 }
 \if{html}{\out{</div>}}
 }

@@ -11,12 +11,15 @@
 #' file1 <- "file1.rtf"
 #' file2 <- "file2.rtf"
 #'
+#' # instantiating the configuration 
+#' config <- Config$new()
+#'
 #' # instantiating a new comparator instance for every comparison:
 #' comparator <- verifyr2::create_comparator(file1, file2)
 #'
 #' # calling the summary and details comparison methods
-#' comparator$vrf_summary()
-#' comparator$vrf_details()
+#' comparator$vrf_summary(config = config)
+#' comparator$vrf_details(config = config)
 #'
 #' @include BinaryFileComparator.R
 #' @include TxtFileComparator.R
@@ -69,9 +72,9 @@ create_comparator <- function(file1, file2) {
   lst_type <- grepl(file_extension, c("Lst"))
 
   if (txt_type || fix_type || lst_type) {
-    return(TxtFileComparator$new(file1 = file1, file2 = file2))
+    TxtFileComparator$new(file1 = file1, file2 = file2)
   } else {
-    return(BinaryFileComparator$new(file1 = file1, file2 = file2))
+    BinaryFileComparator$new(file1 = file1, file2 = file2)
   }
 }
 

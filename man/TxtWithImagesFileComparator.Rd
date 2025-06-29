@@ -80,15 +80,15 @@ can be overwritten by more specialized comparator classes. This method is
 intended to be called only by the comparator classes in the processing
 and shouldn't be called directly by the user.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TxtWithImagesFileComparator$vrf_summary_inner(omit, options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TxtWithImagesFileComparator$vrf_summary_inner(config, omit)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{omit}}{string pattern to omit from the comparison}
+\item{\code{config}}{configuration values}
 
-\item{\code{options}}{additional comparator parameters}
+\item{\code{omit}}{string pattern to omit from the comparison}
 }
 \if{html}{\out{</div>}}
 }
@@ -102,15 +102,15 @@ can be overwritten by more specialized comparator classes. This method is
 intended to be called only by the comparator classes in the processing
 and shouldn't be called directly by the user.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TxtWithImagesFileComparator$vrf_details_inner(omit, options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TxtWithImagesFileComparator$vrf_details_inner(config, omit)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{omit}}{string pattern to omit from the comparison}
+\item{\code{config}}{configuration values}
 
-\item{\code{options}}{additional comparator parameters}
+\item{\code{omit}}{string pattern to omit from the comparison}
 }
 \if{html}{\out{</div>}}
 }

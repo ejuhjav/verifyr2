@@ -1,5 +1,6 @@
 
-base <- "test_outputs/txt"
+base   <- "test_outputs/txt"
+config <- Config$new(FALSE)
 
 ################################################################################
 # Generic file existence checks
@@ -13,7 +14,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting2.txt")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details()[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(result$contents, "File(s) not available; unable to compare.")
@@ -27,7 +28,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting.txt")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details()[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(result$contents, "File(s) not available; unable to compare.")
@@ -43,11 +44,11 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "copy.txt")
 
-  config <- Config$new(FALSE)
-  config$set("details.mode", "summary")
+  config_local <- Config$new(FALSE)
+  config_local$set("details.mode", "summary")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(options = config)[[1]]
+  result     <- comparator$vrf_details(config = config_local)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
@@ -59,11 +60,11 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.txt")
   file2 <- testthat::test_path(base, "changes_one_row.txt")
 
-  config <- Config$new(FALSE)
-  config$set("details.mode", "full")
+  config_local <- Config$new(FALSE)
+  config_local$set("details.mode", "full")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(options = config)[[1]]
+  result     <- comparator$vrf_details(config = config_local)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
@@ -81,7 +82,7 @@ test_that(paste(
   config$set("details.mode", "full")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(options = config, omit = "Line 4")[[1]]
+  result     <- comparator$vrf_details(config = config, omit = "Line 4")[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")

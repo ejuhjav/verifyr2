@@ -1,5 +1,6 @@
 
-base <- "test_outputs/txt"
+base   <- "test_outputs/txt"
+config <- Config$new(FALSE)
 
 ################################################################################
 # Generic file existence checks
@@ -13,7 +14,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting2.txt")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -26,7 +27,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting.txt")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -42,7 +43,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "copy.txt")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "No differences.")
 })
@@ -55,7 +56,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_one_row.txt")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -68,7 +69,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "base.txt")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "File content has changes in 1 place(s).")
 })
@@ -81,7 +82,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "base.txt")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "File content has changes in 2 place(s).")
 })
@@ -98,7 +99,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "copy.txt")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "Nothing")
+  result     <- comparator$vrf_summary(config = config, omit = "Nothing")
 
   expect_equal(result, "No differences.")
 })
@@ -111,7 +112,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "changes_one_row.txt")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "Line 2")
+  result     <- comparator$vrf_summary(config = config, omit = "Line 2")
 
   expect_equal(result, "No differences.")
 })
@@ -124,7 +125,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_one_row.txt")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "Line 4")
+  result     <- comparator$vrf_summary(config = config, omit = "Line 4")
 
   expect_equal(result, "No differences.")
 })
@@ -137,7 +138,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_two_rows.txt")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "Line 4")
+  result     <- comparator$vrf_summary(config = config, omit = "Line 4")
 
   expect_equal(result, "No differences.")
 })
@@ -150,7 +151,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_two_rows.txt")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "Line 41")
+  result     <- comparator$vrf_summary(config = config, omit = "Line 41")
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -163,7 +164,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "changes_two_rows.txt")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "Line 2")
+  result     <- comparator$vrf_summary(config = config, omit = "Line 2")
 
   expect_equal(result, "File content has changes in 1 place(s).")
 })

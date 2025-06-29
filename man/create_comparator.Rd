@@ -20,11 +20,14 @@ Factory method for creating comparator instance based on the given two files.
 file1 <- "file1.rtf"
 file2 <- "file2.rtf"
 
+# instantiating the configuration 
+config <- Config$new()
+
 # instantiating a new comparator instance for every comparison:
 comparator <- verifyr2::create_comparator(file1, file2)
 
 # calling the summary and details comparison methods
-comparator$vrf_summary()
-comparator$vrf_details()
+comparator$vrf_summary(config = config)
+comparator$vrf_details(config = config)
 
 }

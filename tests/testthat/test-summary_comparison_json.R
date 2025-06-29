@@ -1,5 +1,6 @@
 
-base <- "test_outputs/json"
+base   <- "test_outputs/json"
+config <- Config$new(FALSE)
 
 ################################################################################
 # Text file comparison - WITHOUT omit
@@ -12,7 +13,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "copy.json")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "No differences.")
 })
@@ -25,7 +26,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "modified.json")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -42,7 +43,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "copy.json")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "Nothing")
+  result     <- comparator$vrf_summary(config = config, omit = "Nothing")
 
   expect_equal(result, "No differences.")
 })
@@ -55,7 +56,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "modified.json")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "height")
+  result     <- comparator$vrf_summary(config = config, omit = "height")
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -68,7 +69,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "modified.json")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "sex")
+  result     <- comparator$vrf_summary(config = config, omit = "sex")
 
   expect_equal(result, "File content has changes in 5 place(s).")
 })

@@ -1,5 +1,6 @@
 
-base <- "test_outputs/rtf"
+base   <- "test_outputs/rtf"
+config <- Config$new(FALSE)
 
 ################################################################################
 # Generic file existence checks
@@ -13,7 +14,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details()[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(result$contents, "File(s) not available; unable to compare.")
@@ -30,7 +31,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "copy.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details()[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
@@ -43,7 +44,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "changes_one_row_content.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details()[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
@@ -57,7 +58,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details()[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
@@ -70,11 +71,11 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base_with_image.rtf")
   file2 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
 
-  config <- Config$new(FALSE)
-  config$set("rtf.images", "no")
+  config_local <- Config$new(FALSE)
+  config_local$set("rtf.images", "no")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(options = config)[[1]]
+  result     <- comparator$vrf_details(config = config_local)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
@@ -90,12 +91,12 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base_with_image.rtf")
   file2 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
 
-  config <- Config$new(FALSE)
-  config$set("generic.debug", "yes")
+  config_local <- Config$new(FALSE)
+  config_local$set("generic.debug", "yes")
 
   output <- capture.output({
     comparator <- create_comparator(file1, file2)
-    result     <- comparator$vrf_details(options = config)[[1]]
+    result     <- comparator$vrf_details(config = config_local)[[1]]
   })
 
   expected <- "'File::vrf_details, mode: summary' (execution time"

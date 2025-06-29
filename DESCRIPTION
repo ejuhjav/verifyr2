@@ -8,6 +8,7 @@ Authors@R: c(
     person("Juha", "Javanainen", email = "ejuhjav@gmail.com", role = c("aut", "cre")),
     person("Tiina", "Kirsilä", email = "tiina.kirsila@gmail.com", role = "ctb"),
     person("Anna", "Wiksten", email = "a.s.wiksten@gmail.com", role = "ctb"))
+Depends: R (>= 4.1.0)
 Imports:
     base64enc,
     diffobj,

@@ -1,5 +1,6 @@
 
 base <- "test_outputs/img"
+config <- Config$new(FALSE)
 
 ################################################################################
 # Generic file existence checks
@@ -13,7 +14,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting2.jpg")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details()[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(result$contents, "File(s) not available; unable to compare.")
@@ -27,7 +28,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting.png")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details()[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(result$contents, "File(s) not available; unable to compare.")
@@ -44,15 +45,20 @@ test_that(paste(
   file2 <- testthat::test_path(base, "base.jpeg")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details()[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
   contents   <- result$contents
 
-  expect_equal(result$type, "image")
-  expect_equal(typeof(contents), "list")
-  expect_equal(names(contents), c("image1", "image2", "image3"))
-  expect_equal(contents$image1, contents$image2)
-  expect_false(isTRUE(all.equal(contents$image1, contents$image3)))
-  expect_false(isTRUE(all.equal(contents$image2, contents$image3)))
+  if (requireNamespace("magick", quietly = TRUE)) {
+    expect_equal(result$type, "image")
+    expect_equal(typeof(contents), "list")
+    expect_equal(names(contents), c("image1", "image2", "image3"))
+    expect_equal(contents$image1, contents$image2)
+    expect_false(isTRUE(all.equal(contents$image1, contents$image3)))
+    expect_false(isTRUE(all.equal(contents$image2, contents$image3)))
+  } else {
+    expect_equal(result$type, "text")
+    expect_equal(result$contents, "Image details comparison disabled.")
+  }
 })
 
 test_that(paste(
@@ -62,13 +68,18 @@ test_that(paste(
   file2 <- testthat::test_path(base, "modified1.png")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details()[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
   contents   <- result$contents
 
-  expect_equal(result$type, "image")
-  expect_equal(typeof(contents), "list")
-  expect_equal(names(contents), c("image1", "image2", "image3"))
-  expect_false(isTRUE(all.equal(contents$image1, contents$image2)))
-  expect_false(isTRUE(all.equal(contents$image1, contents$image3)))
-  expect_false(isTRUE(all.equal(contents$image2, contents$image3)))
+  if (requireNamespace("magick", quietly = TRUE)) {
+    expect_equal(result$type, "image")
+    expect_equal(typeof(contents), "list")
+    expect_equal(names(contents), c("image1", "image2", "image3"))
+    expect_false(isTRUE(all.equal(contents$image1, contents$image2)))
+    expect_false(isTRUE(all.equal(contents$image1, contents$image3)))
+    expect_false(isTRUE(all.equal(contents$image2, contents$image3)))
+  } else {
+    expect_equal(result$type, "text")
+    expect_equal(result$contents, "Image details comparison disabled.")
+  }
 })

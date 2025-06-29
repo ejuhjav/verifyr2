@@ -1,5 +1,6 @@
 
-base <- "test_outputs/rtf"
+base   <- "test_outputs/rtf"
+config <- Config$new(FALSE)
 
 ################################################################################
 # Generic file existence checks
@@ -13,7 +14,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -29,7 +30,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "base.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "No differences.")
 })
@@ -42,7 +43,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_one_row_content.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -55,7 +56,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "base.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -68,7 +69,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_one_row_footer.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "No differences.")
 })
@@ -81,7 +82,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_one_row_footer.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "No differences.")
 })
@@ -94,7 +95,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "base.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "File content has changes in 1 place(s).")
 })
@@ -107,7 +108,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "changes_one_row_footer.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "No differences.")
 })
@@ -120,7 +121,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "base.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "File content has changes in 2 place(s).")
 })
@@ -133,7 +134,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "changes_two_rows_footer.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "No differences.")
 })
@@ -150,7 +151,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "copy.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "Nothing")
+  result     <- comparator$vrf_summary(config = config, omit = "Nothing")
 
   expect_equal(result, "No differences.")
 })
@@ -163,7 +164,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "changes_one_row_content.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "setosa")
+  result     <- comparator$vrf_summary(config = config, omit = "setosa")
 
   expect_equal(result, "No differences.")
 })
@@ -176,7 +177,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_one_row_content.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "setosa")
+  result     <- comparator$vrf_summary(config = config, omit = "setosa")
 
   expect_equal(result, "No differences.")
 })
@@ -189,7 +190,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_two_rows_content.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "unknown")
+  result     <- comparator$vrf_summary(config = config, omit = "unknown")
 
   expect_equal(result, "No differences.")
 })
@@ -202,7 +203,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_two_rows_content.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "unknown1")
+  result     <- comparator$vrf_summary(config = config, omit = "unknown1")
 
   expect_equal(result, "Different number of lines in compared content.")
 })
@@ -215,7 +216,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "changes_two_rows_content.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "setosa")
+  result     <- comparator$vrf_summary(config = config, omit = "setosa")
 
   expect_equal(result, "File content has changes in 1 place(s).")
 })
@@ -232,9 +233,13 @@ test_that(paste(
   file2 <- testthat::test_path(base, "base_with_image.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
-  expect_equal(result, "No differences. No differences in embedded images.")
+  if (requireNamespace("magick", quietly = TRUE)) {
+    expect_equal(result, "No differences. No differences in embedded images.")
+  } else {
+    expect_equal(result, "No differences.")
+  }
 })
 
 test_that(paste(
@@ -246,12 +251,16 @@ test_that(paste(
   file2 <- testthat::test_path(base, "base_with_image.rtf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
-  expect_equal(result, paste(
-    "File content has changes in 1 place(s).",
-    "1/1 embedded images have differences."
-  ))
+  if (requireNamespace("magick", quietly = TRUE)) {
+    expect_equal(result, paste(
+      "File content has changes in 1 place(s).",
+      "1/1 embedded images have differences."
+    ))
+  } else {
+    expect_equal(result, "File content has changes in 1 place(s).")
+  }
 })
 
 test_that(paste(
@@ -262,11 +271,11 @@ test_that(paste(
   file1 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
   file2 <- testthat::test_path(base, "base_with_image.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.images", "no")
+  config_local <- Config$new(FALSE)
+  config_local$set("rtf.images", "no")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
+  result     <- comparator$vrf_summary(config = config_local)
 
   expect_equal(result, "File content has changes in 1 place(s).")
 })
@@ -283,11 +292,11 @@ test_that(paste(
   file1 <- testthat::test_path(base, "changes_one_row_content_one_image.rtf")
   file2 <- testthat::test_path(base, "base_with_image.rtf")
 
-  options <- Config$new(FALSE)
-  options$set("rtf.images", "no")
+  config_local <- Config$new(FALSE)
+  config_local$set("rtf.images", "no")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
+  result     <- comparator$vrf_summary(config = config_local)
 
   expect_equal(result, "File content has changes in 1 place(s).")
 })
@@ -306,9 +315,10 @@ test_that(paste(
     check_magick_available = function() FALSE
   )
 
-  options    <- Config$new(FALSE)
+  config_local <- Config$new(FALSE)
+
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = options)
+  result     <- comparator$vrf_summary(config = config_local)
 
   expect_equal(result, paste(
     "File content has changes in 1 place(s)."

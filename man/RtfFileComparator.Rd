@@ -75,7 +75,7 @@ and shouldn't be called directly by the user.
 For RtfComparator, only the RTF file content part is returned for
 comparison.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RtfFileComparator$vrf_contents(file, omit, options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RtfFileComparator$vrf_contents(file, config, omit)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -83,9 +83,9 @@ comparison.
 \describe{
 \item{\code{file}}{file for which to get the contents}
 
-\item{\code{omit}}{string pattern to omit from the comparison}
+\item{\code{config}}{configuration values}
 
-\item{\code{options}}{additional comparator parameters}
+\item{\code{omit}}{string pattern to omit from the comparison}
 }
 \if{html}{\out{</div>}}
 }
@@ -97,7 +97,7 @@ comparison.
 "Abstract" method for getting the raw image hex vector array from the
 given source file.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RtfFileComparator$vrf_images(file, options)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RtfFileComparator$vrf_images(file, config)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -105,7 +105,7 @@ given source file.
 \describe{
 \item{\code{file}}{file for which to get the embedded image details}
 
-\item{\code{options}}{additional comparator parameters}
+\item{\code{config}}{configuration values}
 }
 \if{html}{\out{</div>}}
 }

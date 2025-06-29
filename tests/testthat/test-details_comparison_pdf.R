@@ -1,5 +1,6 @@
 
-base <- "test_outputs/pdf"
+base   <- "test_outputs/pdf"
+config <- Config$new(FALSE)
 
 ################################################################################
 # Generic file existence checks
@@ -13,7 +14,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting2.pdf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details()[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(result$contents, "File(s) not available; unable to compare.")
@@ -27,7 +28,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting.pdf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details()[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
 
   expect_equal(result$type, "text")
   expect_equal(result$contents, "File(s) not available; unable to compare.")
@@ -44,10 +45,15 @@ test_that(paste(
   file2 <- testthat::test_path(base, "copy.pdf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details()[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
 
   expect_equal(result$type, "text")
-  expect_equal(typeof(result$contents), "S4")
+
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(typeof(result$contents), "S4")
+  } else {
+    expect_equal(result$contents, "Pdf details comparison disabled.")
+  }
 })
 
 test_that(paste(
@@ -57,8 +63,13 @@ test_that(paste(
   file2 <- testthat::test_path(base, "two_pages_changes_one_row.pdf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details()[[1]]
+  result     <- comparator$vrf_details(config = config)[[1]]
 
   expect_equal(result$type, "text")
-  expect_equal(typeof(result$contents), "S4")
+
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(typeof(result$contents), "S4")
+  } else {
+    expect_equal(result$contents, "Pdf details comparison disabled.")
+  }
 })

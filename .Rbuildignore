@@ -3,3 +3,6 @@
 .RData
 .lintr
 ^LICENSE\.md$
+^\.github$
+^\.gitignore$
+^Dockerfile$

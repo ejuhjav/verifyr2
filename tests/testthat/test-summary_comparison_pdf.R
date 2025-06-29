@@ -1,5 +1,6 @@
 
-base <- "test_outputs/pdf"
+base   <- "test_outputs/pdf"
+config <- Config$new(FALSE)
 
 ################################################################################
 # Generic file existence checks
@@ -13,7 +14,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting2.pdf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -26,7 +27,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting.pdf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
   expect_equal(result, "File(s) not available; unable to compare.")
 })
@@ -43,9 +44,16 @@ test_that(paste(
   file2 <- testthat::test_path(base, "copy.pdf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
-  expect_equal(result, "No differences.")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "No differences.")
+  } else {
+    expect_equal(result, paste(
+      "No differences.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 test_that(paste(
@@ -56,9 +64,16 @@ test_that(paste(
   file2 <- testthat::test_path(base, "two_pages_copy.pdf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
-  expect_equal(result, "No differences.")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "No differences.")
+  } else {
+    expect_equal(result, paste(
+      "No differences.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 test_that(paste(
@@ -70,9 +85,16 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_one_row.pdf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
-  expect_equal(result, "Different number of lines in compared content.")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "Different number of lines in compared content.")
+  } else {
+    expect_equal(result, paste(
+      "Different number of lines in compared content.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 test_that(paste(
@@ -84,9 +106,16 @@ test_that(paste(
   file2 <- testthat::test_path(base, "two_pages_addition_one_row.pdf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
-  expect_equal(result, "Different number of lines in compared content.")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "Different number of lines in compared content.")
+  } else {
+    expect_equal(result, paste(
+      "Different number of lines in compared content.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 test_that(paste(
@@ -98,9 +127,16 @@ test_that(paste(
   file2 <- testthat::test_path(base, "base.pdf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
-  expect_equal(result, "File content has changes in 1 place(s).")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "File content has changes in 1 place(s).")
+  } else {
+    expect_equal(result, paste(
+      "Different number of lines in compared content.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 test_that(paste(
@@ -112,9 +148,16 @@ test_that(paste(
   file2 <- testthat::test_path(base, "two_pages.pdf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
-  expect_equal(result, "File content has changes in 1 place(s).")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "File content has changes in 1 place(s).")
+  } else {
+    expect_equal(result, paste(
+      "Different number of lines in compared content.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 test_that(paste(
@@ -126,13 +169,21 @@ test_that(paste(
   file2 <- testthat::test_path(base, "two_pages.pdf")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary()
+  result     <- comparator$vrf_summary(config = config)
 
-  expect_equal(result, "File content has changes in 2 place(s).")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "File content has changes in 2 place(s).")
+  } else {
+    expect_equal(result, paste(
+      "Different number of lines in compared content.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 ################################################################################
 # Text file comparison - WITH omit
+# Note that with pdftools disabled, omit doesn't take effect
 ################################################################################
 
 test_that(paste(
@@ -143,10 +194,18 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.pdf")
   file2 <- testthat::test_path(base, "copy.pdf")
 
+  omit       <- "Nothing."
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "Nothing")
+  result     <- comparator$vrf_summary(config = config, omit = omit)
 
-  expect_equal(result, "No differences.")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "No differences.")
+  } else {
+    expect_equal(result, paste(
+      "No differences.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 test_that(paste(
@@ -157,10 +216,18 @@ test_that(paste(
   file1 <- testthat::test_path(base, "two_pages.pdf")
   file2 <- testthat::test_path(base, "two_pages_copy.pdf")
 
+  omit       <- "Nothing."
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "Nothing.")
+  result     <- comparator$vrf_summary(config = config, omit = omit)
 
-  expect_equal(result, "No differences.")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "No differences.")
+  } else {
+    expect_equal(result, paste(
+      "No differences.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 test_that(paste(
@@ -171,10 +238,18 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.pdf")
   file2 <- testthat::test_path(base, "changes_one_row.pdf")
 
+  omit       <- "simple example pdf"
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "simple example pdf")
+  result     <- comparator$vrf_summary(config = config, omit = omit)
 
-  expect_equal(result, "No differences.")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "No differences.")
+  } else {
+    expect_equal(result, paste(
+      "Different number of lines in compared content.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 test_that(paste(
@@ -185,10 +260,18 @@ test_that(paste(
   file1 <- testthat::test_path(base, "two_pages.pdf")
   file2 <- testthat::test_path(base, "two_pages_changes_one_row.pdf")
 
+  omit       <- "two paged example pdf"
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "two paged example pdf")
+  result     <- comparator$vrf_summary(config = config, omit = omit)
 
-  expect_equal(result, "No differences.")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "No differences.")
+  } else {
+    expect_equal(result, paste(
+      "Different number of lines in compared content.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 test_that(paste(
@@ -199,10 +282,18 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.pdf")
   file2 <- testthat::test_path(base, "addition_one_row.pdf")
 
+  omit       <- "one additional row"
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "one additional row")
+  result     <- comparator$vrf_summary(config = config, omit = omit)
 
-  expect_equal(result, "No differences.")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "No differences.")
+  } else {
+    expect_equal(result, paste(
+      "Different number of lines in compared content.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 test_that(paste(
@@ -213,10 +304,18 @@ test_that(paste(
   file1 <- testthat::test_path(base, "two_pages.pdf")
   file2 <- testthat::test_path(base, "two_pages_addition_one_row.pdf")
 
+  omit       <- "additional row"
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "additional row")
+  result     <- comparator$vrf_summary(config = config, omit = omit)
 
-  expect_equal(result, "No differences.")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "No differences.")
+  } else {
+    expect_equal(result, paste(
+      "Different number of lines in compared content.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 test_that(paste(
@@ -229,9 +328,16 @@ test_that(paste(
 
   omit       <- "additional row"
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = omit)
+  result     <- comparator$vrf_summary(config = config, omit = omit)
 
-  expect_equal(result, "No differences.")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "No differences.")
+  } else {
+    expect_equal(result, paste(
+      "Different number of lines in compared content.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 test_that(paste(
@@ -244,9 +350,16 @@ test_that(paste(
 
   omit       <- "additional row"
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = omit)
+  result     <- comparator$vrf_summary(config = config, omit = omit)
 
-  expect_equal(result, "No differences.")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "No differences.")
+  } else {
+    expect_equal(result, paste(
+      "Different number of lines in compared content.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 test_that(paste(
@@ -257,10 +370,18 @@ test_that(paste(
   file1 <- testthat::test_path(base, "base.pdf")
   file2 <- testthat::test_path(base, "addition_two_rows.pdf")
 
+  omit       <- "one additional row"
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "one additional row")
+  result     <- comparator$vrf_summary(config = config, omit = omit)
 
-  expect_equal(result, "Different number of lines in compared content.")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "Different number of lines in compared content.")
+  } else {
+    expect_equal(result, paste(
+      "Different number of lines in compared content.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 test_that(paste(
@@ -271,10 +392,18 @@ test_that(paste(
   file1 <- testthat::test_path(base, "two_pages.pdf")
   file2 <- testthat::test_path(base, "two_pages_addition_two_rows.pdf")
 
+  omit       <- "one additional row"
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(omit = "one additional row")
+  result     <- comparator$vrf_summary(config = config, omit = omit)
 
-  expect_equal(result, "Different number of lines in compared content.")
+  if (requireNamespace("pdftools", quietly = TRUE)) {
+    expect_equal(result, "Different number of lines in compared content.")
+  } else {
+    expect_equal(result, paste(
+      "Different number of lines in compared content.",
+      "Pdf details comparison disabled."
+    ))
+  }
 })
 
 ################################################################################
@@ -295,10 +424,11 @@ test_that(paste(
     check_pdftools_available = function() FALSE
   )
 
-  config <- Config$new(FALSE)
+  config_local <- Config$new(FALSE)
 
+  omit       <- "Nothing"
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_summary(options = config, omit = "Nothing")
+  result     <- comparator$vrf_summary(config = config_local, omit = omit)
 
   expect_equal(result, paste(
     "Different number of lines in compared content.",
