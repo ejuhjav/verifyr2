@@ -2,7 +2,7 @@ Package: verifyr2
 Type: Package
 Title: Compare and verify file output changes
 Description: A package for file comparison algorithms and example shiny app for the comparison usage example.
-Version: 0.9.2
+Version: 1.0.0
 License: MIT + file LICENSE
 Authors@R: c(
     person("Juha", "Javanainen", email = "ejuhjav@gmail.com", role = c("aut", "cre")),
