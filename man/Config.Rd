@@ -17,16 +17,21 @@ methods for setting and getting config values.
 \examples{
 
 # Creates the configuration instance. Checks automatically if there is
-# a previously stored configuration json file available for usage.
+# a previously stored configuration json file available for usage. Note
+# that you don't need to explicitly define the config file path for the
+# Config instance - by default the config file will be searched from and
+# written in user-specific configuration directory for the package.
 
-config <- Config$new()
+path   <- tempfile(fileext = ".json")
+config <- Config$new(config_path = path)
 
 # Getting and setting configuration values
 
 value <- config$get("defailts.mode")
 config$set("details.mode", "full")
 
-# Saving the current configuration to local machine
+# Saving the current configuration to local machine (to tmp folder with
+# the given explicit file path in initialization).
 
 config$save()
 

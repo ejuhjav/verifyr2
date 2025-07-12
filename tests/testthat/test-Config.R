@@ -52,13 +52,11 @@ test_that("Configuration json file loaded successfully", {
 ################################################################################
 
 test_that("Configuration json file loaded successfully", {
-  file_name <- paste0(as.integer(Sys.time()), ".json")
-  file_path <- testthat::test_path("test_tmp", file_name)
-  config    <- Config$new(load_config = FALSE)
+  file_path <- tempfile(fileext = ".json")
+  config    <- Config$new(load_config = FALSE, config_path = file_path)
 
-  config$path <- file_path
   config$save()
 
-  expect_equal(file.exists(file_path), TRUE)
+  expect_true(file.exists(file_path))
   unlink(file_path)
 })
