@@ -11,7 +11,7 @@
 #' file1 <- "file1.rtf"
 #' file2 <- "file2.rtf"
 #'
-#' # instantiating the configuration 
+#' # instantiating the configuration
 #' config <- Config$new()
 #'
 #' # instantiating a new comparator instance for every comparison:
@@ -50,8 +50,6 @@ create_comparator <- function(file1, file2) {
   }
 
   # generic comparator class used based on the file contents (text/binary).
-  # guess_type returns incorrectly application/octet-string for lst files so
-  # handle those separately
   mime_type <- mime::guess_type(file1)
 
   text_like <- c(
@@ -67,11 +65,17 @@ create_comparator <- function(file1, file2) {
     "application/x-markdown"
   )
 
+  # additional types that the mime::guess_type mapping doesn't handle correctly
+  additional_text_types <- c(
+    "Lst",
+    "Sas"
+  )
+
   txt_type <- startsWith(mime_type, "text/")
   fix_type <- mime_type %in% text_like
-  lst_type <- grepl(file_extension, c("Lst"))
+  add_type <- file_extension %in% additional_text_types
 
-  if (txt_type || fix_type || lst_type) {
+  if (txt_type || fix_type || add_type) {
     TxtFileComparator$new(file1 = file1, file2 = file2)
   } else {
     BinaryFileComparator$new(file1 = file1, file2 = file2)
