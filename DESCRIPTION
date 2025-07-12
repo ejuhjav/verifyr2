@@ -1,7 +1,7 @@
 Package: verifyr2
 Type: Package
-Title: Compare and verify file contents
-Description: Verifyr2 is an R package for extendable file comparison classes and methods including an example shiny app for combining the functions into a convenient application.
+Title: Compare and Verify File Contents
+Description: Extendable 'R6' file comparison classes, including a 'shiny' app for combining the comparison functionality into a file comparison application. The package idea originates from pharma companies' drug development processes, where statisticians and statistical programmers need to review and compare different versions of the same outputs and datasets. The package implementation itself is not tied to any specific industry and can be used in any context for easy file comparisons between different file version sets.
 Version: 1.0.0
 License: MIT + file LICENSE
 Authors@R: c(
