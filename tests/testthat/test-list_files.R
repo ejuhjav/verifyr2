@@ -5,33 +5,19 @@ base <- "test_outputs/bin"
 # Generic file existence checks
 ################################################################################
 
-test_that(paste(
-  "'one or both of the files do not exist' ",
-  "printed if one of the files does not exist"
-), {
+test_that("returns null if both of the files do not exist", {
   file1 <- testthat::test_path(base, "nonexisting1.bin")
   file2 <- testthat::test_path(base, "nonexisting2.bin")
 
-  expect_output(
-    result <- list_files(file1, file2),
-    "one or both of the files do not exist"
-  )
-
+  result <- list_files(file1, file2)
   expect_null(result)
 })
 
-test_that(paste(
-  "'one or both of the files do not exist' ",
-  "printed if both of the files do not exist"
-), {
+test_that("returns null if one of the files does not exist", {
   file1 <- testthat::test_path(base, "base.bin")
   file2 <- testthat::test_path(base, "nonexisting.bin")
 
-  expect_output(
-    result <- list_files(file1, file2),
-    "one or both of the files do not exist"
-  )
-
+  result <- list_files(file1, file2)
   expect_null(result)
 })
 

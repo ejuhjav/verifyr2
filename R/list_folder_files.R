@@ -42,7 +42,6 @@ list_folder_files <- function(folder1, folder2, pattern = NULL) {
     return(selected_files)
   }
 
-  print("one or both of the folders do not exist")
   NULL
 }
 
