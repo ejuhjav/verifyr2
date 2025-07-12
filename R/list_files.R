@@ -35,6 +35,5 @@ list_files <- function(file1, file2) {
     return(data)
   }
 
-  print("one or both of the files do not exist")
   NULL
 }
