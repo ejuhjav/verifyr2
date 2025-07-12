@@ -20,7 +20,7 @@ Factory method for creating comparator instance based on the given two files.
 file1 <- "file1.rtf"
 file2 <- "file2.rtf"
 
-# instantiating the configuration 
+# instantiating the configuration
 config <- Config$new()
 
 # instantiating a new comparator instance for every comparison:
