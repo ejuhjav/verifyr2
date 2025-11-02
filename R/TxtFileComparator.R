@@ -135,7 +135,8 @@ TxtFileComparator <- R6::R6Class(
         file2_contents_whole,
         context = context,
         style = style,
-        mode = "sidebyside"
+        mode = "sidebyside",
+        word.diff = FALSE
       )
       self$vrf_close_debug()
 
@@ -214,8 +215,9 @@ my_finalizer <- function(x, x.chr, omit) {
   width <- nchar(length(split))
   index <- 0
 
-  # add row numbers to compare results manually for diffChr. diffobj-header values
-  # need to be processed to identify the actual line numbers in summary results.
+  # add row numbers to compare results manually for diffChr. diffobj-header
+  # values need to be processed to identify the actual line numbers in summary
+  # results.
   for (i in seq_along(split)) {
     row <- split[[i]]
 
@@ -233,19 +235,34 @@ my_finalizer <- function(x, x.chr, omit) {
 
       row <- gsub(
         "<div class='diffobj-text'><div class='diffobj-match'>",
-        paste0("<div class='diffobj-text'><div class='diffobj-match'><span class='diffobj-trim'>", row_str, "</span>"),
+        paste0(
+          "<div class='diffobj-text'><div class='diffobj-match'>",
+          "<span class='diffobj-trim'>",
+          row_str,
+          "</span>"
+        ),
         row
       )
 
       row <- gsub(
         "<div class='diffobj-text'><div class='delete'>",
-        paste0("<div class='diffobj-text'><div class='delete'><span class='diffobj-trim'>", row_str, "</span>"),
+        paste0(
+          "<div class='diffobj-text'><div class='delete'>",
+          "<span class='diffobj-trim'>",
+          row_str,
+          "</span>"
+        ),
         row
       )
 
       row <- gsub(
         "<div class='diffobj-text'><div class='insert'>",
-        paste0("<div class='diffobj-text'><div class='insert'><span class='diffobj-trim'>", row_str, "</span>"),
+        paste0(
+          "<div class='diffobj-text'><div class='insert'>",
+          "<span class='diffobj-trim'>",
+          row_str,
+          "</span>"
+        ),
         row
       )
 
