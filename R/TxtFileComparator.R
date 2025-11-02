@@ -129,12 +129,15 @@ TxtFileComparator <- R6::R6Class(
         finalizer = my_equalizer_with_omit
       )
 
-      diff_print <- diffobj::diffPrint(
+      self$vrf_open_debug("Txt::vrf_details_inner::diffPrint" , config)
+      diff_print <- diffobj::diffChr(
         file1_contents_whole,
         file2_contents_whole,
         context = context,
-        style = style
+        style = style,
+        mode = "sidebyside"
       )
+      self$vrf_close_debug()
 
       result <- list(
         list(
@@ -208,7 +211,49 @@ TxtFileComparator <- R6::R6Class(
 my_finalizer <- function(x, x.chr, omit) {
 
   split <- strsplit(x.chr, "<div class='diffobj-row'>")[[1]]
+  width <- nchar(length(split))
+  index <- 0
 
+  # add row numbers to compare results manually for diffChr. diffobj-header values
+  # need to be processed to identify the actual line numbers in summary results.
+  for (i in seq_along(split)) {
+    row <- split[[i]]
+
+    if (grepl("<div class='diffobj-header'>@@ .*@@</div>", row)) {
+      index <- as.integer(sub(".*@@\\s*([0-9]+),.*@@.*", "\\1", row)) - 1
+    }
+
+    if (i > 3) {
+      if (grepl("<div class='diffobj-header'>@@ .*@@</div>", row)) {
+        index <- as.integer(sub(".*@@\\s*([0-9]+),.*@@.*", "\\1", row)) - 1
+      } else {
+        index <- index + 1
+      }
+      row_str <- sprintf("%*s", width + 3, sprintf("[%d] ", index))
+
+      row <- gsub(
+        "<div class='diffobj-text'><div class='diffobj-match'>",
+        paste0("<div class='diffobj-text'><div class='diffobj-match'><span class='diffobj-trim'>", row_str, "</span>"),
+        row
+      )
+
+      row <- gsub(
+        "<div class='diffobj-text'><div class='delete'>",
+        paste0("<div class='diffobj-text'><div class='delete'><span class='diffobj-trim'>", row_str, "</span>"),
+        row
+      )
+
+      row <- gsub(
+        "<div class='diffobj-text'><div class='insert'>",
+        paste0("<div class='diffobj-text'><div class='insert'><span class='diffobj-trim'>", row_str, "</span>"),
+        row
+      )
+
+      split[[i]] <- row
+    }
+  }
+
+  # custom processing for omit row styles
   if (!is.null(omit) && "" != paste0(omit)) {
     for (i in seq_along(split)) {
       if (grepl(omit, split[[i]])) {
