@@ -27,6 +27,7 @@ dt_comparators_list <- list()
 row_index <- NULL
 
 current_mode <- shiny::reactiveVal(NULL)
+current_omit <- NULL
 
 # ==============================================================================
 # Custom input functions
@@ -337,7 +338,7 @@ update_details_comparison <- function(
     {
       comparator <- get_comparator(row_index, file1, file2)
       details <- comparator$vrf_details(
-        omit   = input$omit_rows,
+        omit   = current_omit,
         config = options
       )
 
@@ -717,7 +718,7 @@ server <- function(input, output, session) {
 
     dt_file_list <- tibble::tibble(list_of_files()) %>%
       dplyr::mutate(
-        omitted = input$omit_rows,
+        omitted = current_omit,
         comparison = NA_character_,
         comments = "no",
         comments_details = "",
@@ -827,6 +828,8 @@ server <- function(input, output, session) {
 
 list_files <- function(input, summary_text) {
   if (input$compare_tabs == "tabs_folder") {
+    current_omit <<- input$omit_rows
+
     if (file.exists(input$folder1) && file.exists(input$folder2)) {
       set_visibility("comparison_comments_container", FALSE)
       shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
@@ -845,6 +848,8 @@ list_files <- function(input, summary_text) {
       NULL
     }
   } else {
+    current_omit <<- input$omit_file_rows
+
     if (file.exists(input$file1) && file.exists(input$file2)) {
       set_visibility("comparison_comments_container", FALSE)
       shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
