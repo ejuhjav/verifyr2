@@ -1,3 +1,9 @@
+
+# verifyr2 1.2.0 (unreleased)
+
+## Documentation improvements
+- Document available configuration options
+
 # verifyr2 1.1.0
 
 ## Performance improvements
