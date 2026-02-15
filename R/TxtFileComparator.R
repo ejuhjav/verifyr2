@@ -135,6 +135,7 @@ TxtFileComparator <- R6::R6Class(
         file2_contents_whole,
         context = context,
         style = style,
+        ignore.white.space = ("yes" == super$vrf_option_value(config, "generic.spaces")),
         mode = "sidebyside",
         word.diff = FALSE
       )
@@ -178,7 +179,8 @@ TxtFileComparator <- R6::R6Class(
       }
 
       if ("yes" == super$vrf_option_value(config, "generic.spaces")) {
-          contents_processed <- strinr::str_replace_all(contents_processed, "[ \t]+", " ")
+          contents_processed <- stringr::str_replace_all(contents_processed, "[ \t]+", " ")
+          contents_processed <- stringr::str_trim(contents_processed, side = "both")
       }
 
       self$vrf_close_debug()
@@ -224,6 +226,27 @@ my_finalizer <- function(x, x.chr, omit) {
   # results.
   for (i in seq_along(split)) {
     row <- split[[i]]
+
+    # remove the special note regarding whitespace ignoring as it is not
+    # relevant with the custom whitespace ignoring supported.
+    if (1 == i) {
+      old <- paste0(
+        "<div class='diffobj-container light rgb'>",
+        "<pre class='diffobj-content'>",
+        "No visible differences between objects, but there are some ",
+        "differencessuppressed by `ignore.white.space`, ",
+        "`convert.hz.white.space`, `strip.sgr`,and/or `trim`. Set all ",
+        "those arguments to FALSE to highlight the differences."
+      )
+
+      if (old == row) {
+        split[[i]] <- paste0(
+          "<div class='diffobj-container light rgb'>",
+          "<pre class='diffobj-content'>",
+          "No visible differences between objects."
+        )
+      }
+    }
 
     if (grepl("<div class='diffobj-header'>@@ .*@@</div>", row)) {
       index <- as.integer(sub(".*@@\\s*([0-9]+),.*@@.*", "\\1", row)) - 1
