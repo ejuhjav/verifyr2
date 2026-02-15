@@ -557,10 +557,12 @@ server <- function(input, output, session) {
     "the side-by-side details comparison."
   )
 
-  summary_text <- shiny::reactiveVal(default1)
-  details_text <- shiny::reactiveVal(default2)
-  file1_link <- shiny::reactiveVal("")
-  file2_link <- shiny::reactiveVal("")
+  list_of_files <- shiny::reactiveVal(NULL)
+  summary_text  <- shiny::reactiveVal(default1)
+  details_text  <- shiny::reactiveVal(default2)
+  file1_link    <- shiny::reactiveVal("")
+  file2_link    <- shiny::reactiveVal("")
+  prev_comments <- reactiveVal(c())
 
   dt_proxy <- DT::dataTableProxy("summary_out")
 
@@ -579,7 +581,9 @@ server <- function(input, output, session) {
       )
     },
     content = function(file) {
-      dt_subset <- dt_file_list[, !(names(dt_file_list) %in% "comments")]
+      col_exclude <- c("comments", "process_button")
+      dt_subset   <- dt_file_list[, !(names(dt_file_list) %in% col_exclude)]
+      prev_comments(dt_file_list[["comments_details"]])
       write.csv(dt_subset, file, row.names = FALSE)
     }
   )
@@ -613,9 +617,12 @@ server <- function(input, output, session) {
   # Reactive elements and observe triggers
   # ============================================================================
 
-  list_of_files <- shiny::eventReactive(input$go, {
-    dt_comparators_list <<- list()
-    list_files(input, summary_text)
+  shiny::observeEvent(input$go, {
+    check_comment_changes(input, prev_comments, on_confirm = function() {
+      dt_comparators_list <<- list()
+      result <- list_files(input, summary_text)
+      list_of_files(result)
+    })
   })
 
   shiny::observeEvent(input$details_tabs, {
@@ -715,6 +722,10 @@ server <- function(input, output, session) {
 
   summary_verify <- shiny::reactive({
     shiny::req(list_of_files())
+
+    # clear the global data and comment field
+    dt_file_list <<- NULL
+    shiny::updateTextAreaInput(session, "details_out_comments", value = "")
 
     dt_file_list <- tibble::tibble(list_of_files()) |>
       dplyr::mutate(
@@ -954,6 +965,36 @@ apply_config_form_inputs <- function(input, schema, config, save = FALSE) {
   }
 
   shiny::removeModal()
+}
+
+check_comment_changes <- function(input, prev_contents, on_confirm) {
+  comments <- dt_file_list[["comments_details"]]
+
+  # if the current comment data is empty don't show the modal
+  skip <- length(comments) == 0 || all(is.na(comments) | trimws(comments) == "")
+
+  if (!skip && !identical(prev_contents(), comments)) {
+    showModal(
+      modalDialog(
+        title = "Comments changed after previous export",
+        paste0(
+          "You have changes in comparison comments after your last export. ",
+          "Please click confirm to proceed with the operation."
+        ),
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton("confirm_proceed", "Confirm")
+        )
+      )
+    )
+
+    observeEvent(input$confirm_proceed, {
+      removeModal()
+      on_confirm()
+    }, once = TRUE)
+  } else {
+    on_confirm()
+  }
 }
 
 shiny::shinyApp(ui, server)
