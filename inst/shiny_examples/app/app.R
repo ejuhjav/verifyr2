@@ -716,7 +716,7 @@ server <- function(input, output, session) {
   summary_verify <- shiny::reactive({
     shiny::req(list_of_files())
 
-    dt_file_list <- tibble::tibble(list_of_files()) %>%
+    dt_file_list <- tibble::tibble(list_of_files()) |>
       dplyr::mutate(
         omitted = current_omit,
         comparison = NA_character_,
@@ -743,7 +743,7 @@ server <- function(input, output, session) {
       message = "Processing comparison summaries...",
       value = 0,
       {
-        dt_file_list <- dt_file_list %>%
+        dt_file_list <- dt_file_list |>
           dplyr::mutate(
             comparison = purrr::pmap_chr(
               .l = list(
@@ -890,7 +890,7 @@ generate_config_ui_inputs <- function(schema, config, prefix = "") {
       }
     }
   }
-  return(inputs)
+  inputs
 }
 
 generate_config_ui_grouped <- function(schema, config, prefix = "") {
@@ -933,7 +933,7 @@ generate_config_ui_grouped <- function(schema, config, prefix = "") {
       inputs
     )
   }
-  return(groups)
+  groups
 }
 
 apply_config_form_inputs <- function(input, schema, config, save = FALSE) {

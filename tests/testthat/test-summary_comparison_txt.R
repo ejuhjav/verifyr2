@@ -87,6 +87,39 @@ test_that(paste(
   expect_equal(result, "File content has changes in 2 place(s).")
 })
 
+test_that(paste(
+  "Returns 'No differences' for two files with differences in spaces",
+  "with ignore spaces option = 'yes'"
+), {
+  file1 <- testthat::test_path(base, "additional_spaces_and_tabs.txt")
+  file2 <- testthat::test_path(base, "base.txt")
+
+  config_local <- Config$new(FALSE)
+  config_local$set("generic.spaces", "yes")
+
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(config = config_local)
+
+  expect_equal(result, "No differences.")
+})
+
+test_that(paste(
+  "Returns 'File content has changes in 3 place(s).'",
+  "for files with differences in spaces with ignore",
+  "spaces option = 'no'"
+), {
+  file1 <- testthat::test_path(base, "additional_spaces_and_tabs.txt")
+  file2 <- testthat::test_path(base, "base.txt")
+
+  config_local <- Config$new(FALSE)
+  config_local$set("generic.spaces", "no")
+
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(config = config_local)
+
+  expect_equal(result, "File content has changes in 3 place(s).")
+})
+
 ################################################################################
 # Text file comparison - WITH omit
 ################################################################################

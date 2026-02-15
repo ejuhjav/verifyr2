@@ -193,6 +193,11 @@ Config <- R6::R6Class(
             description = "Process embedded images",
             options = c("yes", "no"),
             default = "yes"
+          ),
+          spaces = list(
+            description = "Ignore empty space differences",
+            options = c("yes", "no"),
+            default = "no"
           )
         ),
         rtf = list(

@@ -118,8 +118,8 @@ and shouldn not be called directly by the user.
 Method for comparing the inner part for the details query. The method
 returns the file contents in two separate vectors inside a list. The
 first vector is the file contents and the second one is the file contents
-with the rows matching the omit string excluded. This method can be
-overwritten by more specialized comparator classes. This method is
+processed for empty spaces and omit terms if applicable. This method can
+be overwritten by more specialized comparator classes. This method is
 intended to be called only by the comparator classes in the processing
 and shouldn not be called directly by the user.
 \subsection{Usage}{

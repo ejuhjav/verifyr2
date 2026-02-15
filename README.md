@@ -66,6 +66,13 @@ Processing embedded images requires additional time to detect and extract images
 so it may be advisable to disable this option when working with large files or a high volume of 
 files that do not contain images.
 
+### Generic options - Ignore empty space differences
+
+Option to define whether differences in whitespace should be ignored during comparison. When 
+enabled, differences caused solely by additional spaces or tab characters are not reported. 
+Enabling this option affects the displayed comparison content, as consecutive spaces and tabs 
+are normalized to a single space in the compared file contents before differences are evaluated.
+
 ### RTF comparison - Process embedded images
 
 Option to define whether embedded image processing should be applied specifically to RTF files. 

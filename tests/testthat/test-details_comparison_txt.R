@@ -52,6 +52,10 @@ test_that(paste(
 
   expect_equal(result$type, "text")
   expect_equal(typeof(result$contents), "S4")
+
+  html_output <- as.character(result$contents)
+  html_output <- paste(html_output, collapse = "\n")
+  expect_false(grepl("='insert'><span class='diffobj-trim'>\\[", html_output))
 })
 
 test_that(paste(
@@ -70,6 +74,50 @@ test_that(paste(
   expect_equal(typeof(result$contents), "S4")
 
   html_output <- as.character(result$contents)
+  html_output <- paste(html_output, collapse = "\n")
+  expect_true(grepl("='insert'><span class='diffobj-trim'>\\[", html_output))
+})
+
+test_that(paste(
+  "Returns S4 comparison object for two files with differences in content",
+  "spacing (generic.spaces option = 'no')"
+), {
+  file1 <- testthat::test_path(base, "base.txt")
+  file2 <- testthat::test_path(base, "additional_spaces_and_tabs.txt")
+
+  config_local <- Config$new(FALSE)
+  config_local$set("generic.spaces", "no")
+
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_details(config = config_local)[[1]]
+
+  expect_equal(result$type, "text")
+  expect_equal(typeof(result$contents), "S4")
+
+  html_output <- as.character(result$contents)
+  html_output <- paste(html_output, collapse = "\n")
+  expect_true(grepl("='insert'><span class='diffobj-trim'>\\[", html_output))
+})
+
+test_that(paste(
+  "Returns S4 comparison object for two files with differences in content",
+  "spacing (generic.spaces option = 'yes')"
+), {
+  file1 <- testthat::test_path(base, "base.txt")
+  file2 <- testthat::test_path(base, "additional_spaces_and_tabs.txt")
+
+  config_local <- Config$new(FALSE)
+  config_local$set("generic.spaces", "yes")
+
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_details(config = config_local)[[1]]
+
+  expect_equal(result$type, "text")
+  expect_equal(typeof(result$contents), "S4")
+
+  html_output <- as.character(result$contents)
+  html_output <- paste(html_output, collapse = "\n")
+  expect_false(grepl("='insert'><span class='diffobj-trim'>\\[", html_output))
 })
 
 test_that(paste(

@@ -35,8 +35,8 @@ list_folder_files <- function(folder1, folder2, pattern = NULL) {
 
     selected_files <- dplyr::full_join(folder1_info,
                                        folder2_info,
-                                       by = "file") %>%
-      dplyr::arrange(file) %>%
+                                       by = "file") |>
+      dplyr::arrange(file) |>
       dplyr::select("file1", "file2")
 
     return(selected_files)
