@@ -717,6 +717,10 @@ server <- function(input, output, session) {
   summary_verify <- shiny::reactive({
     shiny::req(list_of_files())
 
+    # clear the data and comment field
+    dt_file_list <<- NULL
+    shiny::updateTextAreaInput(session, "details_out_comments", value = "")
+
     dt_file_list <- tibble::tibble(list_of_files()) |>
       dplyr::mutate(
         omitted = current_omit,
