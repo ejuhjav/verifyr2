@@ -579,7 +579,8 @@ server <- function(input, output, session) {
       )
     },
     content = function(file) {
-      dt_subset <- dt_file_list[, !(names(dt_file_list) %in% "comments")]
+      col_exclude <- c("comments", "process_button")
+      dt_subset   <- dt_file_list[, !(names(dt_file_list) %in% col_exclude)]
       write.csv(dt_subset, file, row.names = FALSE)
     }
   )
