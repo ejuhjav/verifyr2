@@ -1,7 +1,8 @@
 {
   "generic": {
     "debug": "yes",
-    "images": "yes"
+    "images": "yes",
+    "spaces": "yes"
   },
   "rtf": {
     "images": "no"
