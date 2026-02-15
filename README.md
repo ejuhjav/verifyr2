@@ -70,8 +70,6 @@ files that do not contain images.
 
 Option to define whether differences in whitespace should be ignored during comparison. When 
 enabled, differences caused solely by additional spaces or tab characters are not reported. 
-Enabling this option affects the displayed comparison content, as consecutive spaces and tabs 
-are normalized to a single space in the compared file contents before differences are evaluated.
 
 ### RTF comparison - Process embedded images
 
