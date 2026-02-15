@@ -51,6 +51,40 @@ libraries are available, the included 'shiny' app can be launched with the follo
 > verifyr2::run_example()
 ```
 
+## Shiny app configuration options
+
+### Generic options - Debugging enabled
+
+Option to enable debugging so that the application prints diagnostic information to the output 
+stream. This option is available to all users and can be enabled to include debugging details 
+when reporting issues.
+
+### Generic options - Process embedded images
+
+Option to define whether embedded images should be processed for all supported file types. 
+Processing embedded images requires additional time to detect and extract images from documents, 
+so it may be advisable to disable this option when working with large files or a high volume of 
+files that do not contain images.
+
+### RTF comparison - Process embedded images
+
+Option to define whether embedded image processing should be applied specifically to RTF files. 
+Currently, this option is redundant because RTF is the only file type that supports embedded 
+image processing. However, it is intended to allow configuration per file type in addition to 
+the general setting.
+
+### PDF comparison - Process PDF detailed comparison
+
+Option to define whether detailed PDF comparison should be performed. Disabling this option is 
+generally not recommended for users. However, it may be automatically disabled by the 
+application if the required 'pdftools' package is not available.
+
+### Details comparison - Mode
+
+Option to define the default display mode for the details summary view. The available options 
+are “full,” which displays the complete compared file, and “summary,” which displays only the 
+detected differences.
+
 ## Creating and calling the separators manually
 
 ``` bash
