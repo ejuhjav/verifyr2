@@ -1,8 +1,11 @@
 
 # verifyr2 1.2.0 (unreleased)
 
+## New features
+- Support ignoring differences in empty spaces (TODO - add link before release)
+
 ## Documentation improvements
-- Document available configuration options
+- Document available configuration options (TODO - add link before release)
 
 # verifyr2 1.1.0
 
