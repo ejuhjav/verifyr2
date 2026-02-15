@@ -61,10 +61,10 @@ TxtFileComparator <- R6::R6Class(
         self$file2_contents_list <- file2_contents_list
       }
 
-      file1_contents_omit <- file1_contents_list[[2]]
-      file2_contents_omit <- file2_contents_list[[2]]
+      file1_contents_processed <- file1_contents_list[[2]]
+      file2_contents_processed <- file2_contents_list[[2]]
 
-      difference    <- all.equal(file1_contents_omit, file2_contents_omit)
+      difference    <- all.equal(file1_contents_processed, file2_contents_processed)
       result        <- "File content comparison failed!"
       result_images <- ""
       pattern       <- "Lengths \\((\\d+), (\\d+)\\) differ \\(string compare on first"
@@ -155,8 +155,8 @@ TxtFileComparator <- R6::R6Class(
     #' Method for getting the inner part for the file contents query. The method
     #' returns the file contents in two separate vectors inside a list. The
     #' first vector is the file contents and the second one is the file contents
-    #' with the rows matching the omit string excluded. This method can be
-    #' overwritten by more specialized comparator classes. This method is
+    #' processed for empty spaces and omit terms if applicable. This method can
+    #' be overwritten by more specialized comparator classes. This method is
     #' intended to be called only by the comparator classes in the processing
     #' and shouldn't be called directly by the user.
     #'
@@ -167,18 +167,22 @@ TxtFileComparator <- R6::R6Class(
     vrf_contents_inner = function(contents, config, omit) {
       self$vrf_open_debug("Txt::vrf_contents_inner" , config)
 
-      contents_omit <- contents
+      contents_processed <- contents
 
       if (!is.null(omit) && "" != paste0(omit)) {
-        contents_omit <- stringr::str_subset(
+        contents_processed <- stringr::str_subset(
           string = contents,
           pattern = paste0(omit),
           negate = TRUE
         )
       }
 
+      if ("yes" == super$vrf_option_value(config, "generic.spaces")) {
+          contents_processed <- strinr::str_replace_all(contents_processed, "[ \t]+", " ")
+      }
+
       self$vrf_close_debug()
-      return(list(contents, contents_omit))
+      return(list(contents, contents_processed))
     },
 
     #' @description

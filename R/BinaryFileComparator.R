@@ -73,8 +73,8 @@ BinaryFileComparator <- R6::R6Class(
     #' Method for comparing the inner part for the details query. The method
     #' returns the file contents in two separate vectors inside a list. The
     #' first vector is the file contents and the second one is the file contents
-    #' with the rows matching the omit string excluded. This method can be
-    #' overwritten by more specialized comparator classes. This method is
+    #' processed for empty spaces and omit terms if applicable. This method can
+    #' be overwritten by more specialized comparator classes. This method is
     #' intended to be called only by the comparator classes in the processing
     #' and shouldn not be called directly by the user.
     #'
@@ -105,10 +105,10 @@ BinaryFileComparator <- R6::R6Class(
         self$file2_contents_list <- file2_contents_list
       }
 
-      file1_contents_omit <- file1_contents_list[[2]]
-      file2_contents_omit <- file2_contents_list[[2]]
+      file1_contents_processed <- file1_contents_list[[2]]
+      file2_contents_processed <- file2_contents_list[[2]]
 
-      if (!identical(file1_contents_omit, file2_contents_omit)) {
+      if (!identical(file1_contents_processed, file2_contents_processed)) {
         self$vrf_close_debug()
         return("Different content in compared files.")
       }
