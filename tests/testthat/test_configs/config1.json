@@ -2,7 +2,8 @@
   "generic": {
     "debug": "yes",
     "images": "yes",
-    "spaces": "yes"
+    "spaces": "yes",
+    "level": "row"
   },
   "rtf": {
     "images": "no"

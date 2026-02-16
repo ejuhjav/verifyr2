@@ -888,10 +888,10 @@ generate_config_ui_inputs <- function(schema, config, prefix = "") {
     entry    <- schema[[key]]
 
     if (is.list(entry)) {
-      if (!is.null(entry$options) && !is.null(entry$description)) {
+      if (!is.null(entry$options) && !is.null(entry$title)) {
         inputs[[full_key]] <- shiny::selectInput(
           inputId  = full_key,
-          label    = entry$description,
+          label    = entry$title,
           choices  = entry$options,
           selected = config$get(full_key)
         )
@@ -911,12 +911,12 @@ generate_config_ui_grouped <- function(schema, config, prefix = "") {
     entries    <- schema[[group]]
     group_desc <- group
 
-    if (!is.null(entries$description)) {
-      group_desc <- entries$description
+    if (!is.null(entries$title)) {
+      group_desc <- entries$title
     }
 
-    # Exclude "description" key itself from leaf scanning
-    keys <- setdiff(names(entries), "description")
+    # Exclude "title" key itself from leaf scanning
+    keys <- setdiff(names(entries), "title")
 
     inputs <- list()
     for (key in keys) {
@@ -925,16 +925,21 @@ generate_config_ui_grouped <- function(schema, config, prefix = "") {
 
       # Recurse if it's nested
       if (is.list(entry)) {
-        if (!is.null(entry$options) && !is.null(entry$description)) {
+        if (!is.null(entry$options) && !is.null(entry$title)) {
           inputs[[full_key]] <- shiny::selectInput(
             inputId  = full_key,
-            label    = entry$description,
+            label    = shiny::tagList(
+              entry$title,
+              " ",
+              shiny::tags$span(
+                shiny::icon("question-circle"),
+                title = entry$desc,
+                style = "color:#6c757d; margin-left:5px;"
+              )
+            ),
             choices  = entry$options,
             selected = config$get(full_key)
           )
-        } else {
-          sub_inputs <- generate_config_ui_inputs(entry, config, full_key)
-          inputs     <- c(inputs, sub_inputs)
         }
       }
     }

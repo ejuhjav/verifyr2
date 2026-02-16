@@ -137,7 +137,7 @@ TxtFileComparator <- R6::R6Class(
         style = style,
         ignore.white.space = ("yes" == super$vrf_option_value(config, "generic.spaces")),
         mode = "sidebyside",
-        word.diff = FALSE
+        word.diff = ("word" == super$vrf_option_value(config, "generic.level"))
       )
       self$vrf_close_debug()
 

@@ -2,13 +2,12 @@
 # verifyr2 1.2.0 (unreleased)
 
 ## New features
-- Support ignoring differences in empty spaces (TODO - add link before release)
+- Support ignoring differences in empty spaces (optional) (TODO - add link before release)
+- Support word level details comparison (optional) (TODO - add link before release)
+- Add configuration option descriptions (TODO - add link before release)
 
 ## Bug fixes
 - Fix issue with comment exporting with multiple folder loads (TODO - add link before release)
-
-## Documentation improvements
-- Document available configuration options (TODO - add link before release)
 
 # verifyr2 1.1.0
 
