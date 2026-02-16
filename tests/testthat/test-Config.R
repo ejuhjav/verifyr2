@@ -11,6 +11,7 @@ test_that("Configuration json file loaded successfully", {
 
   expect_equal(config$get("generic.debug"), "yes")
   expect_equal(config$get("generic.spaces"), "yes")
+  expect_equal(config$get("generic.level"), "row")
   expect_equal(config$get("rtf.images"), "no")
   expect_equal(config$get("details.mode"), "full")
   expect_equal(config$get("pdf.details"), "yes")
@@ -22,6 +23,7 @@ test_that("Partial configuration successfully updated with defaults", {
 
   expect_equal(config$get("generic.debug"), "no")
   expect_equal(config$get("generic.spaces"), "no")
+  expect_equal(config$get("generic.level"), "word")
   expect_equal(config$get("rtf.images"), "no")
   expect_equal(config$get("details.mode"), "summary")
   expect_equal(config$get("pdf.details"), "yes")

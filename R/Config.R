@@ -1,4 +1,52 @@
 
+generic_level_desc <- paste0(
+  "Option to define whether the comparison is processed and displayed on ",
+  "word or row level. Word-level processing requires additional time for ",
+  "comparison calculation, so it may be advisable to disable this option ",
+  "when working with large files if row-level comparison is sufficient."
+)
+
+generic_images_desc <- paste0(
+  "Option to define whether embedded images should be processed for all ",
+  "supported file types. Processing embedded images requires additional ",
+  "time to detect and extract images from documents, so it may be ",
+  "advisable to disable this option when working with large files or a ",
+  "high volume of files that do not contain images."
+)
+
+generic_spaces_desc <- paste0(
+  "Option to define whether differences in whitespace should be ignored ",
+  "during comparison. When enabled, differences caused solely by additional ",
+  "spaces or tab characters are not reported."
+)
+
+generic_debug_desc <- paste0(
+  "Option to enable debugging so that the application prints diagnostic ",
+  "information to the output stream. This option is available to all users ",
+  "and can be enabled to include debugging details when reporting issues."
+)
+
+rtf_images_desc <- paste0(
+  "Option to define whether embedded images should be processed for RTF file ",
+  "types. Processing embedded images requires additional time to detect and ",
+  "extract images from documents, so it may be advisable to disable this ",
+  "option when working with large files or a high volume of files that do ",
+  "not contain images."
+)
+
+pdf_details_desc <- paste0(
+  "Option to define whether detailed PDF comparison should be performed. ",
+  "Disabling this option is generally not recommended for users. However, it ",
+  "may be automatically disabled by the application if the required ",
+  "'pdftools' package is not available."
+)
+
+details_mode_desc <- paste0(
+  "Option to define the default display mode for the details summary view. ",
+  "The available options are 'full,' which displays the complete compared ",
+  "file, and 'summary,' which displays only the detected differences."
+)
+
 merge_values <- function(defaults, overrides) {
   result <- list()
 
@@ -167,7 +215,7 @@ Config <- R6::R6Class(
         defaults[[group]] <- list()
 
         for (key in names(self$schema[[group]])) {
-          if (key != "description") {
+          if (key != "title") {
             defaults[[group]][[key]] <- self$schema[[group]][[key]]$default
           }
         }
@@ -183,68 +231,83 @@ Config <- R6::R6Class(
     get_default_schema = function() {
       schema <- list(
         generic = list(
-          description = "Generic options",
-          debug = list(
-            description = "Debugging enabled",
-            options = c("yes", "no"),
-            default = "no"
-          ),
-          images = list(
-            description = "Process embedded images",
-            options = c("yes", "no"),
-            default = "yes"
+          title = "Generic options",
+          level = list(
+            title   = "Comparison level",
+            options = c("word", "row"),
+            default = "word",
+            desc    = generic_level_desc
           ),
           spaces = list(
-            description = "Ignore empty space differences",
+            titlei  = "Ignore empty space differences",
             options = c("yes", "no"),
-            default = "no"
+            default = "no",
+            desc    = generic_spaces_desc
+          ),
+          images = list(
+            title   = "Process embedded images",
+            options = c("yes", "no"),
+            default = "yes",
+            desc    = generic_images_desc
+          ),
+          debug = list(
+            title   = "Debugging enabled",
+            options = c("yes", "no"),
+            default = "no",
+            desc    = generic_debug_desc
           )
         ),
         rtf = list(
-          description = "RTF comparison (summary and details)",
+          title = "RTF comparison (summary and details)",
           images = list(
-            description = "Process embedded images",
+            title   = "Process embedded images",
             options = c("yes", "no"),
-            default = "yes"
+            default = "yes",
+            desc    = rtf_images_desc
           )
         ),
         pdf = list(
-          description = "PDF comparison (summary)",
+          title = "PDF comparison (summary)",
           details = list(
-            description = "Process PDF detailed comparison",
+            title = "Process PDF detailed comparison",
             options = c("yes", "no"),
-            default = "yes"
+            default = "yes",
+            desc    = pdf_details_desc
           )
         ),
         details = list(
-          description = "Details comparison",
+          title = "Details comparison",
           mode = list(
-            description = "Mode",
+            title = "Mode",
             options = c("full", "summary"),
-            default = "summary"
+            default = "summary",
+            desc    = details_mode_desc
           )
         )
       )
 
       if (!check_magick_available()) {
         schema[["generic"]][["images"]] <- list(
-          description = "Process embedded images (missing magick library)",
+          title   = "Process embedded images (missing magick library)",
           options = c("no"),
-          default = "no"
+          default = "no",
+          desc    = generic_images_desc
         )
 
         schema[["rtf"]][["images"]] <- list(
-          description = "Process embedded images (missing magick library)",
+          title   = "Process embedded images (missing magick library)",
           options = c("no"),
-          default = "no"
+          default = "no",
+          desc    = rtf_images_desc
         )
       }
 
       if (!check_pdftools_available()) {
         schema[["pdf"]][["details"]] <- list(
-          description = "Process PDF details (missing pdftools library)",
+          title   = "Process PDF details (missing pdftools library)",
           options = c("no"),
-          default = "no"
+          default = "no",
+          desc    = pdf_details_desc
         )
       }
 

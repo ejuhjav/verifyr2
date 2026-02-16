@@ -127,6 +127,7 @@ test_that(paste(
   file2 <- testthat::test_path(base, "addition_one_row.txt")
 
   config <- Config$new(FALSE)
+  config$set("generic.level", "row")
   config$set("details.mode", "full")
 
   comparator <- create_comparator(file1, file2)
