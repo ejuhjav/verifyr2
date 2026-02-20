@@ -175,8 +175,18 @@ Config <- R6::R6Class(
     },
 
     #' @description
-    #' Mehod for getting configuration value based on configuration key.
-    #' Configuratio item children are separated with a dot in the key notation.
+    #' Method for getting schema item based on configuration key.
+    #' Configuration item children are separated with a dot in the key notation.
+    #'
+    #' @param key configuration property key for which to get the schema item
+    #'
+    get_schema_item = function(key) {
+      get_nested_value(self$schema, key)
+    },
+
+    #' @description
+    #' Method for getting configuration value based on configuration key.
+    #' Configuration item children are separated with a dot in the key notation.
     #'
     #' @param key configuration property key for which to get the value
     #'
@@ -185,7 +195,7 @@ Config <- R6::R6Class(
     },
 
     #' @description
-    #' Mehod for setting configuration value based on configuration key.
+    #' Method for setting configuration value based on configuration key.
     #' Configuration item children are separated with a dot in the key notation.
     #'
     #' @param key   configuration property key for which to get the value
@@ -236,24 +246,28 @@ Config <- R6::R6Class(
             title   = "Comparison level",
             options = c("word", "row"),
             default = "word",
+            reload  = TRUE,
             desc    = generic_level_desc
           ),
           spaces = list(
             titlei  = "Ignore empty space differences",
             options = c("yes", "no"),
             default = "no",
+            reload  = TRUE,
             desc    = generic_spaces_desc
           ),
           images = list(
             title   = "Process embedded images",
             options = c("yes", "no"),
             default = "yes",
+            reload  = TRUE,
             desc    = generic_images_desc
           ),
           debug = list(
             title   = "Debugging enabled",
             options = c("yes", "no"),
             default = "no",
+            reload  = FALSE,
             desc    = generic_debug_desc
           )
         ),
@@ -263,6 +277,7 @@ Config <- R6::R6Class(
             title   = "Process embedded images",
             options = c("yes", "no"),
             default = "yes",
+            reload  = TRUE,
             desc    = rtf_images_desc
           )
         ),
@@ -272,6 +287,7 @@ Config <- R6::R6Class(
             title = "Process PDF detailed comparison",
             options = c("yes", "no"),
             default = "yes",
+            reload  = TRUE,
             desc    = pdf_details_desc
           )
         ),
@@ -281,6 +297,7 @@ Config <- R6::R6Class(
             title = "Mode",
             options = c("full", "summary"),
             default = "summary",
+            reload  = FALSE,
             desc    = details_mode_desc
           )
         )
@@ -291,6 +308,7 @@ Config <- R6::R6Class(
           title   = "Process embedded images (missing magick library)",
           options = c("no"),
           default = "no",
+          reload  = TRUE,
           desc    = generic_images_desc
         )
 
@@ -298,6 +316,7 @@ Config <- R6::R6Class(
           title   = "Process embedded images (missing magick library)",
           options = c("no"),
           default = "no",
+          reload  = TRUE,
           desc    = rtf_images_desc
         )
       }
@@ -307,6 +326,7 @@ Config <- R6::R6Class(
           title   = "Process PDF details (missing pdftools library)",
           options = c("no"),
           default = "no",
+          reload  = TRUE,
           desc    = pdf_details_desc
         )
       }

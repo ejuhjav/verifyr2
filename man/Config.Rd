@@ -51,6 +51,7 @@ config$save()
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-Config-new}{\code{Config$new()}}
+\item \href{#method-Config-get_schema_item}{\code{Config$get_schema_item()}}
 \item \href{#method-Config-get}{\code{Config$get()}}
 \item \href{#method-Config-set}{\code{Config$set()}}
 \item \href{#method-Config-save}{\code{Config$save()}}
@@ -81,11 +82,29 @@ the project configuration values are included.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Config-get_schema_item"></a>}}
+\if{latex}{\out{\hypertarget{method-Config-get_schema_item}{}}}
+\subsection{Method \code{get_schema_item()}}{
+Method for getting schema item based on configuration key.
+Configuration item children are separated with a dot in the key notation.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Config$get_schema_item(key)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{key}}{configuration property key for which to get the schema item}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Config-get"></a>}}
 \if{latex}{\out{\hypertarget{method-Config-get}{}}}
 \subsection{Method \code{get()}}{
-Mehod for getting configuration value based on configuration key.
-Configuratio item children are separated with a dot in the key notation.
+Method for getting configuration value based on configuration key.
+Configuration item children are separated with a dot in the key notation.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Config$get(key)}\if{html}{\out{</div>}}
 }
@@ -102,7 +121,7 @@ Configuratio item children are separated with a dot in the key notation.
 \if{html}{\out{<a id="method-Config-set"></a>}}
 \if{latex}{\out{\hypertarget{method-Config-set}{}}}
 \subsection{Method \code{set()}}{
-Mehod for setting configuration value based on configuration key.
+Method for setting configuration value based on configuration key.
 Configuration item children are separated with a dot in the key notation.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Config$set(key, value)}\if{html}{\out{</div>}}

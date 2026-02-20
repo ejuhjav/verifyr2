@@ -562,7 +562,8 @@ server <- function(input, output, session) {
   details_text  <- shiny::reactiveVal(default2)
   file1_link    <- shiny::reactiveVal("")
   file2_link    <- shiny::reactiveVal("")
-  prev_comments <- reactiveVal(c())
+  prev_comments <- shiny::reactiveVal(c())
+  reprocess     <- shiny::reactiveVal(0)
 
   dt_proxy <- DT::dataTableProxy("summary_out")
 
@@ -700,31 +701,36 @@ server <- function(input, output, session) {
         shiny::actionButton("reset_config_modal", "Reset"),
         shiny::actionButton("submit_apply", "Apply"),
         shiny::actionButton("submit_apply_save", "Apply and Save"),
-        shiny::modalButton("Cancel")
+        shiny::actionButton("cancel_config_modal", "Cancel"),
       )
     ))
   })
 
   shiny::observeEvent(input$submit_apply, {
-    apply_config_form_inputs(input, config$schema, config, save = FALSE)
+    apply_config(session, input, prev_comments, reprocess, config, save = FALSE)
   })
 
   shiny::observeEvent(input$submit_apply_save, {
-    apply_config_form_inputs(input, config$schema, config, save = TRUE)
+    apply_config(session, input, prev_comments, reprocess, config, save = TRUE)
   })
 
   shiny::observeEvent(input$reset_config_modal, {
-    keys <- names(generate_config_ui_inputs(config$schema, config))
-    for (key in keys) {
-      shiny::updateSelectInput(session, key, selected = config$get(key))
-    }
+    reset_config(session, config)
+  })
+
+  shiny::observeEvent(input$cancel_config_modal, {
+    reset_config(session, config)
+    shiny::removeModal()
   })
 
   summary_verify <- shiny::reactive({
+    # processing requires changes in list_of_files or force reprocess() update
     shiny::req(list_of_files())
+    reprocess()
 
     # clear the global data and comment field
     dt_file_list <<- NULL
+    row_index <<- NULL
     shiny::updateTextAreaInput(session, "details_out_comments", value = "")
 
     dt_file_list <- tibble::tibble(list_of_files()) |>
@@ -952,12 +958,44 @@ generate_config_ui_grouped <- function(schema, config, prefix = "") {
   groups
 }
 
-apply_config_form_inputs <- function(input, schema, config, save = FALSE) {
-  keys <- names(generate_config_ui_inputs(schema, config))
+apply_config <- function(
+  session,
+  input,
+  prev_comments,
+  reprocess,
+  config,
+  save
+) {
+  schema <- config$schema
+  keys   <- names(generate_config_ui_inputs(schema, config))
+  reload <- FALSE
 
   for (key in keys) {
     val <- input[[key]]
-    if (!is.null(val)) {
+    if (!is.null(val) && val != config$get(key)) {
+      reload <- reload || config$get_schema_item(key)$reload
+    }
+  }
+
+  # possible reload is wrapped in the confirmation dialog check
+  if (reload) {
+    check_comment_changes(input, prev_comments, on_confirm = function() {
+      store_config(input, keys, config, save)
+
+      # force current file reprocessing
+      reprocess(reprocess() + 1)
+    }, on_cancel = function() {
+      reset_config(session, config)
+    })
+  } else {
+    store_config(input, keys, config, save)
+  }
+}
+
+store_config <- function(input, keys, config, save) {
+  for (key in keys) {
+    val <- input[[key]]
+    if (!is.null(val) && val != config$get(key)) {
       config$set(key, val)
     }
   }
@@ -972,31 +1010,49 @@ apply_config_form_inputs <- function(input, schema, config, save = FALSE) {
   shiny::removeModal()
 }
 
-check_comment_changes <- function(input, prev_contents, on_confirm) {
+reset_config <- function(session, config) {
+  keys <- names(generate_config_ui_inputs(config$schema, config))
+  for (key in keys) {
+    shiny::updateSelectInput(session, key, selected = config$get(key))
+  }
+}
+
+check_comment_changes <- function(
+  input,
+  prev_contents,
+  on_confirm,
+  on_cancel = function(...) {}
+) {
   comments <- dt_file_list[["comments_details"]]
 
   # if the current comment data is empty don't show the modal
   skip <- length(comments) == 0 || all(is.na(comments) | trimws(comments) == "")
 
   if (!skip && !identical(prev_contents(), comments)) {
-    showModal(
-      modalDialog(
-        title = "Comments changed after previous export",
+    shiny::showModal(
+      shiny::modalDialog(
+        title = "Confirm file reloading",
         paste0(
-          "You have changes in comparison comments after your last export. ",
-          "Please click confirm to proceed with the operation."
+          "You have unsaved comparison comments added after the last export. ",
+          "Reloading the files will reprocess the comparisons and remove all ",
+          "current comments."
         ),
-        footer = tagList(
-          modalButton("Cancel"),
-          actionButton("confirm_proceed", "Confirm")
+        footer = shiny::tagList(
+          shiny::actionButton("cancel_proceed", "Cancel"),
+          shiny::actionButton("confirm_proceed", "Confirm")
         )
       )
     )
 
-    observeEvent(input$confirm_proceed, {
-      removeModal()
+    shiny::observeEvent(input$confirm_proceed, {
+      shiny::removeModal()
       on_confirm()
-    }, once = TRUE)
+    }, once = TRUE, ignoreInit = TRUE)
+
+    shiny::observeEvent(input$cancel_proceed, {
+      shiny::removeModal()
+      on_cancel()
+    }, once = TRUE, ignoreInit = TRUE)
   } else {
     on_confirm()
   }
