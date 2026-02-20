@@ -236,24 +236,28 @@ Config <- R6::R6Class(
             title   = "Comparison level",
             options = c("word", "row"),
             default = "word",
+            reload  = TRUE,
             desc    = generic_level_desc
           ),
           spaces = list(
             titlei  = "Ignore empty space differences",
             options = c("yes", "no"),
             default = "no",
+            reload  = TRUE,
             desc    = generic_spaces_desc
           ),
           images = list(
             title   = "Process embedded images",
             options = c("yes", "no"),
             default = "yes",
+            reload  = TRUE,
             desc    = generic_images_desc
           ),
           debug = list(
             title   = "Debugging enabled",
             options = c("yes", "no"),
             default = "no",
+            reload  = FALSE,
             desc    = generic_debug_desc
           )
         ),
@@ -263,6 +267,7 @@ Config <- R6::R6Class(
             title   = "Process embedded images",
             options = c("yes", "no"),
             default = "yes",
+            reload  = TRUE,
             desc    = rtf_images_desc
           )
         ),
@@ -272,6 +277,7 @@ Config <- R6::R6Class(
             title = "Process PDF detailed comparison",
             options = c("yes", "no"),
             default = "yes",
+            reload  = TRUE,
             desc    = pdf_details_desc
           )
         ),
@@ -281,6 +287,7 @@ Config <- R6::R6Class(
             title = "Mode",
             options = c("full", "summary"),
             default = "summary",
+            reload  = FALSE,
             desc    = details_mode_desc
           )
         )
@@ -291,6 +298,7 @@ Config <- R6::R6Class(
           title   = "Process embedded images (missing magick library)",
           options = c("no"),
           default = "no",
+          reload  = TRUE,
           desc    = generic_images_desc
         )
 
@@ -298,6 +306,7 @@ Config <- R6::R6Class(
           title   = "Process embedded images (missing magick library)",
           options = c("no"),
           default = "no",
+          reload  = TRUE,
           desc    = rtf_images_desc
         )
       }
@@ -307,6 +316,7 @@ Config <- R6::R6Class(
           title   = "Process PDF details (missing pdftools library)",
           options = c("no"),
           default = "no",
+          reload  = TRUE,
           desc    = pdf_details_desc
         )
       }
