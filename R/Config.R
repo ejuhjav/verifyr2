@@ -175,8 +175,18 @@ Config <- R6::R6Class(
     },
 
     #' @description
-    #' Mehod for getting configuration value based on configuration key.
-    #' Configuratio item children are separated with a dot in the key notation.
+    #' Method for getting schema item based on configuration key.
+    #' Configuration item children are separated with a dot in the key notation.
+    #'
+    #' @param key configuration property key for which to get the schema item
+    #'
+    get_schema_item = function(key) {
+      get_nested_value(self$schema, key)
+    },
+
+    #' @description
+    #' Method for getting configuration value based on configuration key.
+    #' Configuration item children are separated with a dot in the key notation.
     #'
     #' @param key configuration property key for which to get the value
     #'
@@ -185,7 +195,7 @@ Config <- R6::R6Class(
     },
 
     #' @description
-    #' Mehod for setting configuration value based on configuration key.
+    #' Method for setting configuration value based on configuration key.
     #' Configuration item children are separated with a dot in the key notation.
     #'
     #' @param key   configuration property key for which to get the value
