@@ -563,7 +563,7 @@ server <- function(input, output, session) {
   file1_link    <- shiny::reactiveVal("")
   file2_link    <- shiny::reactiveVal("")
   prev_comments <- shiny::reactiveVal(c())
-  reprocess     <- reactiveVal(0)
+  reprocess     <- shiny::reactiveVal(0)
 
   dt_proxy <- DT::dataTableProxy("summary_out")
 
@@ -701,24 +701,26 @@ server <- function(input, output, session) {
         shiny::actionButton("reset_config_modal", "Reset"),
         shiny::actionButton("submit_apply", "Apply"),
         shiny::actionButton("submit_apply_save", "Apply and Save"),
-        shiny::modalButton("Cancel")
+        shiny::actionButton("cancel_config_modal", "Cancel"),
       )
     ))
   })
 
   shiny::observeEvent(input$submit_apply, {
-    apply_config(input, prev_comments, reprocess, config, save = FALSE)
+    apply_config(session, input, prev_comments, reprocess, config, save = FALSE)
   })
 
   shiny::observeEvent(input$submit_apply_save, {
-    apply_config(input, prev_comments, reprocess, config, save = TRUE)
+    apply_config(session, input, prev_comments, reprocess, config, save = TRUE)
   })
 
   shiny::observeEvent(input$reset_config_modal, {
-    keys <- names(generate_config_ui_inputs(config$schema, config))
-    for (key in keys) {
-      shiny::updateSelectInput(session, key, selected = config$get(key))
-    }
+    reset_config(session, config)
+  })
+
+  shiny::observeEvent(input$cancel_config_modal, {
+    reset_config(session, config)
+    shiny::removeModal()
   })
 
   summary_verify <- shiny::reactive({
@@ -728,6 +730,7 @@ server <- function(input, output, session) {
 
     # clear the global data and comment field
     dt_file_list <<- NULL
+    row_index <<- NULL
     shiny::updateTextAreaInput(session, "details_out_comments", value = "")
 
     dt_file_list <- tibble::tibble(list_of_files()) |>
@@ -955,7 +958,14 @@ generate_config_ui_grouped <- function(schema, config, prefix = "") {
   groups
 }
 
-apply_config <- function(input, prev_comments, reprocess, config, save) {
+apply_config <- function(
+  session,
+  input,
+  prev_comments,
+  reprocess,
+  config,
+  save
+) {
   schema <- config$schema
   keys   <- names(generate_config_ui_inputs(schema, config))
   reload <- FALSE
@@ -964,25 +974,31 @@ apply_config <- function(input, prev_comments, reprocess, config, save) {
     val <- input[[key]]
     if (!is.null(val) && val != config$get(key)) {
       reload <- reload || config$get_schema_item(key)$reload
-      config$set(key, val)
     }
   }
 
   # possible reload is wrapped in the confirmation dialog check
   if (reload) {
     check_comment_changes(input, prev_comments, on_confirm = function() {
-      close_options(config, save)
+      store_config(input, keys, config, save)
 
       # force current file reprocessing
       reprocess(reprocess() + 1)
+    }, on_cancel = function() {
+      reset_config(session, config)
     })
   } else {
-    close_options(config, save)
+    store_config(input, keys, config, save)
   }
 }
 
-close_options <- function(config, save) {
-  shiny::removeModal()
+store_config <- function(input, keys, config, save) {
+  for (key in keys) {
+    val <- input[[key]]
+    if (!is.null(val) && val != config$get(key)) {
+      config$set(key, val)
+    }
+  }
 
   if (save) {
     config$save()
@@ -990,9 +1006,23 @@ close_options <- function(config, save) {
   } else {
     shiny::showNotification("Configuration applied", type = "message")
   }
+
+  shiny::removeModal()
 }
 
-check_comment_changes <- function(input, prev_contents, on_confirm) {
+reset_config <- function(session, config) {
+  keys <- names(generate_config_ui_inputs(config$schema, config))
+  for (key in keys) {
+    shiny::updateSelectInput(session, key, selected = config$get(key))
+  }
+}
+
+check_comment_changes <- function(
+  input,
+  prev_contents,
+  on_confirm,
+  on_cancel = function(...) {}
+) {
   comments <- dt_file_list[["comments_details"]]
 
   # if the current comment data is empty don't show the modal
@@ -1008,7 +1038,7 @@ check_comment_changes <- function(input, prev_contents, on_confirm) {
           "current comments."
         ),
         footer = shiny::tagList(
-          shiny::modalButton("Cancel"),
+          shiny::actionButton("cancel_proceed", "Cancel"),
           shiny::actionButton("confirm_proceed", "Confirm")
         )
       )
@@ -1017,7 +1047,12 @@ check_comment_changes <- function(input, prev_contents, on_confirm) {
     shiny::observeEvent(input$confirm_proceed, {
       shiny::removeModal()
       on_confirm()
-    }, once = TRUE)
+    }, once = TRUE, ignoreInit = TRUE)
+
+    shiny::observeEvent(input$cancel_proceed, {
+      shiny::removeModal()
+      on_cancel()
+    }, once = TRUE, ignoreInit = TRUE)
   } else {
     on_confirm()
   }
