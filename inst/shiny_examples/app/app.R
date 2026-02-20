@@ -562,7 +562,7 @@ server <- function(input, output, session) {
   details_text  <- shiny::reactiveVal(default2)
   file1_link    <- shiny::reactiveVal("")
   file2_link    <- shiny::reactiveVal("")
-  prev_comments <- reactiveVal(c())
+  prev_comments <- shiny::reactiveVal(c())
 
   dt_proxy <- DT::dataTableProxy("summary_out")
 
@@ -979,22 +979,22 @@ check_comment_changes <- function(input, prev_contents, on_confirm) {
   skip <- length(comments) == 0 || all(is.na(comments) | trimws(comments) == "")
 
   if (!skip && !identical(prev_contents(), comments)) {
-    showModal(
-      modalDialog(
+    shiny::showModal(
+      shiny::modalDialog(
         title = "Comments changed after previous export",
         paste0(
           "You have changes in comparison comments after your last export. ",
           "Please click confirm to proceed with the operation."
         ),
-        footer = tagList(
-          modalButton("Cancel"),
-          actionButton("confirm_proceed", "Confirm")
+        footer = shiny::tagList(
+          shiny::modalButton("Cancel"),
+          shiny::actionButton("confirm_proceed", "Confirm")
         )
       )
     )
 
-    observeEvent(input$confirm_proceed, {
-      removeModal()
+    shiny::observeEvent(input$confirm_proceed, {
+      shiny::removeModal()
       on_confirm()
     }, once = TRUE)
   } else {
