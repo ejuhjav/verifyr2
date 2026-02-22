@@ -719,7 +719,7 @@ server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$cancel_config_modal, {
-    reset_config(session, config)
+    cancel_config(session, config)
     shiny::removeModal()
   })
 
@@ -985,7 +985,7 @@ apply_config <- function(
       # force current file reprocessing
       reprocess(reprocess() + 1)
     }, on_cancel = function() {
-      reset_config(session, config)
+      cancel_config(session, config)
     })
   } else {
     store_config(input, keys, config, save)
@@ -1010,10 +1010,20 @@ store_config <- function(input, keys, config, save) {
   shiny::removeModal()
 }
 
-reset_config <- function(session, config) {
+# set values from existing config to options popup
+cancel_config <- function(session, config) {
   keys <- names(generate_config_ui_inputs(config$schema, config))
   for (key in keys) {
     shiny::updateSelectInput(session, key, selected = config$get(key))
+  }
+}
+
+# set default values from config schema to options popup
+reset_config <- function(session, config) {
+  keys <- names(generate_config_ui_inputs(config$schema, config))
+  for (key in keys) {
+    default_value <- config$get_schema_item(key)$default
+    shiny::updateSelectInput(session, key, selected = default_value)
   }
 }
 
