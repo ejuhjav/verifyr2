@@ -9,14 +9,6 @@ if (!"verifyr2" %in% loadedNamespaces()) {
   library(verifyr2)
 }
 
-# initialize the configuration and possible debug override option
-config <- verifyr2::Config$new()
-debug  <- getOption("verifyr2.debug", default = FALSE)
-
-if (isTRUE(debug)) {
-  config$set("generic.debug", "yes")
-}
-
 # the datatable contents with summary comparisons and comments
 dt_file_list <- NULL
 
@@ -27,7 +19,6 @@ dt_comparators_list <- list()
 row_index <- NULL
 
 current_mode <- shiny::reactiveVal(NULL)
-current_omit <- NULL
 
 # ==============================================================================
 # Custom input functions
@@ -308,6 +299,7 @@ update_details_comparison <- function(
   output,
   session,
   config_param,
+  current_omit,
   row,
   row_index
 ) {
@@ -338,7 +330,7 @@ update_details_comparison <- function(
     {
       comparator <- get_comparator(row_index, file1, file2)
       details <- comparator$vrf_details(
-        omit   = current_omit,
+        omit   = current_omit(),
         config = options
       )
 
@@ -535,6 +527,14 @@ server <- function(input, output, session) {
     allowDirCreate = FALSE
   )
 
+  # initialize the configuration and possible debug override option
+  config <- verifyr2::Config$new()
+  debug  <- getOption("verifyr2.debug", default = FALSE)
+
+  if (isTRUE(debug)) {
+    config$set("generic.debug", "yes")
+  }
+
   do.call(shinyFiles::shinyDirChoose, c(list(input, "folder1_select"), params))
   do.call(shinyFiles::shinyDirChoose, c(list(input, "folder2_select"), params))
 
@@ -564,6 +564,7 @@ server <- function(input, output, session) {
   file2_link    <- shiny::reactiveVal("")
   prev_comments <- shiny::reactiveVal(c())
   reprocess     <- shiny::reactiveVal(0)
+  current_omit  <- shiny::reactiveVal(NULL)
 
   dt_proxy <- DT::dataTableProxy("summary_out")
 
@@ -621,7 +622,7 @@ server <- function(input, output, session) {
   shiny::observeEvent(input$go, {
     check_comment_changes(input, prev_comments, on_confirm = function() {
       dt_comparators_list <<- list()
-      result <- list_files(input, summary_text)
+      result <- list_files(input, current_omit, summary_text)
       list_of_files(result)
     })
   })
@@ -641,6 +642,7 @@ server <- function(input, output, session) {
           output,
           session,
           config,
+          current_omit,
           row,
           new_row_index
         )
@@ -735,7 +737,7 @@ server <- function(input, output, session) {
 
     dt_file_list <- tibble::tibble(list_of_files()) |>
       dplyr::mutate(
-        omitted = current_omit,
+        omitted = current_omit(),
         comparison = NA_character_,
         comments = "no",
         comments_details = "",
@@ -824,6 +826,7 @@ server <- function(input, output, session) {
       output,
       session,
       config,
+      current_omit,
       row,
       new_row_index
     )
@@ -843,9 +846,9 @@ server <- function(input, output, session) {
   }
 }
 
-list_files <- function(input, summary_text) {
+list_files <- function(input, current_omit, summary_text) {
   if (input$compare_tabs == "tabs_folder") {
-    current_omit <<- input$omit_rows
+    current_omit(input$omit_rows)
 
     if (file.exists(input$folder1) && file.exists(input$folder2)) {
       set_visibility("comparison_comments_container", FALSE)
@@ -865,7 +868,7 @@ list_files <- function(input, summary_text) {
       NULL
     }
   } else {
-    current_omit <<- input$omit_file_rows
+    current_omit(input$omit_file_rows)
 
     if (file.exists(input$file1) && file.exists(input$file2)) {
       set_visibility("comparison_comments_container", FALSE)
