@@ -1,0 +1,18 @@
+{
+  "input": {
+    "clear_comments": 0,
+    "compare_tabs": "tabs_folder",
+    "configure": 0,
+    "details_out_comments": "",
+    "details_tabs": "tabs_details_summary",
+    "file1_select": 0,
+    "file2_select": 0,
+    "file_name_pattern": "",
+    "folder1_select": 0,
+    "folder2_select": 0,
+    "go": 0,
+    "omit_file_rows": "versicolor",
+    "omit_rows": "versicolor",
+    "save_comments": 0
+  }
+}
