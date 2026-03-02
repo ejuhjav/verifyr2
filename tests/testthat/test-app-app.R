@@ -137,9 +137,9 @@ test_that("{shinytest2} recording: comment_persistence", {
   expect_equal(app$get_value(input = "details_out_comments"), "")
 
   # set and store comment
-  app$set_inputs(details_out_comments = "comment1")
+  app$set_inputs(details_out_comments = "comment2")
   app$click("save_comments")
-  expect_equal(app$get_value(input = "details_out_comments"), "comment1")
+  expect_equal(app$get_value(input = "details_out_comments"), "comment2")
 
   app$set_inputs(summary_out_state = c(
     1772480019284,
@@ -168,8 +168,9 @@ test_that("{shinytest2} recording: comment_persistence", {
   )
   app$wait_for_idle(500)
 
-  # check that comment field is empty
+  # check that comment field is empty - set comment but do not save
   expect_equal(app$get_value(input = "details_out_comments"), "")
+  app$set_inputs(details_out_comments = "comment1")
 
   # click compare on row 2
   app$set_inputs(process_row = 2, allow_no_input_binding_ = TRUE)
@@ -180,6 +181,18 @@ test_that("{shinytest2} recording: comment_persistence", {
   )
   app$wait_for_idle(500)
 
-  # check that comment field contains value "comment1"
-  expect_equal(app$get_value(input = "details_out_comments"), "comment1")
+  # check that comment field contains value "comment2"
+  expect_equal(app$get_value(input = "details_out_comments"), "comment2")
+
+  # click compare on row 1
+  app$set_inputs(process_row = 1, allow_no_input_binding_ = TRUE)
+  app$set_inputs(
+    summary_out_cell_clicked = c("1", "7", compare_button("1")),
+    allow_no_input_binding_ = TRUE,
+    priority_ = "event"
+  )
+  app$wait_for_idle(500)
+
+  # check that comment field is empty (previous value was not saved)
+  expect_equal(app$get_value(input = "details_out_comments"), "")
 })
