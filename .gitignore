@@ -52,5 +52,8 @@ rsconnect/
 *.swo
 *.swp
 
+# shinytest2 snapshots
+tests/testthat/_snaps/*/*_.png
+
 # TODO file
 TODO

@@ -1,0 +1,140 @@
+{
+  "input": {
+    "clear_comments": 0,
+    "compare_tabs": "tabs_folder",
+    "configure": 0,
+    "details_out_comments": "",
+    "details_tabs": "tabs_details_summary",
+    "file1_select": 0,
+    "file2_select": 0,
+    "file_name_pattern": "",
+    "folder1_select": 0,
+    "folder2_select": 0,
+    "go": 1,
+    "omit_file_rows": "versicolor",
+    "omit_rows": "versicolor",
+    "save_comments": 0,
+    "summary_out_cell_clicked": {
+
+    },
+    "summary_out_cells_selected": [
+
+    ],
+    "summary_out_columns_selected": null,
+    "summary_out_rows_all": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "summary_out_rows_current": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "summary_out_rows_selected": null,
+    "summary_out_search": "",
+    "summary_out_state": {
+      "start": 0,
+      "length": 10,
+      "order": [
+
+      ],
+      "search": {
+        "search": "",
+        "smart": true,
+        "regex": false,
+        "caseInsensitive": true
+      },
+      "columns": [
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": false,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        }
+      ]
+    }
+  }
+}
