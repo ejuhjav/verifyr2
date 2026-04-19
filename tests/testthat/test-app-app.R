@@ -87,6 +87,7 @@ test_that("{shinytest2} recording: options_reset", {
   app <- create_app("options_reset")
 
   app$click("configure")
+  app$wait_for_idle()
   app$click("reset_config_modal")
 
   custom_expect_values(app)
@@ -101,8 +102,18 @@ test_that("{shinytest2} recording: comment_persistence", {
   all <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
 
   app$click("go")
-  app$set_inputs(summary_out_rows_current = cur, allow_no_input_binding_ = TRUE)
-  app$set_inputs(summary_out_rows_all = all, allow_no_input_binding_ = TRUE)
+  app$set_inputs(
+    summary_out_rows_current = cur,
+    allow_no_input_binding_ = TRUE,
+    wait_ = FALSE
+  )
+
+  app$set_inputs(
+    summary_out_rows_all = all,
+    allow_no_input_binding_ = TRUE,
+    wait_ = FALSE
+  )
+
   app$set_inputs(
     summary_out_state = c(
       1772479993305,

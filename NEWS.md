@@ -9,6 +9,7 @@
 
 ## Bug fixes
 - Fix issue with comment exporting with multiple folder loads (TODO - add link before release)
+- Fix global variable usage in shiny app that was causing random behavior when running on server (TODO - add link before relase)
 
 # verifyr2 1.1.0
 
