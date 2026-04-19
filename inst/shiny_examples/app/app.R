@@ -17,18 +17,6 @@ if (isTRUE(debug)) {
   config$set("generic.debug", "yes")
 }
 
-# the datatable contents with summary comparisons and comments
-dt_file_list <- NULL
-
-# executed details comparison values for quick access
-dt_comparators_list <- list()
-
-# currently selected datatable row index
-row_index <- NULL
-
-current_mode <- shiny::reactiveVal(NULL)
-current_omit <- NULL
-
 # ==============================================================================
 # Custom input functions
 # ==============================================================================
@@ -289,16 +277,17 @@ update_download_links <- function(output, row, file1_link, file2_link) {
 # Helper method for getting the comparator related to specific row index
 # or creating a new comparator instance if one is not found from local
 # storage.
-get_comparator <- function(row_index, file1, file2) {
+get_comparator <- function(row_index, file1, file2, comparators_rv) {
   row_index_str <- as.character(row_index)
+  cache <- comparators_rv()
 
-  if (row_index_str %in% names(dt_comparators_list)) {
-    return(dt_comparators_list[[row_index_str]])
+  if (row_index_str %in% names(cache)) {
+    return(cache[[row_index_str]])
   }
 
   comparator <- verifyr2::create_comparator(file1, file2)
-  dt_comparators_list[[row_index_str]] <- comparator
-  dt_comparators_list <<- dt_comparators_list
+  cache[[row_index_str]] <- comparator
+  comparators_rv(cache)
 
   comparator
 }
@@ -309,13 +298,16 @@ update_details_comparison <- function(
   session,
   config_param,
   row,
-  row_index
+  row_index,
+  mode,
+  omit,
+  comparators_rv
 ) {
   file1 <- paste0(row[1])
   file2 <- paste0(row[2])
 
   options <- config_param$clone(deep = TRUE)
-  options$set("details.mode", current_mode())
+  options$set("details.mode", mode)
 
   # empty and hide the display elements by default before redrawing the contents
   set_visibility("details_tabs", FALSE)
@@ -336,9 +328,9 @@ update_details_comparison <- function(
     message = "Processing comparison details...",
     value = 0,
     {
-      comparator <- get_comparator(row_index, file1, file2)
+      comparator <- get_comparator(row_index, file1, file2, comparators_rv)
       details <- comparator$vrf_details(
-        omit   = current_omit,
+        omit   = omit,
         config = options
       )
 
@@ -352,7 +344,7 @@ update_details_comparison <- function(
     if ("text" == instance_data$type) {
       set_visibility("details_tabs", TRUE)
 
-      if ("full" == current_mode()) {
+      if ("full" == mode) {
         output$details_out_full <- shiny::renderUI({
           shiny::HTML(
             as.character(
@@ -557,13 +549,18 @@ server <- function(input, output, session) {
     "the side-by-side details comparison."
   )
 
-  list_of_files <- shiny::reactiveVal(NULL)
-  summary_text  <- shiny::reactiveVal(default1)
-  details_text  <- shiny::reactiveVal(default2)
-  file1_link    <- shiny::reactiveVal("")
-  file2_link    <- shiny::reactiveVal("")
-  prev_comments <- shiny::reactiveVal(c())
-  reprocess     <- shiny::reactiveVal(0)
+  list_of_files   <- shiny::reactiveVal(NULL)
+  summary_text    <- shiny::reactiveVal(default1)
+  details_text    <- shiny::reactiveVal(default2)
+  file1_link      <- shiny::reactiveVal("")
+  file2_link      <- shiny::reactiveVal("")
+  prev_comments   <- shiny::reactiveVal(c())
+  reprocess       <- shiny::reactiveVal(0)
+  comparators_rv  <- shiny::reactiveVal(list())
+  row_index_rv    <- shiny::reactiveVal(NULL)
+  current_mode_rv <- shiny::reactiveVal(NULL)
+  current_omit_rv <- shiny::reactiveVal(NULL)
+  dt_data_rv      <- shiny::reactiveVal(NULL)
 
   dt_proxy <- DT::dataTableProxy("summary_out")
 
@@ -583,15 +580,16 @@ server <- function(input, output, session) {
     },
     content = function(file) {
       col_exclude <- c("comments", "process_button")
-      dt_subset   <- dt_file_list[, !(names(dt_file_list) %in% col_exclude)]
-      prev_comments(dt_file_list[["comments_details"]])
+      dt_current  <- dt_data_rv()
+      dt_subset   <- dt_current[, !(names(dt_current) %in% col_exclude)]
+      prev_comments(dt_current[["comments_details"]])
       write.csv(dt_subset, file, row.names = FALSE)
     }
   )
 
   output$summary_out <- DT::renderDataTable({
     shiny::req(summary_verify())
-    dt_file_list <- summary_verify()
+    dt <- summary_verify()
 
     options <- list(
       columnDefs = list(
@@ -601,12 +599,12 @@ server <- function(input, output, session) {
     )
 
     colnames <- c(
-      names(dt_file_list)[-ncol(dt_file_list)],
+      names(dt)[-ncol(dt)],
       "Actions"
     )
 
     DT::datatable(
-      dt_file_list,
+      dt,
       selection = "none",
       escape    = FALSE,
       options   = options,
@@ -619,19 +617,24 @@ server <- function(input, output, session) {
   # ============================================================================
 
   shiny::observeEvent(input$go, {
-    check_comment_changes(input, prev_comments, on_confirm = function() {
-      dt_comparators_list <<- list()
-      result <- list_files(input, summary_text)
-      list_of_files(result)
-    })
+    check_comment_changes(
+      input,
+      prev_comments,
+      dt_data_rv,
+      on_confirm = function() {
+        comparators_rv(list())
+        result <- list_files(input, summary_text, current_omit_rv)
+        list_of_files(result)
+      }
+    )
   })
 
   shiny::observeEvent(input$details_tabs, {
-    if (!is.null(current_mode())) {
+    if (!is.null(current_mode_rv())) {
       mode <- sub("^tabs_details_", "", input$details_tabs)
 
-      if (mode != current_mode()) {
-        current_mode(mode)
+      if (mode != current_mode_rv()) {
+        current_mode_rv(mode)
 
         new_row_index <- input$process_row
         row <- summary_verify()[new_row_index, ]
@@ -642,46 +645,50 @@ server <- function(input, output, session) {
           session,
           config,
           row,
-          new_row_index
+          new_row_index,
+          current_mode_rv(),
+          current_omit_rv(),
+          comparators_rv
         )
       }
     } else {
-      current_mode(config$get("details.mode"))
+      current_mode_rv(config$get("details.mode"))
     }
   })
 
   shiny::observeEvent(input$save_comments, {
-    if (is.null(dt_file_list)) {
-      dt_file_list <<- summary_verify()
-    }
-
+    idx     <- row_index_rv()
     comment <- input$details_out_comments
 
-    dt_file_list[row_index, "comments_details"] <- comment
-    dt_file_list[row_index, "comments"] <- ifelse(comment != "", "yes", "no")
-    dt_file_list <<- dt_file_list
+    dt <- dt_data_rv()
+    dt[idx, "comments_details"] <- comment
+    dt[idx, "comments"] <- ifelse(comment != "", "yes", "no")
+    dt_data_rv(dt)
 
-    DT::replaceData(dt_proxy, dt_file_list, resetPaging = FALSE)
+    DT::replaceData(dt_proxy, dt_data_rv(), resetPaging = FALSE)
     shinyjs::delay(100, {
       session$sendCustomMessage(
         "highlightRow",
-        list(row_id = row_index)
+        list(row_id = idx)
       )
     })
   })
 
   shiny::observeEvent(input$clear_comments, {
-    if (!is.null(dt_file_list)) {
-      if ("" != dt_file_list[row_index, "comments_details"]) {
-        dt_file_list[row_index, "comments_details"] <- ""
-        dt_file_list[row_index, "comments"] <- "no"
-        dt_file_list <<- dt_file_list
+    idx <- row_index_rv()
+    dt  <- dt_data_rv()
 
-        DT::replaceData(dt_proxy, dt_file_list, resetPaging = FALSE)
+    if (!is.null(dt)) {
+      if ("" != dt[idx, "comments_details"]) {
+        dt[idx, "comments_details"] <- ""
+        dt[idx, "comments"] <- "no"
+        dt_data_rv(dt)
+
+        DT::replaceData(dt_proxy, dt_data_rv(), resetPaging = FALSE)
         shinyjs::delay(100, {
           session$sendCustomMessage(
             "highlightRow",
-            list(row_id = row_index)
+            list(row_id = idx)
           )
         })
       }
@@ -707,11 +714,27 @@ server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$submit_apply, {
-    apply_config(session, input, prev_comments, reprocess, config, save = FALSE)
+    apply_config(
+      session,
+      input,
+      prev_comments,
+      reprocess,
+      config,
+      dt_data_rv,
+      save = FALSE
+    )
   })
 
   shiny::observeEvent(input$submit_apply_save, {
-    apply_config(session, input, prev_comments, reprocess, config, save = TRUE)
+    apply_config(
+      session,
+      input,
+      prev_comments,
+      reprocess,
+      config,
+      dt_data_rv,
+      save = TRUE
+    )
   })
 
   shiny::observeEvent(input$reset_config_modal, {
@@ -728,14 +751,9 @@ server <- function(input, output, session) {
     shiny::req(list_of_files())
     reprocess()
 
-    # clear the global data and comment field
-    dt_file_list <<- NULL
-    row_index <<- NULL
-    shiny::updateTextAreaInput(session, "details_out_comments", value = "")
-
     dt_file_list <- tibble::tibble(list_of_files()) |>
       dplyr::mutate(
-        omitted = current_omit,
+        omitted = current_omit_rv(),
         comparison = NA_character_,
         comments = "no",
         comments_details = "",
@@ -773,7 +791,13 @@ server <- function(input, output, session) {
                 shiny::setProgress(detail = file1)
 
                 # Process a single row
-                comparator <- get_comparator(row_index, file1, file2)
+                comparator <- get_comparator(
+                  row_index,
+                  file1,
+                  file2,
+                  comparators_rv
+                )
+
                 result <- comparator$vrf_summary(
                   omit   = omitted,
                   config = config
@@ -791,6 +815,12 @@ server <- function(input, output, session) {
     dt_file_list
   })
 
+  shiny::observeEvent(summary_verify(), {
+    dt_data_rv(summary_verify())
+    row_index_rv(NULL)
+    shiny::updateTextAreaInput(session, "details_out_comments", value = "")
+  })
+
   shiny::observe({
     # handle changes in folder selections
     update_folder_selections(input, session, roots)
@@ -800,9 +830,18 @@ server <- function(input, output, session) {
     new_row_index <- input$process_row
 
     # clear/initialize comparison specific comment value when selecting a row
-    if (!is.null(row_index)) {
-      if (row_index != new_row_index) {
-        row_comment <- paste0(dt_file_list[new_row_index, "comments_details"])
+    if (!is.null(row_index_rv())) {
+      if (row_index_rv() != new_row_index) {
+        dt <- dt_data_rv()
+
+        row_comment <- if (!is.null(dt)) paste0(dt[new_row_index, "comments_details"]) else ""
+
+        if (!is.null(dt)) {
+          row_comment <- paste0(dt[new_row_index, "comments_details"])
+        } else {
+          row_comment <- ""
+        }
+
         shiny::updateTextAreaInput(
           session,
           "details_out_comments",
@@ -814,18 +853,21 @@ server <- function(input, output, session) {
     set_visibility("comparison_comments_container", TRUE)
     set_visibility("details_tabs", TRUE)
 
-    row_index <<- new_row_index
+    row_index_rv(new_row_index)
     row <- summary_verify()[new_row_index, ]
 
     # list side-by-side comparison
-    set_reactive_text("details_text", "")
+    details_text("")
     update_details_comparison(
       input,
       output,
       session,
       config,
       row,
-      new_row_index
+      new_row_index,
+      current_mode_rv(),
+      current_omit_rv(),
+      comparators_rv
     )
 
     # set up the file download links for the compared files
@@ -838,14 +880,11 @@ server <- function(input, output, session) {
     )
   })
 
-  set_reactive_text <- function(reactive_id, text, class = "") {
-    do.call(reactive_id, list(text))
-  }
 }
 
-list_files <- function(input, summary_text) {
+list_files <- function(input, summary_text, current_omit_rv) {
   if (input$compare_tabs == "tabs_folder") {
-    current_omit <<- input$omit_rows
+    current_omit_rv(input$omit_rows)
 
     if (file.exists(input$folder1) && file.exists(input$folder2)) {
       set_visibility("comparison_comments_container", FALSE)
@@ -865,7 +904,7 @@ list_files <- function(input, summary_text) {
       NULL
     }
   } else {
-    current_omit <<- input$omit_file_rows
+    current_omit_rv(input$omit_file_rows)
 
     if (file.exists(input$file1) && file.exists(input$file2)) {
       set_visibility("comparison_comments_container", FALSE)
@@ -964,6 +1003,7 @@ apply_config <- function(
   prev_comments,
   reprocess,
   config,
+  dt_data_rv,
   save
 ) {
   schema <- config$schema
@@ -979,14 +1019,19 @@ apply_config <- function(
 
   # possible reload is wrapped in the confirmation dialog check
   if (reload) {
-    check_comment_changes(input, prev_comments, on_confirm = function() {
-      store_config(input, keys, config, save)
+    check_comment_changes(
+      input,
+      prev_comments,
+      dt_data_rv,
+      on_confirm = function() {
+        store_config(input, keys, config, save)
 
-      # force current file reprocessing
-      reprocess(reprocess() + 1)
-    }, on_cancel = function() {
-      cancel_config(session, config)
-    })
+        # force current file reprocessing
+        reprocess(reprocess() + 1)
+      }, on_cancel = function() {
+        cancel_config(session, config)
+      }
+    )
   } else {
     store_config(input, keys, config, save)
   }
@@ -1030,10 +1075,11 @@ reset_config <- function(session, config) {
 check_comment_changes <- function(
   input,
   prev_contents,
+  dt_data_rv,
   on_confirm,
   on_cancel = function(...) {}
 ) {
-  comments <- dt_file_list[["comments_details"]]
+  comments <- dt_data_rv()[["comments_details"]]
 
   # if the current comment data is empty don't show the modal
   skip <- length(comments) == 0 || all(is.na(comments) | trimws(comments) == "")
