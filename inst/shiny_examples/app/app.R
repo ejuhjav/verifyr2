@@ -834,8 +834,6 @@ server <- function(input, output, session) {
       if (row_index_rv() != new_row_index) {
         dt <- dt_data_rv()
 
-        row_comment <- if (!is.null(dt)) paste0(dt[new_row_index, "comments_details"]) else ""
-
         if (!is.null(dt)) {
           row_comment <- paste0(dt[new_row_index, "comments_details"])
         } else {

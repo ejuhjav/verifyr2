@@ -38,6 +38,7 @@ comparator <- RtfFileComparator$new(file1, file2)
 \itemize{
 \item \href{#method-RtfFileComparator-vrf_contents}{\code{RtfFileComparator$vrf_contents()}}
 \item \href{#method-RtfFileComparator-vrf_images}{\code{RtfFileComparator$vrf_images()}}
+\item \href{#method-RtfFileComparator-safe_read_rtf}{\code{RtfFileComparator$safe_read_rtf()}}
 \item \href{#method-RtfFileComparator-clone}{\code{RtfFileComparator$clone()}}
 }
 }
@@ -106,6 +107,24 @@ given source file.
 \item{\code{file}}{file for which to get the embedded image details}
 
 \item{\code{config}}{configuration values}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-RtfFileComparator-safe_read_rtf"></a>}}
+\if{latex}{\out{\hypertarget{method-RtfFileComparator-safe_read_rtf}{}}}
+\subsection{Method \code{safe_read_rtf()}}{
+RTF content reading method with some fallback options to fix simple
+file content issues.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RtfFileComparator$safe_read_rtf(file)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{file}}{file for which to get the embedded image details}
 }
 \if{html}{\out{</div>}}
 }
