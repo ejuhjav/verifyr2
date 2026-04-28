@@ -51,7 +51,7 @@ RtfFileComparator <- R6::R6Class(
       self$vrf_open_debug("Rtf::vrf_contents", config)
 
       # Get the RTF text content
-      contents <- striprtf::read_rtf(file = file)
+      contents <- self$safe_read_rtf(file = file)
       result   <- self$vrf_contents_inner(contents, config, omit)
 
       self$vrf_close_debug()
@@ -105,6 +105,29 @@ RtfFileComparator <- R6::R6Class(
 
       self$vrf_close_debug()
       result
+    },
+
+    #' @description
+    #' RTF content reading method with some fallback options to fix simple
+    #' file content issues.
+    #'
+    #' @param file file for which to get the embedded image details
+    #'
+    safe_read_rtf = function(file) {
+      tryCatch({
+        striprtf::read_rtf(file)
+      }, error = function(e) {
+        txt <- readLines(file, warn = FALSE)
+
+        if (!any(grepl("\\\\ansicpg0", txt, fixed = FALSE))) {
+          stop(e)
+        }
+
+        txt_fixed  <- sub("\\\\ansicpg0", "\\\\ansicpg1252", txt)
+        txt_single <- paste(txt_fixed, collapse = "\n")
+
+        striprtf::strip_rtf(txt_single)
+      })
     }
   )
 )
