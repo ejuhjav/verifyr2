@@ -324,3 +324,22 @@ test_that(paste(
     "File content has changes in 1 place(s)."
   ))
 })
+
+################################################################################
+# Corrupted RTF files
+################################################################################
+
+test_that(paste(
+  "Returns 'File content has changes in 5 place(s).' for corrupted",
+  "RTF files"
+), {
+  file1 <- testthat::test_path(base, "changes_five_rows_content_corrupted.rtf")
+  file2 <- testthat::test_path(base, "base_corrupted.rtf")
+
+  comparator <- create_comparator(file1, file2)
+  result     <- comparator$vrf_summary(config = config)
+
+  expect_equal(result, paste(
+    "File content has changes in 5 place(s)."
+  ))
+})
