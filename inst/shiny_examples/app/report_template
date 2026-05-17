@@ -1,0 +1,182 @@
+---
+title: "File Comparison Report"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    theme: flatly
+    highlight: tango
+    self_contained: true
+params:
+  dt:              NULL
+  omit_val:        NULL
+  current_omit_rv: NULL
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(knitr)
+library(kableExtra)
+
+dt       <- params$dt
+omit_val <- params$omit_val
+n_total  <- nrow(dt)
+n_pass   <- sum(grepl("No differences", dt$comparison))
+n_fail   <- n_total - n_pass
+
+# ── Pre-render all FAIL diffs and collect <style> tags ────────────────────────
+# diffobj injects <style> blocks that must live in <head>. We collect them here
+# and emit them once at the top; the body HTML has them stripped out.
+diff_results  <- vector("list", n_total)
+
+for (i in seq_len(n_total)) {
+  is_pass <- grepl("No differences", dt$comparison[i])
+  if (is_pass) next
+
+  # Always create a fresh comparator with a fresh config
+  comparator <- verifyr2::create_comparator(dt$file1[i], dt$file2[i])
+  opts <- verifyr2::Config$new()
+  opts$set("details.mode", "summary")
+  omit_param <- if (!is.null(params$omit_val) && params$omit_val != "") params$omit_val else NULL
+  details <- tryCatch(
+    comparator$vrf_details(config = opts, omit = omit_param),
+    error = function(e) list(list(type = "text", content = paste0("<p style='color:red;'>Error: ", conditionMessage(e), "</p>")))
+  )
+
+  for (d in details) {
+    if (d$type == "text") {
+      # Store content as-is — styles are inline and render fine in self_contained HTML
+      diff_results[[i]] <- as.character(d$content)
+    }
+  }
+}
+```
+
+
+```{r header, results='asis'}
+cat(paste0(
+  "<div style='display:flex;justify-content:space-between;align-items:center;",
+  "border-bottom:3px solid #1B5EAD;padding-bottom:16px;margin-bottom:24px;'>",
+  "<span style='font-size:13px;color:#666;'>",
+  "<strong style='color:#1B5EAD;'>Generated:</strong> ",
+  format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+  if (!is.null(omit_val) && omit_val != "")
+    paste0(" &nbsp;|&nbsp; <strong style='color:#1B5EAD;'>Omit pattern:</strong> <code>",
+           omit_val, "</code>")
+  else "",
+  "</span>",
+  "</div>"
+))
+```
+
+## Overview
+
+```{r overview}
+data.frame(
+  Metric = c("Total files", "Match", "Mismatch"),
+  Count  = c(n_total, n_pass, n_fail)
+) |>
+  kable("html", align = c("l", "r")) |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE,
+    position = "left"
+  ) |>
+  row_spec(2, color = "#5a8a20", bold = TRUE) |>
+  row_spec(3, color = "#c04820", bold = TRUE)
+```
+
+## Summary
+
+```{r summary_table}
+summary_df <- data.frame(
+  File     = basename(dt$file1),
+  Result   = dt$comparison,
+  Status   = ifelse(grepl("No differences", dt$comparison),
+                    "Match", "Mismatch"),
+  Comments = ifelse(!is.null(dt$comments_details) & dt$comments_details != "",
+                    dt$comments_details, "\u2014"),
+  stringsAsFactors = FALSE
+)
+
+summary_df |>
+  kable("html", align = c("l", "l", "c", "l")) |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = TRUE
+  ) |>
+  column_spec(3, bold = TRUE,
+    color = ifelse(summary_df$Status == "Match", "#5a8a20", "#c04820")
+  )
+```
+
+## Details
+
+```{r details, results='asis'}
+for (i in seq_len(nrow(dt))) {
+  file1    <- dt$file1[i]
+  file2    <- dt$file2[i]
+  result   <- dt$comparison[i]
+  comment  <- dt$comments_details[i]
+  is_pass  <- grepl("No differences", result)
+  status   <- if (is_pass) "Match" else "Mismatch"
+  colour   <- if (is_pass) "#5a8a20" else "#c04820"
+  border   <- if (is_pass) "#8DC63F" else "#e05a2a"
+  badge_bg <- if (is_pass) "#e8f5d0" else "#fde9e0"
+
+  cat(paste0(
+    "\n<div style='margin-bottom:28px;border-radius:8px;overflow:hidden;",
+    "border:1px solid #e8e8e8;border-left:4px solid ", border, ";'>",
+
+    # File name + status badge
+    "<div style='padding:12px 16px;background:#fafafa;border-bottom:1px solid #eee;",
+    "display:flex;justify-content:space-between;align-items:center;'>",
+    "<strong style='font-family:monospace;font-size:14px;'>", basename(file1), "</strong>",
+    "<span style='padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;",
+    "background:", badge_bg, ";color:", colour, ";'>", status, "</span>",
+    "</div>",
+
+    # File paths
+    "<div style='padding:10px 16px;background:#fff;border-bottom:1px solid #f0f0f0;",
+    "font-size:12px;color:#555;font-family:monospace;'>",
+    "<span style='color:#999;text-transform:uppercase;font-size:10px;'>Base</span><br/>",
+    file1, "<br/>",
+    "<span style='color:#999;text-transform:uppercase;font-size:10px;",
+    "margin-top:4px;display:block;'>Compare</span>",
+    file2,
+    "</div>",
+
+    # Result text + optional comment
+    "<div style='padding:12px 16px;background:#fff;",
+    if (!is_pass) "border-bottom:1px solid #f0f0f0;" else "", "'>",
+    "<span style='font-size:13px;color:#333;'>", result, "</span>",
+    if (!is.null(comment) && comment != "")
+      paste0("<div style='margin-top:8px;padding:8px 12px;background:#fff8e8;",
+             "border-left:3px solid #F7A800;font-size:13px;color:#7a5800;'>",
+             "<strong>Comment:</strong> ", comment, "</div>")
+    else "",
+    "</div>"
+  ))
+
+  if (is_pass) {
+    cat(paste0(
+      "<div style='padding:12px 16px;background:#fff;color:#2e7d32;font-size:13px;'>",
+      "&#10003;&nbsp; Files are identical &mdash; no differences to display.",
+      "</div>"
+    ))
+  } else {
+    diff_html <- diff_results[[i]]
+    cat("<div style='padding:12px 16px;background:#fff;overflow-x:auto;'>")
+    if (!is.null(diff_html) && nchar(diff_html) > 0) {
+      cat(diff_html)
+    } else {
+      cat(paste0("<p style='color:#888;margin:0;'>", result, "</p>"))
+    }
+    cat("</div>")
+  }
+
+  cat("</div>\n")
+}
+```
