@@ -17,6 +17,7 @@ if (isTRUE(debug)) {
   config$set("generic.debug", "yes")
 }
 
+
 # ==============================================================================
 # Custom input functions
 # ==============================================================================
@@ -604,23 +605,27 @@ server <- function(input, output, session) {
       
       omit_val <- if (!is.null(current_omit_rv()) && current_omit_rv() != "") current_omit_rv() else NULL
       
+      # Render to a controlled temp dir to avoid pandoc path issues on Windows
       tmp_dir  <- tempdir()
-      tmp_file   <- file.path(tmp_dir, "report_output.html")
-      tmp_rmd    <- file.path(tmp_dir, "report_template.Rmd")
-      source_rmd <- file.path(getwd(), "report_template.Rmd")
-      file.copy(source_rmd, tmp_rmd, overwrite = TRUE)
+      tmp_file <- file.path(tmp_dir, "report_output.html")
+      
+      # Copy the .Rmd to the temp dir so relative paths (e.g. knitr) work correctly
+      tmp_rmd <- file.path(tmp_dir, "report_template.Rmd")
+      file.copy("report_template.Rmd", tmp_rmd, overwrite = TRUE)
       
       tryCatch({
         rmarkdown::render(
-          input             = tmp_rmd,
-          output_file       = tmp_file,
-          output_dir        = tmp_dir,
-          knit_root_dir     = tmp_dir,
+          input         = tmp_rmd,
+          output_file   = tmp_file,
+          output_dir    = tmp_dir,
+          knit_root_dir = tmp_dir,
           intermediates_dir = tmp_dir,
-          params = list(
-            dt              = dt,
-            omit_val        = omit_val,
-            current_omit_rv = current_omit_rv()
+          params      = list(
+            dt               = dt,
+            omit_val         = omit_val,
+            config           = config,
+            comparators_rv   = comparators_rv(),
+            current_omit_rv  = current_omit_rv()
           ),
           envir = new.env(parent = globalenv())
         )
@@ -636,6 +641,7 @@ server <- function(input, output, session) {
       })
     }
   )
+  
   
   output$summary_out <- DT::renderDataTable({
     shiny::req(summary_verify())
