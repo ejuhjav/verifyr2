@@ -25,10 +25,12 @@ Imports:
 Suggests: 
     DT,
     fs,
+    kableExtra,
     magick,
     pkgload,
     pdftools,
     purrr,
+    rmarkdown,
     shinyjs,
     shinyFiles,
     shinytest2,

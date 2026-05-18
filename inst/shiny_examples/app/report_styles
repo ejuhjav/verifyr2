@@ -1,0 +1,104 @@
+/* verifyr2 Comparison Report Styles
+   Override these styles to customise the report appearance */
+
+.report-header {
+  border-bottom: 2px solid #1B5EAD;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+  font-size: 13px;
+  color: #666;
+}
+
+.report-header strong {
+  color: #1B5EAD;
+}
+
+.file-section {
+  margin-bottom: 24px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #e8e8e8;
+}
+
+.file-match  { border-left: 4px solid #8DC63F; }
+.file-mismatch { border-left: 4px solid #e05a2a; }
+
+.file-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: #fafafa;
+  border-bottom: 1px solid #eee;
+}
+
+.file-name {
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.status-badge {
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.badge-match    { background: #e8f5d0; color: #5a8a20; }
+.badge-mismatch { background: #fde9e0; color: #c04820; }
+
+.file-paths {
+  padding: 8px 14px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 12px;
+  color: #555;
+  font-family: monospace;
+  word-break: break-all;
+}
+
+.path-label {
+  color: #999;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-family: sans-serif;
+}
+
+.file-result {
+  padding: 10px 14px;
+  background: #fff;
+  font-size: 13px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.comment-box {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #fff8e8;
+  border-left: 3px solid #F7A800;
+  font-size: 13px;
+  color: #7a5800;
+}
+
+.diff-output {
+  padding: 12px 14px;
+  background: #fff;
+  overflow-x: auto;
+}
+
+.match-message { color: #2e7d32; }
+
+.no-diff { color: #888; margin: 0; }
+
+/* Wider content area */
+.main-container {
+    max-width: 1400px !important;
+    width: 95% !important;
+}
+
+/* Alternating row shading in summary table */
+table tbody tr:nth-child(odd)  { background-color: #f8f8f8; }
+table tbody tr:nth-child(even) { background-color: #ffffff; }
+table tbody tr:hover           { background-color: #f0f4f8; }
+table th { background-color: #f0f0f0; font-weight: 700; }
+table td, table th { padding: 8px 16px; }
