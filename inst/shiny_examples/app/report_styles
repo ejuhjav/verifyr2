@@ -89,3 +89,15 @@
 .match-message { color: #2e7d32; }
 
 .no-diff { color: #888; margin: 0; }
+
+/* Wider content area */
+.main-container {
+    max-width: 1400px !important;
+    width: 95% !important;
+}
+
+/* Alternating row shading in summary table */
+table tbody tr:nth-child(odd)  { background-color: #f8f8f8; }
+table tbody tr:nth-child(even) { background-color: #ffffff; }
+table tbody tr:hover           { background-color: #f0f4f8; }
+table th { background-color: #f0f0f0; font-weight: 700; }
