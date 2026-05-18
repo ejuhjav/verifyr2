@@ -11,8 +11,7 @@ output:
     self_contained: true
 params:
   dt:              NULL
-  omit_val:        NULL
-  current_omit_rv: NULL
+  omit_val:        NULL  
 ---
 
 ```{r setup, include=FALSE}
