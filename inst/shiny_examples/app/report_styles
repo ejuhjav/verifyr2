@@ -101,3 +101,4 @@ table tbody tr:nth-child(odd)  { background-color: #f8f8f8; }
 table tbody tr:nth-child(even) { background-color: #ffffff; }
 table tbody tr:hover           { background-color: #f0f4f8; }
 table th { background-color: #f0f0f0; font-weight: 700; }
+table td, table th { padding: 8px 16px; }
