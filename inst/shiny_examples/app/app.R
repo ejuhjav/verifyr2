@@ -593,7 +593,8 @@ server <- function(input, output, session) {
 
   output$download_html <- shiny::downloadHandler(
     filename = function() {
-      paste0("Verifyr2_Comparison_Report_", format(Sys.Date(), "%Y%m%d"), ".html")
+      paste0("Verifyr2_Comparison_Report_",
+             format(Sys.Date(), "%Y%m%d"), ".html")
     },
     content = function(file) {
       dt <- dt_data_rv()
@@ -611,6 +612,10 @@ server <- function(input, output, session) {
       file.copy(source_rmd, tmp_rmd, overwrite = TRUE)
       file.copy(file.path(getwd(), "report_styles.css"),
                 file.path(tmp_dir, "report_styles.css"), overwrite = TRUE)
+      ico_src <- file.path(getwd(), "www", "verifyr2.ico")
+      if (file.exists(ico_src)) {
+        file.copy(ico_src, file.path(tmp_dir, "verifyr2.ico"), overwrite = TRUE)
+      }
 
       tryCatch({
         rmarkdown::render(
