@@ -1,5 +1,4 @@
-/* verifyr2 Comparison Report Styles
-   Override these styles to customise the report appearance */
+/* report_styles.css */
 
 .report-header {
   border-bottom: 2px solid #1B5EAD;
