@@ -162,6 +162,13 @@ div.custom-img-diffobj-container > div {
     margin-left: 5px;
 }
 
+.custom-img-diffobj-image-display {
+    margin-left: 13px;
+    background-color: #eeeeee;
+    border-left: 1px solid #888888;
+    height: 100%;
+}
+
 #download_html {
     display: none;
     margin-top: 10px;
