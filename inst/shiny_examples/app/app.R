@@ -183,7 +183,7 @@ summary_container <- function() {
     ),
     shiny::downloadButton(
       "download_html",
-      "Download Comparison Report"
+      "Download Comparison Report as HTML"
     ),
   )
 }
@@ -591,10 +591,27 @@ server <- function(input, output, session) {
     }
   )
 
+  # Enable/disable HTML report button based on required package availability
+  observe({
+    has_deps <- requireNamespace("rmarkdown", quietly = TRUE) &&
+                requireNamespace("kableExtra", quietly = TRUE)
+    shinyjs::toggleState("download_html", condition = has_deps)
+    if (!has_deps) {
+      missing <- c(
+        if (!requireNamespace("rmarkdown",   quietly = TRUE)) "rmarkdown",
+        if (!requireNamespace("kableExtra", quietly = TRUE)) "kableExtra"
+      )
+      shinyjs::runjs(paste0(
+        "$('#download_html').attr('title', 'Missing packages: ",
+        paste(missing, collapse = ", "),
+        "');"
+      ))
+    }
+  })
+
   output$download_html <- shiny::downloadHandler(
     filename = function() {
-      paste0("Verifyr2_Comparison_Report_",
-             format(Sys.Date(), "%Y%m%d"), ".html")
+      paste0("Verifyr2_Comparison_Report_", format(Sys.time(), "%Y%m%d_%H%M"), ".html")
     },
     content = function(file) {
       dt <- dt_data_rv()
@@ -617,8 +634,9 @@ server <- function(input, output, session) {
         file.copy(ico_src, file.path(tmp_dir, "verifyr2.ico"), overwrite = TRUE)
       }
 
-      tryCatch({
-        rmarkdown::render(
+      shiny::withProgress(message = "Generating HTML report...", value = 0, {
+        tryCatch({
+          rmarkdown::render(
           input  = tmp_rmd,
           output_file = tmp_file,
           params = list(
@@ -627,15 +645,16 @@ server <- function(input, output, session) {
           ),
           envir = new.env(parent = globalenv())
         )
-        file.copy(tmp_file, file, overwrite = TRUE)
-      }, error = function(e) {
-        msg <- conditionMessage(e)
-        writeLines(paste0(
-          "<html><body>",
-          "<h2 style='color:red;'>Report generation failed</h2>",
-          "<pre>", htmltools::htmlEscape(msg), "</pre>",
-          "</body></html>"
-        ), file)
+          file.copy(tmp_file, file, overwrite = TRUE)
+        }, error = function(e) {
+          msg <- conditionMessage(e)
+          writeLines(paste0(
+            "<html><body>",
+            "<h2 style='color:red;'>Report generation failed</h2>",
+            "<pre>", htmltools::htmlEscape(msg), "</pre>",
+            "</body></html>"
+          ), file)
+        })
       })
     }
   )
@@ -804,7 +823,18 @@ server <- function(input, output, session) {
     shiny::req(list_of_files())
     reprocess()
 
-    dt_file_list <- tibble::tibble(list_of_files()) |>
+    # Natural sort so file2 comes before file10 regardless of naming convention
+    natural_key <- function(x) {
+      parts <- strsplit(x, "(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)", perl = TRUE)[[1]]
+      nums  <- suppressWarnings(as.numeric(parts))
+      paste(ifelse(is.na(nums), parts, sprintf("%020.0f", nums)), collapse = "\t")
+    }
+    files_sorted <- list_of_files()
+    files_sorted <- files_sorted[
+      order(vapply(basename(files_sorted$file1), natural_key, character(1))),
+    ]
+
+    dt_file_list <- tibble::tibble(files_sorted) |>
       dplyr::mutate(
         omitted = current_omit_rv(),
         comparison = NA_character_,
