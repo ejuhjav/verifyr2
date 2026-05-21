@@ -25,7 +25,6 @@ Imports:
 Suggests: 
     DT,
     fs,
-    kableExtra,
     magick,
     pkgload,
     pdftools,
