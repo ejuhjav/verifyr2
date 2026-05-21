@@ -592,19 +592,12 @@ server <- function(input, output, session) {
   )
 
   # Enable/disable HTML report button based on required package availability
-  observe({
-    has_deps <- requireNamespace("rmarkdown", quietly = TRUE) &&
-                requireNamespace("kableExtra", quietly = TRUE)
+ observe({
+    has_deps <- requireNamespace("rmarkdown", quietly = TRUE)
     shinyjs::toggleState("download_html", condition = has_deps)
     if (!has_deps) {
-      missing <- c(
-        if (!requireNamespace("rmarkdown",   quietly = TRUE)) "rmarkdown",
-        if (!requireNamespace("kableExtra", quietly = TRUE)) "kableExtra"
-      )
       shinyjs::runjs(paste0(
-        "$('#download_html').attr('title', 'Missing packages: ",
-        paste(missing, collapse = ", "),
-        "');"
+        "$('#download_html').attr('title', 'Missing packages: rmarkdown');"
       ))
     }
   })
