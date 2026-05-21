@@ -611,7 +611,7 @@ server <- function(input, output, session) {
 
   output$download_html <- shiny::downloadHandler(
     filename = function() {
-      paste0("Verifyr2_Comparison_Report_", format(Sys.time(), "%Y%m%d_%H%M"), ".html")
+      paste0("Verifyr2_Comparison_Report_", format(Sys.time(), "%Y%m%d_%Hh%Mm%Ss"), ".html")
     },
     content = function(file) {
       dt <- dt_data_rv()
