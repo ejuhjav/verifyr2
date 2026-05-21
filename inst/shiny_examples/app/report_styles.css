@@ -1,4 +1,4 @@
-/* report_styles.css*/
+/* report_styles.css */
 
 .report-header {
   border-bottom: 2px solid #1B5EAD;
@@ -102,6 +102,7 @@
 }
 
 /* Alternating row shading in summary table */
+table { width: 100%; }
 table tbody tr:nth-child(odd)  { background-color: #f8f8f8; }
 table tbody tr:nth-child(even) { background-color: #ffffff; }
 table tbody tr:hover           { background-color: #f0f4f8; }
