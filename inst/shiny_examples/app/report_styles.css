@@ -1,4 +1,4 @@
-/* report_styles.css */
+/* report_styles.css*/
 
 .report-header {
   border-bottom: 2px solid #1B5EAD;
@@ -83,6 +83,12 @@
   padding: 12px 14px;
   background: #fff;
   overflow-x: auto;
+  font-size: 12px;
+}
+
+.diff-output .diffobj-container,
+.diff-output .diffobj-container * {
+  font-size: 12px !important;
 }
 
 .match-message { color: #2e7d32; }
@@ -99,5 +105,12 @@
 table tbody tr:nth-child(odd)  { background-color: #f8f8f8; }
 table tbody tr:nth-child(even) { background-color: #ffffff; }
 table tbody tr:hover           { background-color: #f0f4f8; }
-table th { background-color: #f0f0f0; font-weight: 700; }
-table td, table th { padding: 8px 16px; }
+table th { background-color: #f0f0f0; font-weight: 700; padding: 8px 20px; }
+table td { padding: 8px 20px; }
+
+/* Logo inline in header */
+.title-logo {
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
