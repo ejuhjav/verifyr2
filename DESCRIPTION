@@ -29,6 +29,7 @@ Suggests:
     pkgload,
     pdftools,
     purrr,
+    rmarkdown,
     shinyjs,
     shinyFiles,
     shinytest2,

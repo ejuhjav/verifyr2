@@ -1,0 +1,242 @@
+---
+title: "File Comparison Report"
+output:
+  html_document:
+    theme: flatly
+    highlight: tango
+    self_contained: true
+params:
+  # Comparison data frame containing file paths, results and comments
+  dt:       NULL
+  # Optional string pattern used to omit rows from comparisons
+  omit_val: NULL
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+dt       <- params$dt
+omit_val <- params$omit_val
+n_total  <- nrow(dt)
+n_pass   <- sum(grepl("No differences", dt$comparison))
+n_fail   <- n_total - n_pass
+
+# Pre-render all FAIL diffs
+diff_results <- vector("list", n_total)
+
+# Initialise config once outside the loop
+opts <- verifyr2::Config$new()
+opts$set("details.mode", "summary")
+
+for (i in seq_len(n_total)) {
+  if (grepl("No differences", dt$comparison[i])) next
+
+  comparator <- verifyr2::create_comparator(dt$file1[i], dt$file2[i])
+
+  details <- tryCatch(
+    comparator$vrf_details(config = opts, omit = omit_val),
+    error = function(e) {
+      list(list(
+        type    = "text",
+        content = paste0(
+          "<p style='color:red;'>Error: ", conditionMessage(e), "</p>"
+        )
+      ))
+    }
+  )
+
+  # Collect all detail items — a file can return multiple items
+  item_html <- character(0)
+  for (d in details) {
+    if (d$type == "text") {
+      item_html <- c(item_html, as.character(d$content))
+    } else if (d$type == "image") {
+      img1      <- d$content$image1
+      img2      <- d$content$image2
+      img3      <- d$content$image3
+      img3_html <- if (!is.null(img3)) {
+        paste0(
+          "<div style='flex:1;min-width:200px;'>",
+          "<div class='path-label'>Difference</div>",
+          "<img src='", img3, "' style='width:100%;border:1px solid #eee;'/>",
+          "</div>"
+        )
+      } else {
+        ""
+      }
+      item_html <- c(item_html, paste0(
+        "<div style='display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;'>",
+        "<div style='flex:1;min-width:200px;'>",
+        "<div class='path-label'>Base</div>",
+        "<img src='", img1, "' style='width:100%;border:1px solid #eee;'/>",
+        "</div>",
+        "<div style='flex:1;min-width:200px;'>",
+        "<div class='path-label'>Compare</div>",
+        "<img src='", img2, "' style='width:100%;border:1px solid #eee;'/>",
+        "</div>",
+        img3_html,
+        "</div>"
+      ))
+    }
+  }
+  diff_results[[i]] <- paste(item_html, collapse = "")
+}
+```
+
+```{r load_styles, results='asis', echo=FALSE}
+css_file <- "report_styles.css"
+if (file.exists(css_file)) {
+  cat(
+    "<style>\n",
+    paste(readLines(css_file, warn = FALSE), collapse = "\n"),
+    "\n</style>\n"
+  )
+}
+```
+
+```{r header, results='asis'}
+logo_path <- "verifyr2.ico"
+logo_html <- ""
+if (file.exists(logo_path)) {
+  logo_b64  <- base64enc::base64encode(logo_path)
+  logo_html <- paste0(
+    "<img src='data:image/x-icon;base64,", logo_b64,
+    "' style='height:20px;vertical-align:middle;margin-right:8px;'/>  "
+  )
+}
+omit_html <- if (!is.null(omit_val)) {
+  paste0(
+    " &nbsp;|&nbsp; <strong>Omit pattern:</strong> <code>",
+    omit_val,
+    "</code>"
+  )
+} else {
+  ""
+}
+cat(paste0(
+  "<div class='report-header'>",
+  logo_html,
+  "<strong>Generated:</strong> ",
+  format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+  omit_html,
+  " &nbsp;|&nbsp; <strong>Generated with</strong> ",
+  "<a href='https://github.com/ejuhjav/verifyr2' target='_blank'>verifyr2</a>",
+  "</div>"
+))
+```
+
+## Overview
+
+```{r overview}
+knitr::kable(
+  data.frame(
+    "Total files" = n_total,
+    Match = paste0(
+      "<span style='color:#5a8a20;font-weight:700;'>", n_pass, "</span>"
+    ),
+    Mismatch = paste0(
+      "<span style='color:#c04820;font-weight:700;'>", n_fail, "</span>"
+    ),
+    check.names = FALSE
+  ),
+  format = "html",
+  align  = c("c", "c", "c"),
+  escape = FALSE
+)
+```
+
+## Summary
+
+```{r summary_table}
+is_match    <- grepl("No differences", dt$comparison)
+badge_match <- paste0(
+  "<span class='badge-match' style='padding:2px 8px;border-radius:20px;",
+  "font-size:11px;font-weight:700;background:#e8f5d0;color:#5a8a20;'>",
+  "Match</span>"
+)
+badge_mismatch <- paste0(
+  "<span class='badge-mismatch' style='padding:2px 8px;border-radius:20px;",
+  "font-size:11px;font-weight:700;background:#fde9e0;color:#c04820;'>",
+  "Mismatch</span>"
+)
+status_html <- ifelse(is_match, badge_match, badge_mismatch)
+file_links <- paste0(
+  "<a href='#detail-", seq_len(nrow(dt)), "'>",
+  basename(dt$file1),
+  "</a>"
+)
+knitr::kable(
+  data.frame(
+    File     = file_links,
+    Result   = dt$comparison,
+    Status   = status_html,
+    Comments = ifelse(
+      !is.null(dt$comments_details) & dt$comments_details != "",
+      dt$comments_details,
+      "\u2014"
+    ),
+    stringsAsFactors = FALSE
+  ),
+  format = "html",
+  align  = c("l", "l", "c", "l"),
+  escape = FALSE
+)
+```
+
+## Details
+
+```{r details, results='asis'}
+for (i in seq_len(nrow(dt))) {
+  file1   <- dt$file1[i]
+  file2   <- dt$file2[i]
+  result  <- dt$comparison[i]
+  comment <- dt$comments_details[i]
+  is_pass <- grepl("No differences", result)
+  status  <- if (is_pass) "Match" else "Mismatch"
+  section_class <- if (is_pass) "file-match" else "file-mismatch"
+  badge_class   <- if (is_pass) "badge-match" else "badge-mismatch"
+
+  comment_html <- if (!is.null(comment) && comment != "") {
+    paste0(
+      "<div class='comment-box'><strong>Comment:</strong> ", comment, "</div>"
+    )
+  } else {
+    ""
+  }
+
+  cat(paste0(
+    "\n<div id='detail-", i, "' class='file-section ", section_class, "'>",
+    "<div class='file-header'>",
+    "<strong class='file-name'>", basename(file1), "</strong>",
+    "<span class='status-badge ", badge_class, "'>", status, "</span>",
+    "</div>",
+    "<div class='file-paths'>",
+    "<span class='path-label'>Base</span><br/>", file1, "<br/>",
+    "<span class='path-label'>Compare</span><br/>", file2,
+    "</div>",
+    "<div class='file-result'>",
+    "<span>", result, "</span>",
+    comment_html,
+    "</div>"
+  ))
+
+  if (is_pass) {
+    cat(paste0(
+      "<div class='diff-output match-message'>",
+      "&#10003;&nbsp; Files are identical.",
+      "</div>"
+    ))
+  } else {
+    diff_html <- diff_results[[i]]
+    cat("<div class='diff-output'>")
+    if (!is.null(diff_html) && nchar(diff_html) > 0) {
+      cat(diff_html)
+    } else {
+      cat(paste0("<p class='no-diff'>", result, "</p>"))
+    }
+    cat("</div>")
+  }
+
+  cat("</div>\n")
+}
+```

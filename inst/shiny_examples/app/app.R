@@ -181,6 +181,10 @@ summary_container <- function() {
       "download_csv",
       "Download comparison results as CSV"
     ),
+    shiny::downloadButton(
+      "download_html",
+      "Download Comparison Report as HTML"
+    ),
   )
 }
 
@@ -587,6 +591,67 @@ server <- function(input, output, session) {
     }
   )
 
+  # Enable/disable HTML report button based on required package availability
+ observe({
+    has_deps <- requireNamespace("rmarkdown", quietly = TRUE)
+    shinyjs::toggleState("download_html", condition = has_deps)
+    if (!has_deps) {
+      shinyjs::runjs(paste0(
+        "$('#download_html').attr('title', 'Missing packages: rmarkdown');"
+      ))
+    }
+  })
+
+  output$download_html <- shiny::downloadHandler(
+    filename = function() {
+      paste0("Verifyr2_Comparison_Report_", format(Sys.time(), "%Y%m%d_%Hh%Mm%Ss"), ".html")
+    },
+    content = function(file) {
+      dt <- dt_data_rv()
+      if (is.null(dt)) {
+        writeLines("<html><body><p>No data available.</p></body></html>", file)
+        return()
+      }
+
+      omit_val <- current_omit_rv()
+
+      tmp_dir    <- tempdir()
+      tmp_file   <- file.path(tmp_dir, "report_output.html")
+      source_rmd <- file.path(getwd(), "report_template.Rmd")
+      tmp_rmd    <- file.path(tmp_dir, "report_template.Rmd")
+      file.copy(source_rmd, tmp_rmd, overwrite = TRUE)
+      file.copy(file.path(getwd(), "report_styles.css"),
+                file.path(tmp_dir, "report_styles.css"), overwrite = TRUE)
+      ico_src <- file.path(getwd(), "www", "verifyr2.ico")
+      if (file.exists(ico_src)) {
+        file.copy(ico_src, file.path(tmp_dir, "verifyr2.ico"), overwrite = TRUE)
+      }
+
+      shiny::withProgress(message = "Generating HTML report...", value = 0, {
+        tryCatch({
+          rmarkdown::render(
+          input  = tmp_rmd,
+          output_file = tmp_file,
+          params = list(
+            dt       = dt,
+            omit_val = omit_val
+          ),
+          envir = new.env(parent = globalenv())
+        )
+          file.copy(tmp_file, file, overwrite = TRUE)
+        }, error = function(e) {
+          msg <- conditionMessage(e)
+          writeLines(paste0(
+            "<html><body>",
+            "<h2 style='color:red;'>Report generation failed</h2>",
+            "<pre>", htmltools::htmlEscape(msg), "</pre>",
+            "</body></html>"
+          ), file)
+        })
+      })
+    }
+  )
+
   output$summary_out <- DT::renderDataTable({
     shiny::req(summary_verify())
     dt <- summary_verify()
@@ -751,7 +816,18 @@ server <- function(input, output, session) {
     shiny::req(list_of_files())
     reprocess()
 
-    dt_file_list <- tibble::tibble(list_of_files()) |>
+    # Natural sort so file2 comes before file10 regardless of naming convention
+    natural_key <- function(x) {
+      parts <- strsplit(x, "(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)", perl = TRUE)[[1]]
+      nums  <- suppressWarnings(as.numeric(parts))
+      paste(ifelse(is.na(nums), parts, sprintf("%020.0f", nums)), collapse = "\t")
+    }
+    files_sorted <- list_of_files()
+    files_sorted <- files_sorted[
+      order(vapply(basename(files_sorted$file1), natural_key, character(1))),
+    ]
+
+    dt_file_list <- tibble::tibble(files_sorted) |>
       dplyr::mutate(
         omitted = current_omit_rv(),
         comparison = NA_character_,
@@ -887,6 +963,7 @@ list_files <- function(input, summary_text, current_omit_rv) {
     if (file.exists(input$folder1) && file.exists(input$folder2)) {
       set_visibility("comparison_comments_container", FALSE)
       shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
+      shinyjs::runjs("$('#download_html').css('display', 'inline-block');")
       set_reactive_text(summary_text, "")
 
       verifyr2::list_folder_files(
@@ -907,6 +984,7 @@ list_files <- function(input, summary_text, current_omit_rv) {
     if (file.exists(input$file1) && file.exists(input$file2)) {
       set_visibility("comparison_comments_container", FALSE)
       shinyjs::runjs("$('#download_csv').css('display', 'inline-block');")
+      shinyjs::runjs("$('#download_html').css('display', 'inline-block');")
       set_reactive_text(summary_text, "")
 
       verifyr2::list_files(
