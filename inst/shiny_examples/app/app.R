@@ -179,7 +179,7 @@ summary_container <- function() {
     shiny::textOutput("summary_text_output"),
     shiny::downloadButton(
       "download_csv",
-      "Download comparison results as CSV"
+      "Download Comparison Results as CSV"
     ),
     shiny::downloadButton(
       "download_html",
@@ -592,7 +592,7 @@ server <- function(input, output, session) {
   )
 
   # Enable/disable HTML report button based on required package availability
- observe({
+  shiny::observe({
     has_deps <- requireNamespace("rmarkdown", quietly = TRUE)
     shinyjs::toggleState("download_html", condition = has_deps)
     if (!has_deps) {
@@ -604,7 +604,11 @@ server <- function(input, output, session) {
 
   output$download_html <- shiny::downloadHandler(
     filename = function() {
-      paste0("Verifyr2_Comparison_Report_", format(Sys.time(), "%Y%m%d_%Hh%Mm%Ss"), ".html")
+      paste0(
+        "Verifyr2_Comparison_Report_",
+        format(Sys.time(), "%Y%m%d_%Hh%Mm%Ss"),
+        ".html"
+      )
     },
     content = function(file) {
       dt <- dt_data_rv()
@@ -613,31 +617,36 @@ server <- function(input, output, session) {
         return()
       }
 
-      omit_val <- current_omit_rv()
+      version  <- as.character(utils::packageVersion("verifyr2"))
+      tmp_dir  <- tempdir()
+      tmp_rmd  <- file.path(tmp_dir, "report_template.Rmd")
+      tmp_file <- file.path(tmp_dir, "report_output.html")
 
-      tmp_dir    <- tempdir()
-      tmp_file   <- file.path(tmp_dir, "report_output.html")
-      source_rmd <- file.path(getwd(), "report_template.Rmd")
-      tmp_rmd    <- file.path(tmp_dir, "report_template.Rmd")
-      file.copy(source_rmd, tmp_rmd, overwrite = TRUE)
-      file.copy(file.path(getwd(), "report_styles.css"),
-                file.path(tmp_dir, "report_styles.css"), overwrite = TRUE)
-      ico_src <- file.path(getwd(), "www", "verifyr2.ico")
-      if (file.exists(ico_src)) {
-        file.copy(ico_src, file.path(tmp_dir, "verifyr2.ico"), overwrite = TRUE)
-      }
+      # Files that need to be copied to tmp dir for HTML export generation
+      files_to_copy <- c(
+        file.path(getwd(), "report_template.Rmd"),
+        file.path(getwd(), "report_styles.css"),
+        file.path(getwd(), "www", "verifyr2.ico")
+      )
+
+      file.copy(
+        from = files_to_copy,
+        to   = file.path(tmp_dir, basename(files_to_copy)),
+        overwrite = TRUE
+      )
 
       shiny::withProgress(message = "Generating HTML report...", value = 0, {
         tryCatch({
           rmarkdown::render(
-          input  = tmp_rmd,
-          output_file = tmp_file,
-          params = list(
-            dt       = dt,
-            omit_val = omit_val
-          ),
-          envir = new.env(parent = globalenv())
-        )
+            input  = tmp_rmd,
+            output_file = tmp_file,
+            params = list(
+              dt       = dt,
+              omit_val = current_omit_rv(),
+              version  = version
+            ),
+            envir = new.env(parent = globalenv())
+          )
           file.copy(tmp_file, file, overwrite = TRUE)
         }, error = function(e) {
           msg <- conditionMessage(e)
@@ -820,7 +829,9 @@ server <- function(input, output, session) {
     natural_key <- function(x) {
       parts <- strsplit(x, "(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)", perl = TRUE)[[1]]
       nums  <- suppressWarnings(as.numeric(parts))
-      paste(ifelse(is.na(nums), parts, sprintf("%020.0f", nums)), collapse = "\t")
+      paste(
+        ifelse(is.na(nums), parts, sprintf("%020.0f", nums)), collapse = "\t"
+      )
     }
     files_sorted <- list_of_files()
     files_sorted <- files_sorted[
