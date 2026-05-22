@@ -7,6 +7,7 @@
 - Improve options cancel, reset, and detecting changes requiring data reloading (TODO - add link before release) 
 - Add configuration option descriptions (TODO - add link before release)
 - Improve RTF reading to handle some invalid RTF contents (TODO - add link before release)
+- Implement HTML report with full comparison details (TODO - add link before release)
 
 ## Bug fixes
 - Fix issue with comment exporting with multiple folder loads (TODO - add link before release)
