@@ -10,6 +10,8 @@ params:
   dt:       NULL
   # Optional string pattern used to omit rows from comparisons
   omit_val: NULL
+  # Used verifyr2 library version
+  version:  NULL
 ---
 
 ```{r setup, include=FALSE}
@@ -17,6 +19,7 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
 dt       <- params$dt
 omit_val <- params$omit_val
+version  <- params$version
 n_total  <- nrow(dt)
 n_pass   <- sum(grepl("No differences", dt$comparison))
 n_fail   <- n_total - n_pass
@@ -120,7 +123,9 @@ cat(paste0(
   format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
   omit_html,
   " &nbsp;|&nbsp; <strong>Generated with</strong> ",
-  "<a href='https://github.com/ejuhjav/verifyr2' target='_blank'>verifyr2</a>",
+  "<a href='https://github.com/ejuhjav/verifyr2' target='_blank'>",
+  "verifyr2 (v", version, ")",
+  "</a>",
   "</div>"
 ))
 ```
