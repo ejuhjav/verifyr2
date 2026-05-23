@@ -1,17 +1,17 @@
 
-# verifyr2 1.2.0 (unreleased)
+# verifyr2 1.2.0
 
 ## New features
-- Support ignoring differences in empty spaces (optional) (TODO - add link before release)
-- Support word level details comparison (optional) (TODO - add link before release)
-- Improve options cancel, reset, and detecting changes requiring data reloading (TODO - add link before release) 
-- Add configuration option descriptions (TODO - add link before release)
-- Improve RTF reading to handle some invalid RTF contents (TODO - add link before release)
-- Implement HTML report with full comparison details (TODO - add link before release)
+- Add configuration option descriptions ([#48](https://github.com/ejuhjav/verifyr2/pull/48)).
+- Support ignoring differences in empty spaces ([#49](https://github.com/ejuhjav/verifyr2/pull/49)).
+- Support word level details comparison (optional) ([#52](https://github.com/ejuhjav/verifyr2/pull/52)).
+- Improve options cancel, reset, and detecting changes requiring data reloading ([#54](https://github.com/ejuhjav/verifyr2/pull/54)).
+- Improve RTF reading to handle some invalid RTF contents ([#62](https://github.com/ejuhjav/verifyr2/pull/62)).
+- Implement HTML report with full comparison details ([#66](https://github.com/ejuhjav/verifyr2/pull/66)).
 
 ## Bug fixes
-- Fix issue with comment exporting with multiple folder loads (TODO - add link before release)
-- Fix global variable usage in shiny app that was causing random behavior when running on server (TODO - add link before relase)
+- Fix issue with comment exporting with multiple folder loads ([#51](https://github.com/ejuhjav/verifyr2/pull/51)).
+- Fix global variable usage in shiny app that was causing random behavior when running on server ([#60](https://github.com/ejuhjav/verifyr2/pull/60)).
 
 # verifyr2 1.1.0
 
@@ -19,8 +19,8 @@
 - Improve file content comparisons to be ~90% faster for large file contents and to not cap at 1000 lines ([#43](https://github.com/ejuhjav/verifyr2/pull/43)).
 
 ## Bug fixes
-- Fix 'omit' input usage in 'compare specific files' tab in 'shiny' application ([#42](https://github.com/ejuhjav/verifyr2/pull/42)).
 - Add missing 'purrr' library suggestion that is needed for running the 'shiny' application ([#41](https://github.com/ejuhjav/verifyr2/pull/41)).
+- Fix 'omit' input usage in 'compare specific files' tab in 'shiny' application ([#42](https://github.com/ejuhjav/verifyr2/pull/42)).
 
 # verifyr2 1.0.0
 - Initial CRAN release.
