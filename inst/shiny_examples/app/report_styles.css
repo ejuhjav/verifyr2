@@ -1,9 +1,14 @@
 /* report_styles.css */
 
+#header {
+  padding-right: 100px;
+}
+
 .report-header {
   position: relative;
   border-bottom: 2px solid #1B5EAD;
   padding-bottom: 12px;
+  padding-right: 100px;
   margin-bottom: 24px;
   font-size: 13px;
   color: #666;
@@ -22,7 +27,6 @@
 
 .file-section {
   margin-bottom: 24px;
-  border-radius: 6px;
   overflow: hidden;
   border: 1px solid #e8e8e8;
 }
