@@ -578,7 +578,7 @@ server <- function(input, output, session) {
     filename = function() {
       paste0(
         "verifyr2_comparison_",
-        format(Sys.time(), "%Y%m%d_%H%M"),
+        format(Sys.time(), "%Y%m%d_%H%M%S"),
         ".csv"
       )
     },
@@ -606,7 +606,7 @@ server <- function(input, output, session) {
     filename = function() {
       paste0(
         "Verifyr2_Comparison_Report_",
-        format(Sys.time(), "%Y%m%d_%Hh%Mm%Ss"),
+        format(Sys.time(), "%Y%m%d_%H%M%S"),
         ".html"
       )
     },
