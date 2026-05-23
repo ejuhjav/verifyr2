@@ -1,11 +1,19 @@
 /* report_styles.css */
 
 .report-header {
+  position: relative;
   border-bottom: 2px solid #1B5EAD;
   padding-bottom: 12px;
   margin-bottom: 24px;
   font-size: 13px;
   color: #666;
+}
+
+.report-header img {
+  position: absolute;
+  right: 0;
+  top: -55px;
+  height: 75px;
 }
 
 .report-header strong {
