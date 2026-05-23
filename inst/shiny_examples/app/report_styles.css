@@ -1,11 +1,24 @@
 /* report_styles.css */
 
+#header {
+  padding-right: 100px;
+}
+
 .report-header {
+  position: relative;
   border-bottom: 2px solid #1B5EAD;
   padding-bottom: 12px;
+  padding-right: 100px;
   margin-bottom: 24px;
   font-size: 13px;
   color: #666;
+}
+
+.report-header img {
+  position: absolute;
+  right: 0;
+  top: -55px;
+  height: 75px;
 }
 
 .report-header strong {
@@ -14,7 +27,6 @@
 
 .file-section {
   margin-bottom: 24px;
-  border-radius: 6px;
   overflow: hidden;
   border: 1px solid #e8e8e8;
 }
@@ -31,7 +43,7 @@
   border-bottom: 1px solid #eee;
 }
 
-.file-name {
+.file-name strong {
   font-family: monospace;
   font-size: 14px;
 }

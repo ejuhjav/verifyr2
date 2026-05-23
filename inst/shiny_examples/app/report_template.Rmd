@@ -23,6 +23,7 @@ version  <- params$version
 n_total  <- nrow(dt)
 n_pass   <- sum(grepl("No differences", dt$comparison))
 n_fail   <- n_total - n_pass
+gh_link  <- "https://github.com/ejuhjav/verifyr2"
 
 # Pre-render all FAIL diffs
 diff_results <- vector("list", n_total)
@@ -103,8 +104,11 @@ logo_html <- ""
 if (file.exists(logo_path)) {
   logo_b64  <- base64enc::base64encode(logo_path)
   logo_html <- paste0(
-    "<img src='data:image/x-icon;base64,", logo_b64,
-    "' style='height:20px;vertical-align:middle;margin-right:8px;'/>  "
+    "<a href='", gh_link, "' title='verifyr2 in github' target='_blank'>",
+    "<img src='data:image/x-icon;base64,",
+    base64enc::base64encode(logo_path),
+    "'/>",
+    "</a>"
   )
 }
 omit_html <- if (!is.null(omit_val)) {
@@ -123,7 +127,7 @@ cat(paste0(
   format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
   omit_html,
   " &nbsp;|&nbsp; <strong>Generated with</strong> ",
-  "<a href='https://github.com/ejuhjav/verifyr2' target='_blank'>",
+  "<a href='", gh_link, "' title='verifyr2 in github' target='_blank'>",
   "verifyr2 (v", version, ")",
   "</a>",
   "</div>"
@@ -212,7 +216,10 @@ for (i in seq_len(nrow(dt))) {
   cat(paste0(
     "\n<div id='detail-", i, "' class='file-section ", section_class, "'>",
     "<div class='file-header'>",
-    "<strong class='file-name'>", basename(file1), "</strong>",
+    "<span class='file-name'>",
+    "<strong>", basename(file1), "</strong>",
+    " [<a href='#header'>back to top</a>]",
+    "</span>",
     "<span class='status-badge ", badge_class, "'>", status, "</span>",
     "</div>",
     "<div class='file-paths'>",
