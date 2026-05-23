@@ -31,7 +31,7 @@
   border-bottom: 1px solid #eee;
 }
 
-.file-name {
+.file-name strong {
   font-family: monospace;
   font-size: 14px;
 }

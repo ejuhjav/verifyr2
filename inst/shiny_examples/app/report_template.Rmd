@@ -212,7 +212,10 @@ for (i in seq_len(nrow(dt))) {
   cat(paste0(
     "\n<div id='detail-", i, "' class='file-section ", section_class, "'>",
     "<div class='file-header'>",
-    "<strong class='file-name'>", basename(file1), "</strong>",
+    "<span class='file-name'>",
+    "<strong>", basename(file1), "</strong>",
+    " [<a href='#header'>back to top</a>]",
+    "</span>",
     "<span class='status-badge ", badge_class, "'>", status, "</span>",
     "</div>",
     "<div class='file-paths'>",
