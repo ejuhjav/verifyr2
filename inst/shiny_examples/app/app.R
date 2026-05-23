@@ -647,6 +647,7 @@ server <- function(input, output, session) {
             ),
             envir = new.env(parent = globalenv())
           )
+          prev_comments(dt[["comments_details"]])
           file.copy(tmp_file, file, overwrite = TRUE)
         }, error = function(e) {
           msg <- conditionMessage(e)
@@ -657,6 +658,7 @@ server <- function(input, output, session) {
             "</body></html>"
           ), file)
         })
+        shiny::incProgress(1)
       })
     }
   )
