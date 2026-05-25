@@ -75,7 +75,7 @@ css_file1 <- "report_styles.css"
 css_file2 <- "image_diff_styles.css"
 
 if (file.exists(css_file1) && file.exists(css_file2)) {
-  tags$style(
+  htmltools::tags$style(
     includeText(css_file1),
     includeText(css_file2)
   )
@@ -89,11 +89,11 @@ logo_tag  <- NULL
 omit_tag  <- NULL
 
 if (file.exists(logo_path)) {
-  logo_tag <- tags$a(
+  logo_tag <- htmltools::tags$a(
     href = gh_link,
     title = "verifyr2 in github",
     target = "_blank",
-    tags$img(
+    htmltools::tags$img(
       src = paste0(
         "data:image/x-icon;base64,",
         base64enc::base64encode(logo_path)
@@ -105,19 +105,19 @@ if (file.exists(logo_path)) {
 if (!is.null(omit_val)) {
   omit_tag <- tagList(
     " \u00a0|\u00a0 ", # Safe unicode for &nbsp;
-    tags$strong("Omit pattern:"), " ",
-    tags$code(omit_val)
+    htmltools::tags$strong("Omit pattern:"), " ",
+    htmltools::tags$code(omit_val)
   )
 }
 
-report_header <- tags$div(
+report_header <- htmltools::tags$div(
   class = "report-header",
   logo_tag,
-  tags$strong("Generated:"), " ", format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+  htmltools::tags$strong("Generated:"), " ", format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
   omit_tag,
   " \u00a0|\u00a0 ",
-  tags$strong("Generated with"), " ",
-  tags$a(
+  htmltools::tags$strong("Generated with"), " ",
+  htmltools::tags$a(
     href = gh_link,
     title = "verifyr2 in github",
     target = "_blank",
@@ -167,12 +167,12 @@ htmltools::tags$table(
 ```{r summary_table}
 status_badge <- function(comparison_result) {
   if (grepl("No differences", comparison_result)) {
-    tags$span(
+    htmltools::tags$span(
       class = "status-badge badge-match",
       "Match"
     )
   } else {
-    tags$span(
+    htmltools::tags$span(
       class = "status-badge badge-mismatch",
       "Mismatch"
     )
@@ -180,25 +180,25 @@ status_badge <- function(comparison_result) {
 }
 
 rows <- lapply(seq_len(nrow(dt)), function(i) {
-  tags$tr(
+  htmltools::tags$tr(
     # File name as link
-    tags$td(
-      tags$a(
+    htmltools::tags$td(
+      htmltools::tags$a(
         href = paste0("#detail-", i),
         basename(dt$file1[i])
       )
     ),
     # Result
-    tags$td(
+    htmltools::tags$td(
       dt$comparison[i]
     ),
     # Status
-    tags$td(
+    htmltools::tags$td(
       class = "status-column",
       status_badge(dt$comparison[i])
     ),
     # Comments
-    tags$td(
+    htmltools::tags$td(
       if (!is.null(dt$comments_details[i]) && nzchar(dt$comments_details[i])) {
         dt$comments_details[i]
       } else {
@@ -208,19 +208,19 @@ rows <- lapply(seq_len(nrow(dt)), function(i) {
   )
 })
 
-table_html <- tags$table(
+table_html <- htmltools::tags$table(
   class = "diff-table",
 
-  tags$thead(
-    tags$tr(
-      tags$th("File"),
-      tags$th("Result"),
-      tags$th("Status"),
-      tags$th("Comments")
+  htmltools::tags$thead(
+    htmltools::tags$tr(
+      htmltools::tags$th("File"),
+      htmltools::tags$th("Result"),
+      htmltools::tags$th("Status"),
+      htmltools::tags$th("Comments")
     )
   ),
 
-  tags$tbody(
+  htmltools::tags$tbody(
     tagList(rows)
   )
 )
@@ -245,9 +245,9 @@ detail_sections <- lapply(seq_len(nrow(dt)), function(i) {
 
   # ---- Comment block (SAFE HTML via tags) ----
   comment_block <- if (!is.null(comment) && nzchar(comment)) {
-    tags$div(
+    htmltools::tags$div(
       class = "comment-box",
-      tags$strong("Comment:"),
+      htmltools::tags$strong("Comment:"),
       " ",
       comment
     )
@@ -256,64 +256,64 @@ detail_sections <- lapply(seq_len(nrow(dt)), function(i) {
   }
 
   # ---- Header ----
-  header <- tags$div(
+  header <- htmltools::tags$div(
     class = "file-header",
 
-    tags$span(
+    htmltools::tags$span(
       class = "file-name",
-      tags$strong(basename(file1)),
+      htmltools::tags$strong(basename(file1)),
       " [",
-      tags$a(href = "#header", "back to top"),
+      htmltools::tags$a(href = "#header", "back to top"),
       "]"
     ),
 
-    tags$span(
+    htmltools::tags$span(
       class = badge_class,
       if (is_pass) "Match" else "Mismatch"
     )
   )
 
   # ---- Paths ----
-  paths <- tags$div(
+  paths <- htmltools::tags$div(
     class = "file-paths",
 
-    tags$span(class = "path-label", "Base"),
-    tags$br(),
+    htmltools::tags$span(class = "path-label", "Base"),
+    htmltools::tags$br(),
     file1,
-    tags$br(),
+    htmltools::tags$br(),
 
-    tags$span(class = "path-label", "Compare"),
-    tags$br(),
+    htmltools::tags$span(class = "path-label", "Compare"),
+    htmltools::tags$br(),
     file2
   )
 
   # ---- Result block ----
-  result_block <- tags$div(
+  result_block <- htmltools::tags$div(
     class = "file-result",
-    tags$span(result),
+    htmltools::tags$span(result),
     comment_block
   )
 
   # ---- Diff output ----
   diff_html  <- diff_results[[i]]
   diff_block <- if (is_pass) {
-    tags$div(
+    htmltools::tags$div(
       class = "diff-output match-message",
       htmltools::HTML("&#10003;&nbsp; Files are identical.")
     )
   } else {
-    tags$div(
+    htmltools::tags$div(
       class = "diff-output",
       if (!is.null(diff_html) && length(diff_html) > 0) {
         diff_html
       } else {
-        tags$p(class = "no-diff", result)
+        htmltools::tags$p(class = "no-diff", result)
       }
     )
   }
 
   # ---- Full section ----
-  tags$div(
+  htmltools::tags$div(
     id = paste0("detail-", i),
     class = paste("file-section", section_class),
     header,

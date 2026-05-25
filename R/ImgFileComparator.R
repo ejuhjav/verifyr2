@@ -5,6 +5,7 @@
 #' part for the comparison.
 #'
 #' @import base64enc
+#' @import htmltools
 #'
 #' @include BinaryFileComparator.R
 #'
@@ -233,31 +234,31 @@ ImgFileComparator <- R6::R6Class(
         ),
 
         # Bottom images row
-        tags$div(
+        htmltools::tags$div(
           class = "custom-img-diffobj-container bottom",
-          tags$div(
+          htmltools::tags$div(
             class = "custom-img-diffobj-display-wrapper",
-            tags$div(
+            htmltools::tags$div(
               class = "custom-img-diffobj-image-display",
-              tags$img(
+              htmltools::tags$img(
                 src = image1,
                 alt = "Image1"
               )
             )
           ),
-          tags$div(
+          htmltools::tags$div(
             class = "custom-img-diffobj-display-wrapper",
-            tags$div(
+            htmltools::tags$div(
               class = "custom-img-diffobj-image-display",
-              tags$img(
+              htmltools::tags$img(
                 src = image2,
                 alt = "Image2"
               )
             )
           ),
-          tags$div(
+          htmltools::tags$div(
             class = "custom-img-diffobj-display-wrapper",
-            tags$div(
+            htmltools::tags$div(
               class = "custom-img-diffobj-image-display",
               image3_display
             )
