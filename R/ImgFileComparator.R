@@ -129,11 +129,11 @@ ImgFileComparator <- R6::R6Class(
       image2_base64 <- paste0(png_prefix, base64enc::base64encode(image2_raw))
 
       result <- list(
-        type = "image",
-        contents = list(
-          image1 = image1_base64,
-          image2 = image2_base64,
-          image3 = image3_base64
+        type     = "image",
+        contents = self$vrf_render_image_diff(
+          image1_base64,
+          image2_base64,
+          image3_base64
         )
       )
 
@@ -179,6 +179,64 @@ ImgFileComparator <- R6::R6Class(
         return("Image details comparison disabled.")
       }
       ""
+    },
+
+    #' @description
+    #' Method for rendering image differences as HTML.
+    #'
+    #' @param image1 first image as base64 decoded string
+    #' @param image2 second image as base64 decoded string
+    #' @param image3 differences image as base64 decoded string
+    #'
+    vrf_render_image_diff = function(image1, image2, image3) {
+      image3_display <- if (!is.null(image3)) {
+        paste0("<img src='", image3, "' alt='Difference Image' />")
+      } else {
+        paste0(
+          "<div class='custom-img-diffobj-image-display-empty'>",
+          "<div>No differences</div>",
+          "</div>"
+        )
+      }
+
+      paste0(
+        "<div class='custom-img-diffobj-wrapper'>",
+        "<div class='custom-img-diffobj-container top'>",
+        "<div class='custom-img-diffobj-display-wrapper'>",
+        "<div class='custom-img-diffobj-image custom-img-diffobj-img1'>",
+        "<span>Image version 1</span>",
+        "</div>",
+        "</div>",
+        "<div class='custom-img-diffobj-display-wrapper'>",
+        "<div class='custom-img-diffobj-image custom-img-diffobj-img2'>",
+        "<span>Image version 2</span>",
+        "</div>",
+        "</div>",
+        "<div class='custom-img-diffobj-display-wrapper'>",
+        "<div class='custom-img-diffobj-image custom-img-diffobj-img3'>",
+        "<span>Image difference</span>",
+        "</div>",
+        "</div>",
+        "</div>",
+        "<div class='custom-img-diffobj-container bottom'>",
+        "<div class='custom-img-diffobj-display-wrapper'>",
+        "<div class='custom-img-diffobj-image-display'>",
+        "<img src='", image1, "' alt='Image1' />",
+        "</div>",
+        "</div>",
+        "<div class='custom-img-diffobj-display-wrapper'>",
+        "<div class='custom-img-diffobj-image-display'>",
+        "<img src='", image2, "' alt='Image2' />",
+        "</div>",
+        "</div>",
+        "<div class='custom-img-diffobj-display-wrapper'>",
+        "<div class='custom-img-diffobj-image-display'>",
+        image3_display,
+        "</div>",
+        "</div>",
+        "</div>",
+        "</div>"
+      )
     }
   )
 )

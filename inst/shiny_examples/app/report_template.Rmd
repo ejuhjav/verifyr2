@@ -52,36 +52,7 @@ for (i in seq_len(n_total)) {
   # Collect all detail items — a file can return multiple items
   item_html <- character(0)
   for (d in details) {
-    if (d$type == "text") {
-      item_html <- c(item_html, as.character(d$content))
-    } else if (d$type == "image") {
-      img1      <- d$content$image1
-      img2      <- d$content$image2
-      img3      <- d$content$image3
-      img3_html <- if (!is.null(img3)) {
-        paste0(
-          "<div style='flex:1;min-width:200px;'>",
-          "<div class='path-label'>Difference</div>",
-          "<img src='", img3, "' style='width:100%;border:1px solid #eee;'/>",
-          "</div>"
-        )
-      } else {
-        ""
-      }
-      item_html <- c(item_html, paste0(
-        "<div style='display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;'>",
-        "<div style='flex:1;min-width:200px;'>",
-        "<div class='path-label'>Base</div>",
-        "<img src='", img1, "' style='width:100%;border:1px solid #eee;'/>",
-        "</div>",
-        "<div style='flex:1;min-width:200px;'>",
-        "<div class='path-label'>Compare</div>",
-        "<img src='", img2, "' style='width:100%;border:1px solid #eee;'/>",
-        "</div>",
-        img3_html,
-        "</div>"
-      ))
-    }
+    item_html <- c(item_html, as.character(d$content))
   }
   diff_results[[i]] <- paste(item_html, collapse = "")
 }
@@ -89,13 +60,16 @@ for (i in seq_len(n_total)) {
 
 ```{r load_styles, results='asis', echo=FALSE}
 css_file <- "report_styles.css"
-if (file.exists(css_file)) {
+image_diff_css_file <- "image_diff_styles.css"
+if (file.exists(css_file) && file.exists(image_diff_css_file)) {
   cat(
     "<style>\n",
     paste(readLines(css_file, warn = FALSE), collapse = "\n"),
+    paste(readLines(image_diff_css_file, warn = FALSE), collapse = "\n"),
     "\n</style>\n"
   )
 }
+
 ```
 
 ```{r header, results='asis'}

@@ -1,4 +1,9 @@
 
+# verifyr2 1.3.0 (unreleased)
+
+## Improvements
+- Refactor image comparison logic implementation to single place (todo: add link)
+
 # verifyr2 1.2.0
 
 ## New features
@@ -15,7 +20,7 @@
 
 # verifyr2 1.1.0
 
-## Performance improvements
+## Improvements
 - Improve file content comparisons to be ~90% faster for large file contents and to not cap at 1000 lines ([#43](https://github.com/ejuhjav/verifyr2/pull/43)).
 
 ## Bug fixes

@@ -50,11 +50,7 @@ test_that(paste(
 
   if (requireNamespace("magick", quietly = TRUE)) {
     expect_equal(result$type, "image")
-    expect_equal(typeof(contents), "list")
-    expect_equal(names(contents), c("image1", "image2", "image3"))
-    expect_equal(contents$image1, contents$image2)
-    expect_false(isTRUE(all.equal(contents$image1, contents$image3)))
-    expect_false(isTRUE(all.equal(contents$image2, contents$image3)))
+    expect_equal(typeof(contents), "character")
   } else {
     expect_equal(result$type, "text")
     expect_equal(result$contents, "Image details comparison disabled.")
@@ -73,11 +69,7 @@ test_that(paste(
 
   if (requireNamespace("magick", quietly = TRUE)) {
     expect_equal(result$type, "image")
-    expect_equal(typeof(contents), "list")
-    expect_equal(names(contents), c("image1", "image2", "image3"))
-    expect_false(isTRUE(all.equal(contents$image1, contents$image2)))
-    expect_false(isTRUE(all.equal(contents$image1, contents$image3)))
-    expect_false(isTRUE(all.equal(contents$image2, contents$image3)))
+    expect_equal(typeof(contents), "character")
   } else {
     expect_equal(result$type, "text")
     expect_equal(result$contents, "Image details comparison disabled.")
