@@ -3,6 +3,7 @@
 
 ## Improvements
 - Refactor image comparison logic implementation to single place (todo: add link)
+- Use htmltools for HTML generation outside of shiny app (todo: add link)
 
 # verifyr2 1.2.0
 

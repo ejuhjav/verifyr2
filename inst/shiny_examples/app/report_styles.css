@@ -25,6 +25,21 @@
   color: #1B5EAD;
 }
 
+.summary-table,
+.status-column {
+  text-align: center;
+}
+
+.summary-match {
+  color:#5a8a20;
+  font-weight:700;
+}
+
+.summary-mismatch {
+  color:#c04820;
+  font-weight:700;
+}
+
 .file-section {
   margin-bottom: 24px;
   overflow: hidden;
@@ -55,8 +70,15 @@
   font-weight: 700;
 }
 
-.badge-match    { background: #e8f5d0; color: #5a8a20; }
-.badge-mismatch { background: #fde9e0; color: #c04820; }
+.badge-match {
+  background:#e8f5d0;
+  color:#5a8a20;
+}
+
+.badge-mismatch {
+  background:#fde9e0;
+  color:#c04820;
+}
 
 .file-paths {
   padding: 8px 14px;
