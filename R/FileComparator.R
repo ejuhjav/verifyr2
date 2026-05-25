@@ -67,17 +67,17 @@ FileComparator <- R6::R6Class(
         self$vrf_add_debug("One of both of the files not available, unable perform comparison")
         result <- "File(s) not available; unable to compare."
       } else {
-        tryCatch({
+        #tryCatch({
           result   <- self$vrf_summary_inner(config, omit)
           addition <- self$vrf_details_supported(config)
 
           if ('' != addition) {
             result <- paste(result, addition)
           }
-        }, error = function(e) {
-          self$vrf_add_debug(paste("Processing failed with exception: ", conditionMessage(e)))
-          result <- paste0("Error reading file contents: ", conditionMessage(e))
-        })
+        #}, error = function(e) {
+          #self$vrf_add_debug(paste("Processing failed with exception: ", conditionMessage(e)))
+          #result <- paste0("Error reading file contents: ", conditionMessage(e))
+        #})
 
       }
 
@@ -127,17 +127,17 @@ FileComparator <- R6::R6Class(
           )
         )
       } else {
-        tryCatch({
+        #tryCatch({
           result <- self$vrf_details_inner(config, omit)
-        }, error = function(e) {
-          self$vrf_add_debug(paste("Processing failed with exception: ", conditionMessage(e)))
-          result <- list(
-            list(
-              type = "text",
-              contents = paste0("Error reading file contents: ", conditionMessage(e))
-            )
-          )
-        })
+        #}, error = function(e) {
+          #self$vrf_add_debug(paste("Processing failed with exception: ", conditionMessage(e)))
+          #result <- list(
+            #list(
+              #type = "text",
+              #contents = paste0("Error reading file contents: ", conditionMessage(e))
+            #)
+          #)
+        #})
       }
 
       self$details_comparison[[mode]] <- result
