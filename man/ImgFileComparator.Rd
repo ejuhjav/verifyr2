@@ -57,6 +57,7 @@ comparator <- ImgFileComparator$new(NULL, NULL, image1_raw, image2_raw)
 \item \href{#method-ImgFileComparator-vrf_details_inner_from_raw}{\code{ImgFileComparator$vrf_details_inner_from_raw()}}
 \item \href{#method-ImgFileComparator-vrf_details_inner_from_files}{\code{ImgFileComparator$vrf_details_inner_from_files()}}
 \item \href{#method-ImgFileComparator-vrf_details_supported}{\code{ImgFileComparator$vrf_details_supported()}}
+\item \href{#method-ImgFileComparator-vrf_render_image_diff}{\code{ImgFileComparator$vrf_render_image_diff()}}
 \item \href{#method-ImgFileComparator-clone}{\code{ImgFileComparator$clone()}}
 }
 }
@@ -178,6 +179,27 @@ summary string.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{config}}{configuration values}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ImgFileComparator-vrf_render_image_diff"></a>}}
+\if{latex}{\out{\hypertarget{method-ImgFileComparator-vrf_render_image_diff}{}}}
+\subsection{Method \code{vrf_render_image_diff()}}{
+Method for rendering image differences as HTML.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ImgFileComparator$vrf_render_image_diff(image1, image2, image3)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{image1}}{first image as base64 decoded string}
+
+\item{\code{image2}}{second image as base64 decoded string}
+
+\item{\code{image3}}{differences image as base64 decoded string}
 }
 \if{html}{\out{</div>}}
 }
