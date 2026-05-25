@@ -190,52 +190,79 @@ ImgFileComparator <- R6::R6Class(
     #'
     vrf_render_image_diff = function(image1, image2, image3) {
       image3_display <- if (!is.null(image3)) {
-        paste0("<img src='", image3, "' alt='Difference Image' />")
+        htmltools::tags$img(
+          src = image3,
+          alt = "Difference Image"
+        )
       } else {
-        paste0(
-          "<div class='custom-img-diffobj-image-display-empty'>",
-          "<div>No differences</div>",
-          "</div>"
+        htmltools::tags$div(
+          class = "custom-img-diffobj-image-display-empty",
+          htmltools::tags$div(
+            "No differences"
+          )
         )
       }
 
-      paste0(
-        "<div class='custom-img-diffobj-wrapper'>",
-        "<div class='custom-img-diffobj-container top'>",
-        "<div class='custom-img-diffobj-display-wrapper'>",
-        "<div class='custom-img-diffobj-image custom-img-diffobj-img1'>",
-        "<span>Image version 1</span>",
-        "</div>",
-        "</div>",
-        "<div class='custom-img-diffobj-display-wrapper'>",
-        "<div class='custom-img-diffobj-image custom-img-diffobj-img2'>",
-        "<span>Image version 2</span>",
-        "</div>",
-        "</div>",
-        "<div class='custom-img-diffobj-display-wrapper'>",
-        "<div class='custom-img-diffobj-image custom-img-diffobj-img3'>",
-        "<span>Image difference</span>",
-        "</div>",
-        "</div>",
-        "</div>",
-        "<div class='custom-img-diffobj-container bottom'>",
-        "<div class='custom-img-diffobj-display-wrapper'>",
-        "<div class='custom-img-diffobj-image-display'>",
-        "<img src='", image1, "' alt='Image1' />",
-        "</div>",
-        "</div>",
-        "<div class='custom-img-diffobj-display-wrapper'>",
-        "<div class='custom-img-diffobj-image-display'>",
-        "<img src='", image2, "' alt='Image2' />",
-        "</div>",
-        "</div>",
-        "<div class='custom-img-diffobj-display-wrapper'>",
-        "<div class='custom-img-diffobj-image-display'>",
-        image3_display,
-        "</div>",
-        "</div>",
-        "</div>",
-        "</div>"
+      htmltools::tags$div(
+        class = "custom-img-diffobj-wrapper",
+
+        # Top labels row
+        htmltools::tags$div(
+          class = "custom-img-diffobj-container top",
+          htmltools::tags$div(
+            class = "custom-img-diffobj-display-wrapper",
+            htmltools::tags$div(
+              class = "custom-img-diffobj-image custom-img-diffobj-img1",
+              htmltools::tags$span("Image version 1")
+            )
+          ),
+          htmltools::tags$div(
+            class = "custom-img-diffobj-display-wrapper",
+            htmltools::tags$div(
+              class = "custom-img-diffobj-image custom-img-diffobj-img2",
+              htmltools::tags$span("Image version 2")
+            )
+          ),
+          htmltools::tags$div(
+            class = "custom-img-diffobj-display-wrapper",
+            htmltools::tags$div(
+              class = "custom-img-diffobj-image custom-img-diffobj-img3",
+              htmltools::tags$span("Image difference")
+            )
+          )
+        ),
+
+        # Bottom images row
+        tags$div(
+          class = "custom-img-diffobj-container bottom",
+          tags$div(
+            class = "custom-img-diffobj-display-wrapper",
+            tags$div(
+              class = "custom-img-diffobj-image-display",
+              tags$img(
+                src = image1,
+                alt = "Image1"
+              )
+            )
+          ),
+          tags$div(
+            class = "custom-img-diffobj-display-wrapper",
+            tags$div(
+              class = "custom-img-diffobj-image-display",
+              tags$img(
+                src = image2,
+                alt = "Image2"
+              )
+            )
+          ),
+          tags$div(
+            class = "custom-img-diffobj-display-wrapper",
+            tags$div(
+              class = "custom-img-diffobj-image-display",
+              image3_display
+            )
+          )
+        )
       )
     }
   )

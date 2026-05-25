@@ -17,13 +17,13 @@ params:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
-dt       <- params$dt
-omit_val <- params$omit_val
-version  <- params$version
-n_total  <- nrow(dt)
-n_pass   <- sum(grepl("No differences", dt$comparison))
-n_fail   <- n_total - n_pass
-gh_link  <- "https://github.com/ejuhjav/verifyr2"
+dt         <- params$dt
+omit_val   <- params$omit_val
+version    <- params$version
+n_total    <- nrow(dt)
+n_match    <- sum(grepl("No differences", dt$comparison))
+n_mismatch <- n_total - n_match
+gh_link    <- "https://github.com/ejuhjav/verifyr2"
 
 # Pre-render all FAIL diffs
 diff_results <- vector("list", n_total)
@@ -50,23 +50,34 @@ for (i in seq_len(n_total)) {
   )
 
   # Collect all detail items — a file can return multiple items
-  item_html <- character(0)
+  item_html <- htmltools::tagList()
+
   for (d in details) {
-    item_html <- c(item_html, as.character(d$content))
+    content <- d$content
+
+    # S4 object returned by diffobj is not directly compatible with htmltools
+    if ("text" == d$type) {
+      content <- htmltools::HTML(as.character(content))
+    }
+
+    item_html <- htmltools::tagAppendChildren(
+      item_html,
+      content
+    )
   }
-  diff_results[[i]] <- paste(item_html, collapse = "")
+
+  diff_results[[i]] <- item_html
 }
 ```
 
 ```{r load_styles, results='asis', echo=FALSE}
-css_file <- "report_styles.css"
-image_diff_css_file <- "image_diff_styles.css"
-if (file.exists(css_file) && file.exists(image_diff_css_file)) {
-  cat(
-    "<style>\n",
-    paste(readLines(css_file, warn = FALSE), collapse = "\n"),
-    paste(readLines(image_diff_css_file, warn = FALSE), collapse = "\n"),
-    "\n</style>\n"
+css_file1 <- "report_styles.css"
+css_file2 <- "image_diff_styles.css"
+
+if (file.exists(css_file1) && file.exists(css_file2)) {
+  tags$style(
+    includeText(css_file1),
+    includeText(css_file2)
   )
 }
 
@@ -74,155 +85,243 @@ if (file.exists(css_file) && file.exists(image_diff_css_file)) {
 
 ```{r header, results='asis'}
 logo_path <- "verifyr2.ico"
-logo_html <- ""
+logo_tag  <- NULL
+omit_tag  <- NULL
+
 if (file.exists(logo_path)) {
-  logo_b64  <- base64enc::base64encode(logo_path)
-  logo_html <- paste0(
-    "<a href='", gh_link, "' title='verifyr2 in github' target='_blank'>",
-    "<img src='data:image/x-icon;base64,",
-    base64enc::base64encode(logo_path),
-    "'/>",
-    "</a>"
+  logo_tag <- tags$a(
+    href = gh_link,
+    title = "verifyr2 in github",
+    target = "_blank",
+    tags$img(
+      src = paste0(
+        "data:image/x-icon;base64,",
+        base64enc::base64encode(logo_path)
+      )
+    )
   )
 }
-omit_html <- if (!is.null(omit_val)) {
-  paste0(
-    " &nbsp;|&nbsp; <strong>Omit pattern:</strong> <code>",
-    omit_val,
-    "</code>"
+
+if (!is.null(omit_val)) {
+  omit_tag <- tagList(
+    " \u00a0|\u00a0 ", # Safe unicode for &nbsp;
+    tags$strong("Omit pattern:"), " ",
+    tags$code(omit_val)
   )
-} else {
-  ""
 }
-cat(paste0(
-  "<div class='report-header'>",
-  logo_html,
-  "<strong>Generated:</strong> ",
-  format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-  omit_html,
-  " &nbsp;|&nbsp; <strong>Generated with</strong> ",
-  "<a href='", gh_link, "' title='verifyr2 in github' target='_blank'>",
-  "verifyr2 (v", version, ")",
-  "</a>",
-  "</div>"
-))
+
+report_header <- tags$div(
+  class = "report-header",
+  logo_tag,
+  tags$strong("Generated:"), " ", format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+  omit_tag,
+  " \u00a0|\u00a0 ",
+  tags$strong("Generated with"), " ",
+  tags$a(
+    href = gh_link,
+    title = "verifyr2 in github",
+    target = "_blank",
+    paste0("verifyr2 (v", version, ")")
+  )
+)
+
+report_header
 ```
 
 ## Overview
 
 ```{r overview}
-knitr::kable(
-  data.frame(
-    "Total files" = n_total,
-    Match = paste0(
-      "<span style='color:#5a8a20;font-weight:700;'>", n_pass, "</span>"
-    ),
-    Mismatch = paste0(
-      "<span style='color:#c04820;font-weight:700;'>", n_fail, "</span>"
-    ),
-    check.names = FALSE
+htmltools::tags$table(
+  class = "summary-table",
+
+  htmltools::tags$thead(
+    htmltools::tags$tr(
+      htmltools::tags$th("Total files"),
+      htmltools::tags$th("Match"),
+      htmltools::tags$th("Mismatch")
+    )
   ),
-  format = "html",
-  align  = c("c", "c", "c"),
-  escape = FALSE
+
+  htmltools::tags$tr(
+    htmltools::tags$td(n_total),
+
+    htmltools::tags$td(
+      htmltools::tags$span(
+        class = "summary-match",
+        n_match
+      )
+    ),
+
+    htmltools::tags$td(
+      htmltools::tags$span(
+        class = "summary-mismatch",
+        n_mismatch
+      )
+    )
+  )
 )
 ```
 
 ## Summary
 
 ```{r summary_table}
-is_match    <- grepl("No differences", dt$comparison)
-badge_match <- paste0(
-  "<span class='badge-match' style='padding:2px 8px;border-radius:20px;",
-  "font-size:11px;font-weight:700;background:#e8f5d0;color:#5a8a20;'>",
-  "Match</span>"
-)
-badge_mismatch <- paste0(
-  "<span class='badge-mismatch' style='padding:2px 8px;border-radius:20px;",
-  "font-size:11px;font-weight:700;background:#fde9e0;color:#c04820;'>",
-  "Mismatch</span>"
-)
-status_html <- ifelse(is_match, badge_match, badge_mismatch)
-file_links <- paste0(
-  "<a href='#detail-", seq_len(nrow(dt)), "'>",
-  basename(dt$file1),
-  "</a>"
-)
-knitr::kable(
-  data.frame(
-    File     = file_links,
-    Result   = dt$comparison,
-    Status   = status_html,
-    Comments = ifelse(
-      !is.null(dt$comments_details) & dt$comments_details != "",
-      dt$comments_details,
-      "\u2014"
+status_badge <- function(comparison_result) {
+  if (grepl("No differences", comparison_result)) {
+    tags$span(
+      class = "status-badge badge-match",
+      "Match"
+    )
+  } else {
+    tags$span(
+      class = "status-badge badge-mismatch",
+      "Mismatch"
+    )
+  }
+}
+
+rows <- lapply(seq_len(nrow(dt)), function(i) {
+  tags$tr(
+    # File name as link
+    tags$td(
+      tags$a(
+        href = paste0("#detail-", i),
+        basename(dt$file1[i])
+      )
     ),
-    stringsAsFactors = FALSE
+    # Result
+    tags$td(
+      dt$comparison[i]
+    ),
+    # Status
+    tags$td(
+      class = "status-column",
+      status_badge(dt$comparison[i])
+    ),
+    # Comments
+    tags$td(
+      if (!is.null(dt$comments_details[i]) && nzchar(dt$comments_details[i])) {
+        dt$comments_details[i]
+      } else {
+        "\u2014"
+      }
+    )
+  )
+})
+
+table_html <- tags$table(
+  class = "diff-table",
+
+  tags$thead(
+    tags$tr(
+      tags$th("File"),
+      tags$th("Result"),
+      tags$th("Status"),
+      tags$th("Comments")
+    )
   ),
-  format = "html",
-  align  = c("l", "l", "c", "l"),
-  escape = FALSE
+
+  tags$tbody(
+    tagList(rows)
+  )
 )
+
+table_html
 ```
 
 ## Details
 
 ```{r details, results='asis'}
-for (i in seq_len(nrow(dt))) {
+detail_sections <- lapply(seq_len(nrow(dt)), function(i) {
+
   file1   <- dt$file1[i]
   file2   <- dt$file2[i]
   result  <- dt$comparison[i]
   comment <- dt$comments_details[i]
+
   is_pass <- grepl("No differences", result)
-  status  <- if (is_pass) "Match" else "Mismatch"
+
   section_class <- if (is_pass) "file-match" else "file-mismatch"
   badge_class   <- if (is_pass) "badge-match" else "badge-mismatch"
 
-  comment_html <- if (!is.null(comment) && comment != "") {
-    paste0(
-      "<div class='comment-box'><strong>Comment:</strong> ", comment, "</div>"
+  # ---- Comment block (SAFE HTML via tags) ----
+  comment_block <- if (!is.null(comment) && nzchar(comment)) {
+    tags$div(
+      class = "comment-box",
+      tags$strong("Comment:"),
+      " ",
+      comment
     )
   } else {
-    ""
+    NULL
   }
 
-  cat(paste0(
-    "\n<div id='detail-", i, "' class='file-section ", section_class, "'>",
-    "<div class='file-header'>",
-    "<span class='file-name'>",
-    "<strong>", basename(file1), "</strong>",
-    " [<a href='#header'>back to top</a>]",
-    "</span>",
-    "<span class='status-badge ", badge_class, "'>", status, "</span>",
-    "</div>",
-    "<div class='file-paths'>",
-    "<span class='path-label'>Base</span><br/>", file1, "<br/>",
-    "<span class='path-label'>Compare</span><br/>", file2,
-    "</div>",
-    "<div class='file-result'>",
-    "<span>", result, "</span>",
-    comment_html,
-    "</div>"
-  ))
+  # ---- Header ----
+  header <- tags$div(
+    class = "file-header",
 
-  if (is_pass) {
-    cat(paste0(
-      "<div class='diff-output match-message'>",
-      "&#10003;&nbsp; Files are identical.",
-      "</div>"
-    ))
+    tags$span(
+      class = "file-name",
+      tags$strong(basename(file1)),
+      " [",
+      tags$a(href = "#header", "back to top"),
+      "]"
+    ),
+
+    tags$span(
+      class = badge_class,
+      if (is_pass) "Match" else "Mismatch"
+    )
+  )
+
+  # ---- Paths ----
+  paths <- tags$div(
+    class = "file-paths",
+
+    tags$span(class = "path-label", "Base"),
+    tags$br(),
+    file1,
+    tags$br(),
+
+    tags$span(class = "path-label", "Compare"),
+    tags$br(),
+    file2
+  )
+
+  # ---- Result block ----
+  result_block <- tags$div(
+    class = "file-result",
+    tags$span(result),
+    comment_block
+  )
+
+  # ---- Diff output ----
+  diff_html  <- diff_results[[i]]
+  diff_block <- if (is_pass) {
+    tags$div(
+      class = "diff-output match-message",
+      htmltools::HTML("&#10003;&nbsp; Files are identical.")
+    )
   } else {
-    diff_html <- diff_results[[i]]
-    cat("<div class='diff-output'>")
-    if (!is.null(diff_html) && nchar(diff_html) > 0) {
-      cat(diff_html)
-    } else {
-      cat(paste0("<p class='no-diff'>", result, "</p>"))
-    }
-    cat("</div>")
+    tags$div(
+      class = "diff-output",
+      if (!is.null(diff_html) && length(diff_html) > 0) {
+        diff_html
+      } else {
+        tags$p(class = "no-diff", result)
+      }
+    )
   }
 
-  cat("</div>\n")
-}
+  # ---- Full section ----
+  tags$div(
+    id = paste0("detail-", i),
+    class = paste("file-section", section_class),
+    header,
+    paths,
+    result_block,
+    diff_block
+  )
+})
+
+htmltools::tagList(detail_sections)
 ```
