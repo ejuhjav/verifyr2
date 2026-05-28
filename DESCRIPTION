@@ -45,6 +45,7 @@ Collate:
     'Config.R'
     'Debugger.R'
     'TxtFileComparator.R'
+    'XlsxFileComparator.R'
     'FileComparatorFactory.R'
     'ImgFileComparator.R'
     'PdfFileComparator.R'
