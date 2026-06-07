@@ -120,7 +120,7 @@ PdfFileComparator <- R6::R6Class(
 
 Contributions to `verifyr2` are dynamic and welcome! Whether you are fixing a typo, reporting a bug, or building a brand-new file comparator, we appreciate your help.
 
-Please see our [Contributing Guide](CONTRIBUTING.md) for details on our code style, test requirements, and how to set up your local R development environment.
+Please see our [Contributing Guide](.github/CONTRIBUTING.md) for details on our code style, test requirements, and how to set up your local R development environment.
 
 ## Credits
 
