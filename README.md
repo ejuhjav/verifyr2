@@ -8,7 +8,7 @@
 <!-- badges: end -->
 
 `verifyr2` is an R package for extendable file comparison classes and methods including an
-example 'shiny' app for combining the functions into a convenient application.
+example `shiny` app for combining the functions into a convenient application.
 
 ## Package installation
 
@@ -21,7 +21,7 @@ The project is available in cran and can be installed with the following command
 ### Development version
 
 The latest development version can be installed from github using different install packages
-that work with github projects. One such option would be to use the 'devtools' package:
+that work with github projects. One such option would be to use the `devtools` package:
 
 ``` bash
 > install.packages("devtools")
@@ -43,9 +43,9 @@ Following additional libraries can be installed to extend the provided compariso
 
 ## Shiny app usage
 
-Launching the 'shiny' app requires that you have the following additional libraries installed as
-documented in the suggestion list; 'shinyjs', 'shinyFiles', and 'DT'. After all the necessary
-libraries are available, the included 'shiny' app can be launched with the following command:
+Launching the `shiny` app requires that you have the following additional libraries installed as
+documented in the suggestion list; `shinyjs`, `shinyFiles`, and `DT`. After all the necessary
+libraries are available, the included `shiny` app can be launched with the following command:
 
 ``` bash
 > verifyr2::run_example()
@@ -72,13 +72,13 @@ instantiating an explicit comparator manually
 ## Optional features
 
 Image comparison features - comparing single images as well as supported embedded images in file
-contents - requires additional 'magick' library to be installed. This is defined as an optional
-requirement for the 'verifyr2' package due to the additional OS level requirements of the package.
+contents - requires additional `magick` library to be installed. This is defined as an optional
+requirement for the `verifyr2` package due to the additional OS level requirements of the package.
 For more details on the package installation, see [magick package](https://github.com/ropensci/magick).
 
 PDF comparison features - reading PDF file contents as text for details comparison - requires
-additional 'pdftools' library to be installed. This is defined as an optional requirement for the
-'verifyr2' package due to the additional OS level requirements of the package. For more details on
+additional `pdftools` library to be installed. This is defined as an optional requirement for the
+`verifyr2` package due to the additional OS level requirements of the package. For more details on
 the package installation, see [pdftools package](https://github.com/ropensci/pdftools).
 
 ## Adding support to additional file types
