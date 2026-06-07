@@ -7,7 +7,7 @@
 [![Coverage Status](https://ejuhjav.github.io/verifyr2/coverage.svg)](https://ejuhjav.github.io/verifyr2/coverage/)
 <!-- badges: end -->
 
-Verifyr2 is an R package for extendable file comparison classes and methods including an
+`verifyr2` is an R package for extendable file comparison classes and methods including an
 example 'shiny' app for combining the functions into a convenient application.
 
 ## Package installation
@@ -90,7 +90,7 @@ simplified implementation for pdf file comparison - without testing pdftools ava
 logging parts - is an example of how to do this (see source file to see the full implementation with
 documentation).
 
-When using the provided generic create_comparator function along with your custom comparator class implementation, 
+When using the provided generic `create_comparator` function along with your custom comparator class implementation, 
 note that the comparator class name prefix must match with the compared file type. 
 
 ``` bash
@@ -124,6 +124,6 @@ Please see our [Contributing Guide](CONTRIBUTING.md) for details on our code sty
 
 ## Credits
 
-Verifyr2 implementation is based on the concept of the [verifyr package](https://github.com/novartis/verifyr).
+`verifyr2` package implementation is based on the concept of the [verifyr package](https://github.com/novartis/verifyr).
 
 
