@@ -30,7 +30,6 @@ XlsxFileComparator <- R6::R6Class(
   "XlsxFileComparator",
   inherit = TxtFileComparator,
   public = list(
-
     #' @description
     #' Method for getting the single file contents for the comparison. The
     #' method returns the file contents in two separate vectors inside a list.
@@ -40,7 +39,8 @@ XlsxFileComparator <- R6::R6Class(
     #' and shouldn't be called directly by the user.
     #'
     #' For XlsxFileComparator, each sheet is read and rows are converted to
-    #' tab-separated strings for text-based comparison.
+    #' tab-separated strings for text-based comparison. An empty row is added
+    #' after each sheet to make the sheet boundaries easier to spot.
     #'
     #' @param file   file for which to get the contents
     #' @param config configuration values
@@ -48,10 +48,8 @@ XlsxFileComparator <- R6::R6Class(
     #'
     vrf_contents = function(file, config, omit) {
       self$vrf_open_debug("Xlsx::vrf_contents", config)
-
       sheets   <- readxl::excel_sheets(file)
       contents <- character(0)
-
       for (sheet in sheets) {
         data <- readxl::read_excel(
           file,
@@ -59,24 +57,21 @@ XlsxFileComparator <- R6::R6Class(
           col_names = TRUE,
           col_types = "text"
         )
-
         # Add sheet header
         contents <- c(contents, paste0("[Sheet: ", sheet, "]"))
-
         if (nrow(data) > 0) {
           # Include column headers
           contents <- c(contents, paste(names(data), collapse = "\t"))
-
           # Convert each row to a tab-separated string
           rows <- apply(data, 1, function(r) {
             paste(ifelse(is.na(r), "", r), collapse = "\t")
           })
           contents <- c(contents, rows)
         }
+        # Add empty row after each sheet for readability
+        contents <- c(contents, "")
       }
-
       result <- self$vrf_contents_inner(contents, config, omit)
-
       self$vrf_close_debug()
       result
     }
