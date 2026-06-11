@@ -50,7 +50,7 @@ Collate:
     'ImgFileComparator.R'
     'PdfFileComparator.R'
     'TxtWithImagesComparator.R'
-    'RtfFileComparator.R' 
+    'RtfFileComparator.R'
     'list_files.R'
     'list_folder_files.R'
     'run_example.R'
