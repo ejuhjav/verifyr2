@@ -23,7 +23,6 @@
 #'
 #' @include BinaryFileComparator.R
 #' @include TxtFileComparator.R
-#' @include XlsxFileComparator.R
 #'
 #' @export
 #'
