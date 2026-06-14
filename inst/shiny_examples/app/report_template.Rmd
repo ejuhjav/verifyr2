@@ -31,6 +31,7 @@ diff_results <- vector("list", n_total)
 # Initialise config once outside the loop
 opts <- verifyr2::Config$new()
 opts$set("details.mode", "summary")
+opts$set("generic.level", "word")
 
 for (i in seq_len(n_total)) {
   if (grepl("No differences", dt$comparison[i])) next
@@ -113,7 +114,9 @@ if (!is.null(omit_val)) {
 report_header <- htmltools::tags$div(
   class = "report-header",
   logo_tag,
-  htmltools::tags$strong("Generated:"), " ", format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+  htmltools::tags$strong("Generated:"),
+  " ",
+  format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
   omit_tag,
   " \u00a0|\u00a0 ",
   htmltools::tags$strong("Generated with"), " ",
