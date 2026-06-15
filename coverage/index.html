@@ -107,8 +107,8 @@ table.table-condensed {
       </ul>
       <div class="tab-content" data-tabsetid="covr">
         <div class="tab-pane active" title="Files" data-value="Files" id="tab-covr-1">
-          <div class="datatables html-widget html-fill-item" id="htmlwidget-7f644bd55716e704b5a5" style="width:100%;height:500px;"></div>
-          <script type="application/json" data-for="htmlwidget-7f644bd55716e704b5a5">{"x":{"filter":"none","vertical":false,"fillContainer":false,"data":[["<a href=\"#\">R/run_example.R<\/a>","<a href=\"#\">R/FileComparator.R<\/a>","<a href=\"#\">R/BinaryFileComparator.R<\/a>","<a href=\"#\">R/RtfFileComparator.R<\/a>","<a href=\"#\">R/ImgFileComparator.R<\/a>","<a href=\"#\">R/FileComparatorFactory.R<\/a>","<a href=\"#\">R/TxtWithImagesComparator.R<\/a>","<a href=\"#\">R/Config.R<\/a>","<a href=\"#\">R/TxtFileComparator.R<\/a>","<a href=\"#\">R/Debugger.R<\/a>","<a href=\"#\">R/list_folder_files.R<\/a>","<a href=\"#\">R/PdfFileComparator.R<\/a>","<a href=\"#\">R/list_files.R<\/a>"],[20,260,138,133,270,88,185,337,376,134,55,81,39],[6,75,33,36,98,33,52,121,168,33,15,14,6],[0,59,28,33,92,31,49,120,167,33,15,14,6],[6,16,5,3,6,2,3,1,1,0,0,0,0],["0","92","11","28","3","26","8","82","88","12","2","25","2"],["0.00%","78.67%","84.85%","91.67%","93.88%","93.94%","94.23%","99.17%","99.40%","100.00%","100.00%","100.00%","100.00%"]],"container":"<table class=\"row-border\">\n  <thead>\n    <tr>\n      <th>File<\/th>\n      <th>Lines<\/th>\n      <th>Relevant<\/th>\n      <th>Covered<\/th>\n      <th>Missed<\/th>\n      <th>Hits / Line<\/th>\n      <th>Coverage<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":false,"dom":"t","paging":false,"columnDefs":[{"targets":6,"createdCell":"function(td, cellData, rowData, row, col) {\n  var percent = cellData.replace(\"%\", \"\");\n  if (percent > 90) {\n    var grad = \"linear-gradient(90deg, #edfde7 \" + cellData + \", white \" + cellData + \")\";\n  } else if (percent > 75) {\n    var grad = \"linear-gradient(90deg, #f9ffe5 \" + cellData + \", white \" + cellData + \")\";\n  } else {\n    var grad = \"linear-gradient(90deg, #fcece9 \" + cellData + \", white \" + cellData + \")\";\n  }\n  $(td).css(\"background\", grad);\n}\n"},{"className":"dt-right","targets":[1,2,3,4]},{"name":"File","targets":0},{"name":"Lines","targets":1},{"name":"Relevant","targets":2},{"name":"Covered","targets":3},{"name":"Missed","targets":4},{"name":"Hits / Line","targets":5},{"name":"Coverage","targets":6}],"order":[],"autoWidth":false,"orderClasses":false},"callback":"function(table) {\ntable.on('click.dt', 'a', function() {\n  files = $('div#files div');\n  files.not('div.hidden').addClass('hidden');\n  id = $(this).text();\n  files.filter('div[id=\\'' + id + '\\']').removeClass('hidden');\n  $('ul.nav a[data-value=Source]').text(id).tab('show');\n});\n}"},"evals":["options.columnDefs.0.createdCell","callback"],"jsHooks":[]}</script>
+          <div class="datatables html-widget html-fill-item" id="htmlwidget-865a50395b3ba218b167" style="width:100%;height:500px;"></div>
+          <script type="application/json" data-for="htmlwidget-865a50395b3ba218b167">{"x":{"filter":"none","vertical":false,"fillContainer":false,"data":[["<a href=\"#\">R/run_example.R<\/a>","<a href=\"#\">R/FileComparator.R<\/a>","<a href=\"#\">R/BinaryFileComparator.R<\/a>","<a href=\"#\">R/RtfFileComparator.R<\/a>","<a href=\"#\">R/ImgFileComparator.R<\/a>","<a href=\"#\">R/FileComparatorFactory.R<\/a>","<a href=\"#\">R/TxtWithImagesComparator.R<\/a>","<a href=\"#\">R/Config.R<\/a>","<a href=\"#\">R/TxtFileComparator.R<\/a>","<a href=\"#\">R/Debugger.R<\/a>","<a href=\"#\">R/list_folder_files.R<\/a>","<a href=\"#\">R/PdfFileComparator.R<\/a>","<a href=\"#\">R/list_files.R<\/a>"],[20,260,138,133,270,88,185,337,376,134,55,81,39],[6,75,33,36,98,33,52,121,168,33,15,14,6],[0,59,28,33,92,31,49,120,167,33,15,14,6],[6,16,5,3,6,2,3,1,1,0,0,0,0],["0","95","11","28","3","27","8","85","23","12","2","26","2"],["0.00%","78.67%","84.85%","91.67%","93.88%","93.94%","94.23%","99.17%","99.40%","100.00%","100.00%","100.00%","100.00%"]],"container":"<table class=\"row-border\">\n  <thead>\n    <tr>\n      <th>File<\/th>\n      <th>Lines<\/th>\n      <th>Relevant<\/th>\n      <th>Covered<\/th>\n      <th>Missed<\/th>\n      <th>Hits / Line<\/th>\n      <th>Coverage<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":false,"dom":"t","paging":false,"columnDefs":[{"targets":6,"createdCell":"function(td, cellData, rowData, row, col) {\n  var percent = cellData.replace(\"%\", \"\");\n  if (percent > 90) {\n    var grad = \"linear-gradient(90deg, #edfde7 \" + cellData + \", white \" + cellData + \")\";\n  } else if (percent > 75) {\n    var grad = \"linear-gradient(90deg, #f9ffe5 \" + cellData + \", white \" + cellData + \")\";\n  } else {\n    var grad = \"linear-gradient(90deg, #fcece9 \" + cellData + \", white \" + cellData + \")\";\n  }\n  $(td).css(\"background\", grad);\n}\n"},{"className":"dt-right","targets":[1,2,3,4]},{"name":"File","targets":0},{"name":"Lines","targets":1},{"name":"Relevant","targets":2},{"name":"Covered","targets":3},{"name":"Missed","targets":4},{"name":"Hits / Line","targets":5},{"name":"Coverage","targets":6}],"order":[],"autoWidth":false,"orderClasses":false},"callback":"function(table) {\ntable.on('click.dt', 'a', function() {\n  files = $('div#files div');\n  files.not('div.hidden').addClass('hidden');\n  id = $(this).text();\n  files.filter('div[id=\\'' + id + '\\']').removeClass('hidden');\n  $('ul.nav a[data-value=Source]').text(id).tab('show');\n});\n}"},"evals":["options.columnDefs.0.createdCell","callback"],"jsHooks":[]}</script>
         </div>
         <div class="tab-pane" title="Source" data-value="Source" id="tab-covr-2">
           <div id="files">
@@ -467,7 +467,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">51</td>
-                    <td class="coverage">52<em>x</em></td>
+                    <td class="coverage">54<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$vrf_open_debug("Rtf::vrf_contents", config)</pre>
                     </td>
@@ -488,14 +488,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">54</td>
-                    <td class="coverage">52<em>x</em></td>
+                    <td class="coverage">54<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      contents &lt;- self$safe_read_rtf(file = file)</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">55</td>
-                    <td class="coverage">52<em>x</em></td>
+                    <td class="coverage">54<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      result   &lt;- self$vrf_contents_inner(contents, config, omit)</pre>
                     </td>
@@ -509,14 +509,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">57</td>
-                    <td class="coverage">52<em>x</em></td>
+                    <td class="coverage">54<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$vrf_close_debug()</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">58</td>
-                    <td class="coverage">52<em>x</em></td>
+                    <td class="coverage">54<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      result</pre>
                     </td>
@@ -929,21 +929,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">117</td>
-                    <td class="coverage">52<em>x</em></td>
+                    <td class="coverage">54<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      tryCatch({</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">118</td>
-                    <td class="coverage">52<em>x</em></td>
+                    <td class="coverage">54<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        striprtf::read_rtf(file)</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">119</td>
-                    <td class="coverage">52<em>x</em></td>
+                    <td class="coverage">54<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      }, error = function(e) {</pre>
                     </td>
@@ -2138,7 +2138,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">100</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$vrf_open_debug("Txt::vrf_details_inner" , config)</pre>
                     </td>
@@ -2152,14 +2152,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">102</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      file1_contents_list &lt;- self$file1_contents_list</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">103</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      file2_contents_list &lt;- self$file2_contents_list</pre>
                     </td>
@@ -2173,21 +2173,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">105</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if (is.null(file1_contents_list)) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">106</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        file1_contents_list &lt;- self$vrf_contents(self$file1, config, omit)</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">107</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        self$file1_contents_list &lt;- file1_contents_list</pre>
                     </td>
@@ -2208,21 +2208,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">110</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if (is.null(file2_contents_list)) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">111</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        file2_contents_list &lt;- self$vrf_contents(self$file2, config, omit)</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">112</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        self$file2_contents_list &lt;- file2_contents_list</pre>
                     </td>
@@ -2243,14 +2243,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">115</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      file1_contents_whole &lt;- file1_contents_list[[1]]</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">116</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      file2_contents_whole &lt;- file2_contents_list[[1]]</pre>
                     </td>
@@ -2264,14 +2264,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">118</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      context &lt;- 2</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">119</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if ("full" == super$vrf_option_value(config, "details.mode")) {</pre>
                     </td>
@@ -2299,14 +2299,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">123</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      my_equalizer_with_omit &lt;- function(x, x.chr) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">124</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        my_finalizer(x, x.chr, omit)</pre>
                     </td>
@@ -2327,21 +2327,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">127</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      style &lt;- diffobj::StyleHtmlLightRgb(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">128</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        html.output = "diff.w.style",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">129</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        finalizer = my_equalizer_with_omit</pre>
                     </td>
@@ -2362,63 +2362,63 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">132</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$vrf_open_debug("Txt::vrf_details_inner::diffPrint" , config)</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">133</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      diff_print &lt;- diffobj::diffChr(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">134</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        file1_contents_whole,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">135</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        file2_contents_whole,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">136</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        context = context,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">137</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        style = style,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">138</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        ignore.white.space = ("yes" == super$vrf_option_value(config, "generic.spaces")),</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">139</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        mode = "sidebyside",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">140</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        word.diff = ("word" == super$vrf_option_value(config, "generic.level"))</pre>
                     </td>
@@ -2432,7 +2432,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">142</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$vrf_close_debug()</pre>
                     </td>
@@ -2446,28 +2446,28 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">144</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      result &lt;- list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">145</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">146</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          type = "text",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">147</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          contents = diff_print</pre>
                     </td>
@@ -2495,14 +2495,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">151</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$vrf_close_debug()</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">152</td>
-                    <td class="coverage">14<em>x</em></td>
+                    <td class="coverage">15<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      return(result)</pre>
                     </td>
@@ -2621,7 +2621,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">169</td>
-                    <td class="coverage">140<em>x</em></td>
+                    <td class="coverage">142<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$vrf_open_debug("Txt::vrf_contents_inner" , config)</pre>
                     </td>
@@ -2635,7 +2635,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">171</td>
-                    <td class="coverage">140<em>x</em></td>
+                    <td class="coverage">142<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      contents_processed &lt;- contents</pre>
                     </td>
@@ -2649,7 +2649,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">173</td>
-                    <td class="coverage">140<em>x</em></td>
+                    <td class="coverage">142<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if (!is.null(omit) &amp;&amp; "" != paste0(omit)) {</pre>
                     </td>
@@ -2705,7 +2705,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">181</td>
-                    <td class="coverage">140<em>x</em></td>
+                    <td class="coverage">142<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if ("yes" == super$vrf_option_value(config, "generic.spaces")) {</pre>
                     </td>
@@ -2740,14 +2740,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">186</td>
-                    <td class="coverage">140<em>x</em></td>
+                    <td class="coverage">142<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$vrf_close_debug()</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">187</td>
-                    <td class="coverage">140<em>x</em></td>
+                    <td class="coverage">142<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      return(list(contents, contents_processed))</pre>
                     </td>
@@ -2831,7 +2831,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">199</td>
-                    <td class="coverage">69<em>x</em></td>
+                    <td class="coverage">70<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      return("")</pre>
                     </td>
@@ -2978,21 +2978,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">220</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  split &lt;- strsplit(x.chr, "&lt;div class='diffobj-row'&gt;")[[1]]</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">221</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  width &lt;- nchar(length(split))</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">222</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  index &lt;- 0</pre>
                     </td>
@@ -3027,14 +3027,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">227</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  for (i in seq_along(split)) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">228</td>
-                    <td class="coverage">389<em>x</em></td>
+                    <td class="coverage">41<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    row &lt;- split[[i]]</pre>
                     </td>
@@ -3062,56 +3062,56 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">232</td>
-                    <td class="coverage">389<em>x</em></td>
+                    <td class="coverage">41<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    if (1 == i) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">233</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      old &lt;- paste0(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">234</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        "&lt;div class='diffobj-container light rgb'&gt;",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">235</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        "&lt;pre class='diffobj-content'&gt;",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">236</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        "No visible differences between objects, but there are some ",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">237</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        "differencessuppressed by `ignore.white.space`, ",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">238</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        "`convert.hz.white.space`, `strip.sgr`,and/or `trim`. Set all ",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">239</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        "those arguments to FALSE to highlight the differences."</pre>
                     </td>
@@ -3132,7 +3132,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">242</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if (old == row) {</pre>
                     </td>
@@ -3195,14 +3195,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">251</td>
-                    <td class="coverage">389<em>x</em></td>
+                    <td class="coverage">41<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    if (grepl("&lt;div class='diffobj-header'&gt;@@ .*@@&lt;/div&gt;", row)) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">252</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      index &lt;- as.integer(sub(".*@@\\s*([0-9]+),.*@@.*", "\\1", row)) - 1</pre>
                     </td>
@@ -3223,14 +3223,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">255</td>
-                    <td class="coverage">389<em>x</em></td>
+                    <td class="coverage">41<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    if (i &gt; 3) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">256</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if (grepl("&lt;div class='diffobj-header'&gt;@@ .*@@&lt;/div&gt;", row)) {</pre>
                     </td>
@@ -3251,7 +3251,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">259</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        index &lt;- index + 1</pre>
                     </td>
@@ -3265,7 +3265,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">261</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      row_str &lt;- sprintf("%*s", width + 3, sprintf("[%d] ", index))</pre>
                     </td>
@@ -3279,49 +3279,49 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">263</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      row &lt;- gsub(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">264</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        "&lt;div class='diffobj-text'&gt;&lt;div class='diffobj-match'&gt;",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">265</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        paste0(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">266</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          "&lt;div class='diffobj-text'&gt;&lt;div class='diffobj-match'&gt;",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">267</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          "&lt;span class='diffobj-trim'&gt;",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">268</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          row_str,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">269</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          "&lt;/span&gt;"</pre>
                     </td>
@@ -3335,7 +3335,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">271</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        row</pre>
                     </td>
@@ -3356,49 +3356,49 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">274</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      row &lt;- gsub(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">275</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        "&lt;div class='diffobj-text'&gt;&lt;div class='delete'&gt;",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">276</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        paste0(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">277</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          "&lt;div class='diffobj-text'&gt;&lt;div class='delete'&gt;",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">278</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          "&lt;span class='diffobj-trim'&gt;",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">279</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          row_str,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">280</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          "&lt;/span&gt;"</pre>
                     </td>
@@ -3412,7 +3412,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">282</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        row</pre>
                     </td>
@@ -3433,49 +3433,49 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">285</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      row &lt;- gsub(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">286</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        "&lt;div class='diffobj-text'&gt;&lt;div class='insert'&gt;",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">287</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        paste0(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">288</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          "&lt;div class='diffobj-text'&gt;&lt;div class='insert'&gt;",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">289</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          "&lt;span class='diffobj-trim'&gt;",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">290</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          row_str,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">291</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          "&lt;/span&gt;"</pre>
                     </td>
@@ -3489,7 +3489,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">293</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        row</pre>
                     </td>
@@ -3510,7 +3510,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">296</td>
-                    <td class="coverage">371<em>x</em></td>
+                    <td class="coverage">26<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      split[[i]] &lt;- row</pre>
                     </td>
@@ -3545,7 +3545,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">301</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (!is.null(omit) &amp;&amp; "" != paste0(omit)) {</pre>
                     </td>
@@ -4049,7 +4049,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">373</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  html_string &lt;- paste(split, collapse = "&lt;div class='diffobj-row'&gt;")</pre>
                     </td>
@@ -4063,7 +4063,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">375</td>
-                    <td class="coverage">6<em>x</em></td>
+                    <td class="coverage">5<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  diffobj::finalizeHtml(x, html_string)</pre>
                     </td>
@@ -5349,21 +5349,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">43</td>
-                    <td class="coverage">101<em>x</em></td>
+                    <td class="coverage">104<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$file1 &lt;- file1</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">44</td>
-                    <td class="coverage">101<em>x</em></td>
+                    <td class="coverage">104<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$file2 &lt;- file2</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">45</td>
-                    <td class="coverage">101<em>x</em></td>
+                    <td class="coverage">104<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$details_comparison &lt;- list("summary" = NULL, "full" = NULL)</pre>
                     </td>
@@ -5748,14 +5748,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">100</td>
-                    <td class="coverage">28<em>x</em></td>
+                    <td class="coverage">31<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      mode &lt;- self$vrf_option_value(config, "details.mode")</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">101</td>
-                    <td class="coverage">28<em>x</em></td>
+                    <td class="coverage">31<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if ("NA" == mode) {</pre>
                     </td>
@@ -5783,14 +5783,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">105</td>
-                    <td class="coverage">28<em>x</em></td>
+                    <td class="coverage">31<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$vrf_open_debug(paste("File::vrf_details, mode:", mode), config)</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">106</td>
-                    <td class="coverage">28<em>x</em></td>
+                    <td class="coverage">31<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$vrf_add_debug_files()</pre>
                     </td>
@@ -5804,7 +5804,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">108</td>
-                    <td class="coverage">28<em>x</em></td>
+                    <td class="coverage">31<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if (!is.null(self$details_comparison[[mode]])) {</pre>
                     </td>
@@ -5839,7 +5839,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">113</td>
-                    <td class="coverage">28<em>x</em></td>
+                    <td class="coverage">31<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if (!file.exists(self$file1) || !file.exists(self$file2)) {</pre>
                     </td>
@@ -5895,42 +5895,42 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">121</td>
-                    <td class="coverage">17<em>x</em></td>
+                    <td class="coverage">20<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      } else if ('' != self$vrf_details_supported(config)) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">122</td>
-                    <td class="coverage">1<em>x</em></td>
+                    <td class="coverage">3<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        self$vrf_add_debug("Details comparison not supported/enabled, unable perform comparison")</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">123</td>
-                    <td class="coverage">1<em>x</em></td>
+                    <td class="coverage">3<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        result &lt;- list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">124</td>
-                    <td class="coverage">1<em>x</em></td>
+                    <td class="coverage">3<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">125</td>
-                    <td class="coverage">1<em>x</em></td>
+                    <td class="coverage">3<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            type = "text",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">126</td>
-                    <td class="coverage">1<em>x</em></td>
+                    <td class="coverage">3<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            contents = self$vrf_details_supported(config)</pre>
                     </td>
@@ -5958,21 +5958,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">130</td>
-                    <td class="coverage">16<em>x</em></td>
+                    <td class="coverage">17<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        tryCatch({</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">131</td>
-                    <td class="coverage">16<em>x</em></td>
+                    <td class="coverage">17<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          result &lt;- self$vrf_details_inner(config, omit)</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">132</td>
-                    <td class="coverage">16<em>x</em></td>
+                    <td class="coverage">17<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        }, error = function(e) {</pre>
                     </td>
@@ -6049,14 +6049,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">143</td>
-                    <td class="coverage">28<em>x</em></td>
+                    <td class="coverage">31<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$details_comparison[[mode]] &lt;- result</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">144</td>
-                    <td class="coverage">28<em>x</em></td>
+                    <td class="coverage">31<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$vrf_close_debug()</pre>
                     </td>
@@ -6070,7 +6070,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">146</td>
-                    <td class="coverage">28<em>x</em></td>
+                    <td class="coverage">31<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      return(result)</pre>
                     </td>
@@ -6413,7 +6413,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">195</td>
-                    <td class="coverage">962<em>x</em></td>
+                    <td class="coverage">985<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if (is.null(config)) {</pre>
                     </td>
@@ -6434,14 +6434,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">198</td>
-                    <td class="coverage">962<em>x</em></td>
+                    <td class="coverage">985<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      value &lt;- config$get(key)</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">199</td>
-                    <td class="coverage">962<em>x</em></td>
+                    <td class="coverage">985<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      return(value)</pre>
                     </td>
@@ -6525,14 +6525,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">211</td>
-                    <td class="coverage">563<em>x</em></td>
+                    <td class="coverage">573<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if ("yes" != self$vrf_option_value(config, "generic.debug")) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">212</td>
-                    <td class="coverage">551<em>x</em></td>
+                    <td class="coverage">561<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        return()</pre>
                     </td>
@@ -6651,14 +6651,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">229</td>
-                    <td class="coverage">27<em>x</em></td>
+                    <td class="coverage">29<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if (is.null(self$debugger)) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">230</td>
-                    <td class="coverage">27<em>x</em></td>
+                    <td class="coverage">29<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        return()</pre>
                     </td>
@@ -6728,14 +6728,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">240</td>
-                    <td class="coverage">99<em>x</em></td>
+                    <td class="coverage">102<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if (is.null(self$debugger)) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">241</td>
-                    <td class="coverage">98<em>x</em></td>
+                    <td class="coverage">101<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        return()</pre>
                     </td>
@@ -6819,14 +6819,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">253</td>
-                    <td class="coverage">563<em>x</em></td>
+                    <td class="coverage">573<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if (is.null(self$debugger)) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">254</td>
-                    <td class="coverage">551<em>x</em></td>
+                    <td class="coverage">561<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        return()</pre>
                     </td>
@@ -7105,7 +7105,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">33</td>
-                    <td class="coverage">26<em>x</em></td>
+                    <td class="coverage">27<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      super$initialize(file1, file2)</pre>
                     </td>
@@ -7609,7 +7609,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">105</td>
-                    <td class="coverage">5<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$vrf_open_debug("TxtWithImages::vrf_details_inner" , config)</pre>
                     </td>
@@ -7623,7 +7623,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">107</td>
-                    <td class="coverage">5<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      result &lt;- super$vrf_details_inner(config, omit)</pre>
                     </td>
@@ -7637,7 +7637,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">109</td>
-                    <td class="coverage">5<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if ("no" != super$vrf_option_value(config, "generic.images")) {</pre>
                     </td>
@@ -7896,14 +7896,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">146</td>
-                    <td class="coverage">5<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$vrf_close_debug()</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">147</td>
-                    <td class="coverage">5<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      return(result)</pre>
                     </td>
@@ -8721,7 +8721,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">78</td>
-                    <td class="coverage">979<em>x</em></td>
+                    <td class="coverage">1002<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  parts &lt;- strsplit(key, ".", fixed = TRUE)[[1]]</pre>
                     </td>
@@ -8735,14 +8735,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">80</td>
-                    <td class="coverage">979<em>x</em></td>
+                    <td class="coverage">1002<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  for (p in parts) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">81</td>
-                    <td class="coverage">1958<em>x</em></td>
+                    <td class="coverage">2004<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    config &lt;- config[[p]]</pre>
                     </td>
@@ -8756,7 +8756,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">83</td>
-                    <td class="coverage">979<em>x</em></td>
+                    <td class="coverage">1002<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  config</pre>
                     </td>
@@ -8868,7 +8868,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">99</td>
-                    <td class="coverage">31<em>x</em></td>
+                    <td class="coverage">32<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  requireNamespace("magick", quietly = TRUE)</pre>
                     </td>
@@ -8896,7 +8896,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">103</td>
-                    <td class="coverage">34<em>x</em></td>
+                    <td class="coverage">36<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  requireNamespace("pdftools", quietly = TRUE)</pre>
                     </td>
@@ -9295,14 +9295,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">160</td>
-                    <td class="coverage">32<em>x</em></td>
+                    <td class="coverage">35<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$schema &lt;- self$get_default_schema()</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">161</td>
-                    <td class="coverage">32<em>x</em></td>
+                    <td class="coverage">35<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$config &lt;- self$get_default_config()</pre>
                     </td>
@@ -9316,21 +9316,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">163</td>
-                    <td class="coverage">32<em>x</em></td>
+                    <td class="coverage">35<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if (is.null(config_path)) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">164</td>
-                    <td class="coverage">28<em>x</em></td>
+                    <td class="coverage">31<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        config_dir &lt;- rappdirs::user_config_dir("verifyr2")</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">165</td>
-                    <td class="coverage">28<em>x</em></td>
+                    <td class="coverage">31<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        self$path  &lt;- file.path(config_dir, "config.json")</pre>
                     </td>
@@ -9365,7 +9365,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">170</td>
-                    <td class="coverage">32<em>x</em></td>
+                    <td class="coverage">35<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if (load_config &amp;&amp; file.exists(self$path)) {</pre>
                     </td>
@@ -9533,7 +9533,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">194</td>
-                    <td class="coverage">979<em>x</em></td>
+                    <td class="coverage">1002<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      get_nested_value(self$config, key)</pre>
                     </td>
@@ -9729,7 +9729,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">222</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      defaults &lt;- list()</pre>
                     </td>
@@ -9743,14 +9743,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">224</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      for (group in names(self$schema)) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">225</td>
-                    <td class="coverage">140<em>x</em></td>
+                    <td class="coverage">152<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        defaults[[group]] &lt;- list()</pre>
                     </td>
@@ -9764,21 +9764,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">227</td>
-                    <td class="coverage">140<em>x</em></td>
+                    <td class="coverage">152<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        for (key in names(self$schema[[group]])) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">228</td>
-                    <td class="coverage">385<em>x</em></td>
+                    <td class="coverage">418<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          if (key != "title") {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">229</td>
-                    <td class="coverage">245<em>x</em></td>
+                    <td class="coverage">266<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            defaults[[group]][[key]] &lt;- self$schema[[group]][[key]]$default</pre>
                     </td>
@@ -9806,7 +9806,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">233</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      defaults</pre>
                     </td>
@@ -9869,63 +9869,63 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">242</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      schema &lt;- list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">243</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        generic = list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">244</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          title = "Generic options",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">245</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          level = list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">246</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            title   = "Comparison level",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">247</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            options = c("word", "row"),</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">248</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            default = "word",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">249</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            reload  = TRUE,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">250</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            desc    = generic_level_desc</pre>
                     </td>
@@ -9939,42 +9939,42 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">252</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          spaces = list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">253</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            titlei  = "Ignore empty space differences",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">254</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            options = c("yes", "no"),</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">255</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            default = "no",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">256</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            reload  = TRUE,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">257</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            desc    = generic_spaces_desc</pre>
                     </td>
@@ -9988,42 +9988,42 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">259</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          images = list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">260</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            title   = "Process embedded images",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">261</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            options = c("yes", "no"),</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">262</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            default = "yes",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">263</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            reload  = TRUE,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">264</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            desc    = generic_images_desc</pre>
                     </td>
@@ -10037,42 +10037,42 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">266</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          debug = list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">267</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            title   = "Debugging enabled",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">268</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            options = c("yes", "no"),</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">269</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            default = "no",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">270</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            reload  = FALSE,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">271</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            desc    = generic_debug_desc</pre>
                     </td>
@@ -10093,56 +10093,56 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">274</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        rtf = list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">275</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          title = "RTF comparison (summary and details)",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">276</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          images = list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">277</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            title   = "Process embedded images",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">278</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            options = c("yes", "no"),</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">279</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            default = "yes",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">280</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            reload  = TRUE,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">281</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            desc    = rtf_images_desc</pre>
                     </td>
@@ -10163,56 +10163,56 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">284</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        pdf = list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">285</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          title = "PDF comparison (summary)",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">286</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          details = list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">287</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            title = "Process PDF detailed comparison",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">288</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            options = c("yes", "no"),</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">289</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            default = "yes",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">290</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            reload  = TRUE,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">291</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            desc    = pdf_details_desc</pre>
                     </td>
@@ -10233,56 +10233,56 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">294</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        details = list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">295</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          title = "Details comparison",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">296</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          mode = list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">297</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            title = "Mode",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">298</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            options = c("full", "summary"),</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">299</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            default = "summary",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">300</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            reload  = FALSE,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">301</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">            desc    = details_mode_desc</pre>
                     </td>
@@ -10317,49 +10317,49 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">306</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if (!check_magick_available()) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">307</td>
-                    <td class="coverage">4<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        schema[["generic"]][["images"]] &lt;- list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">308</td>
-                    <td class="coverage">4<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          title   = "Process embedded images (missing magick library)",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">309</td>
-                    <td class="coverage">4<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          options = c("no"),</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">310</td>
-                    <td class="coverage">4<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          default = "no",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">311</td>
-                    <td class="coverage">4<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          reload  = TRUE,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">312</td>
-                    <td class="coverage">4<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          desc    = generic_images_desc</pre>
                     </td>
@@ -10380,42 +10380,42 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">315</td>
-                    <td class="coverage">4<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        schema[["rtf"]][["images"]] &lt;- list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">316</td>
-                    <td class="coverage">4<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          title   = "Process embedded images (missing magick library)",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">317</td>
-                    <td class="coverage">4<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          options = c("no"),</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">318</td>
-                    <td class="coverage">4<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          default = "no",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">319</td>
-                    <td class="coverage">4<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          reload  = TRUE,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">320</td>
-                    <td class="coverage">4<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          desc    = rtf_images_desc</pre>
                     </td>
@@ -10443,49 +10443,49 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">324</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if (!check_pdftools_available()) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">325</td>
-                    <td class="coverage">1<em>x</em></td>
+                    <td class="coverage">2<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        schema[["pdf"]][["details"]] &lt;- list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">326</td>
-                    <td class="coverage">1<em>x</em></td>
+                    <td class="coverage">2<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          title   = "Process PDF details (missing pdftools library)",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">327</td>
-                    <td class="coverage">1<em>x</em></td>
+                    <td class="coverage">2<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          options = c("no"),</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">328</td>
-                    <td class="coverage">1<em>x</em></td>
+                    <td class="coverage">2<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          default = "no",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">329</td>
-                    <td class="coverage">1<em>x</em></td>
+                    <td class="coverage">2<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          reload  = TRUE,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">330</td>
-                    <td class="coverage">1<em>x</em></td>
+                    <td class="coverage">2<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">          desc    = pdf_details_desc</pre>
                     </td>
@@ -10513,7 +10513,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">334</td>
-                    <td class="coverage">35<em>x</em></td>
+                    <td class="coverage">38<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      schema</pre>
                     </td>
@@ -10967,21 +10967,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">61</td>
-                    <td class="coverage">7<em>x</em></td>
+                    <td class="coverage">8<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$image1_raw &lt;- raw1</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">62</td>
-                    <td class="coverage">7<em>x</em></td>
+                    <td class="coverage">8<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      self$image2_raw &lt;- raw2</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">63</td>
-                    <td class="coverage">7<em>x</em></td>
+                    <td class="coverage">8<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      super$initialize(file1, file2)</pre>
                     </td>
@@ -11793,14 +11793,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">179</td>
-                    <td class="coverage">5<em>x</em></td>
+                    <td class="coverage">7<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if ("no" == super$vrf_option_value(config, "generic.images")) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">180</td>
-                    <td class="coverage">1<em>x</em></td>
+                    <td class="coverage">3<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        return("Image details comparison disabled.")</pre>
                     </td>
@@ -13905,14 +13905,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">75</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">22<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      if ("no" == super$vrf_option_value(config, "pdf.details")) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">76</td>
-                    <td class="coverage">1<em>x</em></td>
+                    <td class="coverage">3<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        return("Pdf details comparison disabled.")</pre>
                     </td>
@@ -14309,7 +14309,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">30</td>
-                    <td class="coverage">99<em>x</em></td>
+                    <td class="coverage">102<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (!file.exists(file1) || !file.exists(file2)) {</pre>
                     </td>
@@ -14337,7 +14337,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">34</td>
-                    <td class="coverage">79<em>x</em></td>
+                    <td class="coverage">82<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  file_extension  &lt;- tools::toTitleCase(tools::file_ext(file1))</pre>
                     </td>
@@ -14351,14 +14351,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">36</td>
-                    <td class="coverage">79<em>x</em></td>
+                    <td class="coverage">82<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (file_extension %in% list("Jpg", "Jpeg", "Png")) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">37</td>
-                    <td class="coverage">5<em>x</em></td>
+                    <td class="coverage">6<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    file_extension &lt;- "Img"</pre>
                     </td>
@@ -14386,7 +14386,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">41</td>
-                    <td class="coverage">79<em>x</em></td>
+                    <td class="coverage">82<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  comparator_name &lt;- paste0(file_extension, "FileComparator")</pre>
                     </td>
@@ -14400,14 +14400,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">43</td>
-                    <td class="coverage">79<em>x</em></td>
+                    <td class="coverage">82<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (exists(comparator_name, envir = .GlobalEnv)) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">44</td>
-                    <td class="coverage">68<em>x</em></td>
+                    <td class="coverage">71<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    class_def &lt;- get(comparator_name, envir = .GlobalEnv)</pre>
                     </td>
@@ -14428,14 +14428,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">47</td>
-                    <td class="coverage">68<em>x</em></td>
+                    <td class="coverage">71<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    if (inherits(class_def, "R6ClassGenerator")) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">48</td>
-                    <td class="coverage">68<em>x</em></td>
+                    <td class="coverage">71<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      return(do.call(class_def$new, list(file1 = file1, file2 = file2)))</pre>
                     </td>
