@@ -14,10 +14,12 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting2.txt")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(config = config)[[1]]
+  result     <- comparator$vrf_details(config = config)
+  expect_length(result, 1)
 
-  expect_equal(result$type, "text")
-  expect_equal(result$contents, "File(s) not available; unable to compare.")
+  txt_result = result[[1]]
+  expect_equal(txt_result$type, "text")
+  expect_equal(txt_result$contents, "File(s) not available; unable to compare.")
 })
 
 test_that(paste(
@@ -28,10 +30,12 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting.txt")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(config = config)[[1]]
+  result     <- comparator$vrf_details(config = config)
+  expect_length(result, 1)
 
-  expect_equal(result$type, "text")
-  expect_equal(result$contents, "File(s) not available; unable to compare.")
+  txt_result = result[[1]]
+  expect_equal(txt_result$type, "text")
+  expect_equal(txt_result$contents, "File(s) not available; unable to compare.")
 })
 
 ################################################################################
@@ -48,12 +52,14 @@ test_that(paste(
   config_local$set("details.mode", "summary")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(config = config_local)[[1]]
+  result     <- comparator$vrf_details(config = config_local)
+  expect_length(result, 1)
 
-  expect_equal(result$type, "text")
-  expect_equal(typeof(result$contents), "S4")
+  txt_result = result[[1]]
+  expect_equal(txt_result$type, "text")
+  expect_equal(typeof(txt_result$contents), "S4")
 
-  html_output <- as.character(result$contents)
+  html_output <- as.character(txt_result$contents)
   html_output <- paste(html_output, collapse = "\n")
   expect_false(grepl("='insert'><span class='diffobj-trim'>\\[", html_output))
 })
@@ -68,12 +74,14 @@ test_that(paste(
   config_local$set("details.mode", "full")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(config = config_local)[[1]]
+  result     <- comparator$vrf_details(config = config_local)
+  expect_length(result, 1)
 
-  expect_equal(result$type, "text")
-  expect_equal(typeof(result$contents), "S4")
+  txt_result = result[[1]]
+  expect_equal(txt_result$type, "text")
+  expect_equal(typeof(txt_result$contents), "S4")
 
-  html_output <- as.character(result$contents)
+  html_output <- as.character(txt_result$contents)
   html_output <- paste(html_output, collapse = "\n")
   expect_true(grepl("='insert'><span class='diffobj-trim'>\\[", html_output))
 })
@@ -89,12 +97,14 @@ test_that(paste(
   config_local$set("generic.spaces", "no")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(config = config_local)[[1]]
+  result     <- comparator$vrf_details(config = config_local)
+  expect_length(result, 1)
 
-  expect_equal(result$type, "text")
-  expect_equal(typeof(result$contents), "S4")
+  txt_result = result[[1]]
+  expect_equal(txt_result$type, "text")
+  expect_equal(typeof(txt_result$contents), "S4")
 
-  html_output <- as.character(result$contents)
+  html_output <- as.character(txt_result$contents)
   html_output <- paste(html_output, collapse = "\n")
   expect_true(grepl("='insert'><span class='diffobj-trim'>\\[", html_output))
 })
@@ -110,12 +120,14 @@ test_that(paste(
   config_local$set("generic.spaces", "yes")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(config = config_local)[[1]]
+  result     <- comparator$vrf_details(config = config_local)
+  expect_length(result, 1)
 
-  expect_equal(result$type, "text")
-  expect_equal(typeof(result$contents), "S4")
+  txt_result = result[[1]]
+  expect_equal(txt_result$type, "text")
+  expect_equal(typeof(txt_result$contents), "S4")
 
-  html_output <- as.character(result$contents)
+  html_output <- as.character(txt_result$contents)
   html_output <- paste(html_output, collapse = "\n")
   expect_false(grepl("='insert'><span class='diffobj-trim'>\\[", html_output))
 })
@@ -131,13 +143,15 @@ test_that(paste(
   config$set("details.mode", "full")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(config = config, omit = "Line 4")[[1]]
+  result     <- comparator$vrf_details(config = config, omit = "Line 4")
+  expect_length(result, 1)
 
-  expect_equal(result$type, "text")
-  expect_equal(typeof(result$contents), "S4")
+  txt_result = result[[1]]
+  expect_equal(txt_result$type, "text")
+  expect_equal(typeof(txt_result$contents), "S4")
 
   # get the result contents to invoke the finalizer callback used for printing
-  html_output <- as.character(result$contents)
+  html_output <- as.character(txt_result$contents)
   html_output <- paste(html_output, collapse = "\n")
   expect_true(grepl("class='ignore'", html_output))
 })

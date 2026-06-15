@@ -5,10 +5,11 @@
 - Refactor image comparison logic implementation to single place (todo: add link)
 - Use htmltools for HTML generation outside of shiny app (todo: add link)
 - Force word level comparison in HTML export (todo: add link)
+- Improve testing related to optional dependencies (todo: add link)
 
 # verifyr2 1.2.0
 
-## New features
+## Improvements
 - Add configuration option descriptions ([#48](https://github.com/ejuhjav/verifyr2/pull/48)).
 - Support ignoring differences in empty spaces ([#49](https://github.com/ejuhjav/verifyr2/pull/49)).
 - Support word level details comparison (optional) ([#52](https://github.com/ejuhjav/verifyr2/pull/52)).
