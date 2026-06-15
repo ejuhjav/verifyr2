@@ -45,14 +45,7 @@ test_that(paste(
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(config = config)
 
-  if (requireNamespace("magick", quietly = TRUE)) {
-    expect_equal(result, "No differences.")
-  } else {
-    expect_equal(result, paste(
-      "No differences.",
-      "Image details comparison disabled."
-    ))
-  }
+  expect_equal(result, "No differences.")
 })
 
 test_that(paste(
@@ -64,14 +57,7 @@ test_that(paste(
   comparator <- create_comparator(file1, file2)
   result     <- comparator$vrf_summary(config = config)
 
-  if (requireNamespace("magick", quietly = TRUE)) {
-    expect_equal(result, "Different file sizes for compared files.")
-  } else {
-    expect_equal(result, paste(
-      "Different file sizes for compared files.",
-      "Image details comparison disabled."
-    ))
-  }
+  expect_equal(result, "Different file sizes for compared files.")
 })
 
 ################################################################################

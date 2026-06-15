@@ -14,10 +14,12 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting2.jpg")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(config = config)[[1]]
+  result     <- comparator$vrf_details(config = config)
+  expect_length(result, 1)
 
-  expect_equal(result$type, "text")
-  expect_equal(result$contents, "File(s) not available; unable to compare.")
+  txt_result = result[[1]]
+  expect_equal(txt_result$type, "text")
+  expect_equal(txt_result$contents, "File(s) not available; unable to compare.")
 })
 
 test_that(paste(
@@ -28,10 +30,12 @@ test_that(paste(
   file2 <- testthat::test_path(base, "nonexisting.png")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(config = config)[[1]]
+  result     <- comparator$vrf_details(config = config)
+  expect_length(result, 1)
 
-  expect_equal(result$type, "text")
-  expect_equal(result$contents, "File(s) not available; unable to compare.")
+  txt_result = result[[1]]
+  expect_equal(txt_result$type, "text")
+  expect_equal(txt_result$contents, "File(s) not available; unable to compare.")
 })
 
 ################################################################################
@@ -45,16 +49,12 @@ test_that(paste(
   file2 <- testthat::test_path(base, "base.jpeg")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(config = config)[[1]]
-  contents   <- result$contents
+  result     <- comparator$vrf_details(config = config)
+  expect_length(result, 1)
 
-  if (requireNamespace("magick", quietly = TRUE)) {
-    expect_equal(result$type, "image")
-    expect_equal(typeof(contents), "list")
-  } else {
-    expect_equal(result$type, "text")
-    expect_equal(result$contents, "Image details comparison disabled.")
-  }
+  img_result = result[[1]]
+  expect_equal(img_result$type, "image")
+  expect_equal(typeof(img_result$contents), "list")
 })
 
 test_that(paste(
@@ -64,14 +64,36 @@ test_that(paste(
   file2 <- testthat::test_path(base, "modified1.png")
 
   comparator <- create_comparator(file1, file2)
-  result     <- comparator$vrf_details(config = config)[[1]]
-  contents   <- result$contents
+  result     <- comparator$vrf_details(config = config)
+  expect_length(result, 1)
 
-  if (requireNamespace("magick", quietly = TRUE)) {
-    expect_equal(result$type, "image")
-    expect_equal(typeof(contents), "list")
-  } else {
-    expect_equal(result$type, "text")
-    expect_equal(result$contents, "Image details comparison disabled.")
-  }
+  img_result = result[[1]]
+  expect_equal(img_result$type, "image")
+  expect_equal(typeof(img_result$contents), "list")
+})
+
+################################################################################
+# comparison - with magick library not available
+################################################################################
+
+test_that(paste(
+  "Returns 'Image details comparison disabled.'"
+), {
+  file1 <- testthat::test_path(base, "base.jpg")
+  file2 <- testthat::test_path(base, "modified1.jpg")
+
+  # mock the magick available method to return false to replicate situation
+  # that magick library is not installed.
+  local_mocked_bindings(
+    check_magick_available = function() FALSE
+  )
+
+  config_local <- Config$new(FALSE)
+  comparator   <- create_comparator(file1, file2)
+  result       <- comparator$vrf_details(config = config_local)
+  expect_length(result, 1)
+
+  img_result = result[[1]]
+  expect_equal(img_result$type, "text")
+  expect_equal(img_result$contents, "Image details comparison disabled.")
 })
