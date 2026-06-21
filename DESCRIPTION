@@ -30,6 +30,7 @@ Suggests:
     pkgload,
     pdftools,
     purrr,
+    readxl,
     rmarkdown,
     shinyjs,
     shinyFiles,
@@ -44,6 +45,7 @@ Collate:
     'Config.R'
     'Debugger.R'
     'TxtFileComparator.R'
+    'XlsxFileComparator.R'
     'FileComparatorFactory.R'
     'ImgFileComparator.R'
     'PdfFileComparator.R'
