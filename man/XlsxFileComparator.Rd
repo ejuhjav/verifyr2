@@ -69,8 +69,15 @@ contents with the rows matching the omit string excluded. This method
 is intended to be called only by the comparator classes in the processing
 and shouldn't be called directly by the user.
 
-For XlsxFileComparator, each sheet is read and rows are converted to
-tab-separated strings for text-based comparison.
+For XlsxFileComparator, each sheet is read and every row is flattened to
+a single line. Each line is annotated with the sheet name and, when a
+header row is present, each cell is written as \code{Column=Value} so
+that any detected difference clearly indicates the sheet, the row and
+the column it originates from. Whether the first row is treated as a
+header is controlled by the \code{xlsx.header} configuration option:
+\code{"yes"} (default) treats it as a header, \code{"no"} treats every
+row as data and uses positional column names instead, flagging the
+sheet marker accordingly.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{XlsxFileComparator$vrf_contents(file, config, omit)}\if{html}{\out{</div>}}
 }

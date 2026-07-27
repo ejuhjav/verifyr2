@@ -302,7 +302,7 @@ Config <- R6::R6Class(
             options = c("yes", "no"),
             default = "yes",
             reload  = TRUE,
-            desc    = "Whether to use readxl for detailed Excel sheet comparison."
+            desc    = "Whether to use readxl for Excel sheet comparison."
           ),
           header = list(
             title   = "Header row handling",

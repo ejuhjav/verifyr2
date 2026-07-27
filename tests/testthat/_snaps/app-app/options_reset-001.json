@@ -24,6 +24,8 @@
     "rtf.images": "yes",
     "save_comments": 0,
     "submit_apply": 0,
-    "submit_apply_save": 0
+    "submit_apply_save": 0,
+    "xlsx.details": "yes",
+    "xlsx.header": "yes"
   }
 }
