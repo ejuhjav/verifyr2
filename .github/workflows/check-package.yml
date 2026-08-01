@@ -40,7 +40,7 @@ jobs:
 
       - name: Run lintr
         run: |
-          docker run --rm -v ${{ github.workspace }}:/workdir -w /workdir my-r-package-ci \
+          docker run --rm -e NOT_CRAN=true -v ${{ github.workspace }}:/workdir -w /workdir my-r-package-ci \
           Rscript -e "lintr::expect_lint_free()"
 
       - name: Run devtools::check
