@@ -102,8 +102,6 @@ Inherited method for indicating whether detailed comparison is available
 with the current comparator. Returns an empty string if the comparator
 is supported, otherwise a string that will be concatenated with the
 summary string.
-
-dumme comment row that is too long, should be reported by lintr and fail the pipeline.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{XlsxFileComparator$vrf_details_supported(config)}\if{html}{\out{</div>}}
 }

@@ -6,7 +6,8 @@
 - Use htmltools for HTML generation outside of shiny app (todo: add link)
 - Force word level comparison in HTML export (todo: add link)
 - Improve testing related to optional dependencies (todo: add link)
-- Implemented comparator for excel files (todo: add link)
+- Implement comparator for excel files (todo: add link)
+- Add explicit lintr check to pipeline (todo: add link)
 
 # verifyr2 1.2.0
 

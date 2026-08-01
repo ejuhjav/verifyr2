@@ -133,8 +133,6 @@ XlsxFileComparator <- R6::R6Class(
     #' with the current comparator. Returns an empty string if the comparator
     #' is supported, otherwise a string that will be concatenated with the
     #' summary string.
-    #' 
-    #' dumme comment row that is too long, should be reported by lintr and fail the pipeline.
     #'
     #' @param config configuration values
     #'
