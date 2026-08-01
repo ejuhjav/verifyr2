@@ -38,6 +38,11 @@ jobs:
       - name: List Docker images (debug)
         run: docker images
 
+      - name: Run lintr
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/workdir -w /workdir my-r-package-ci \
+          Rscript -e "lintr::expect_lint_free()"
+
       - name: Run devtools::check
         run: |
           docker run --rm -v ${{ github.workspace }}:/workdir my-r-package-ci \
