@@ -1,13 +1,13 @@
 
-# verifyr2 1.3.0 (unreleased)
+# verifyr2 1.3.0
 
 ## Improvements
-- Refactor image comparison logic implementation to single place (todo: add link)
-- Use htmltools for HTML generation outside of shiny app (todo: add link)
-- Force word level comparison in HTML export (todo: add link)
-- Improve testing related to optional dependencies (todo: add link)
-- Implement comparator for excel files (todo: add link)
-- Add explicit lintr check to pipeline (todo: add link)
+- Refactor image comparison logic implementation to single place ([#73](https://github.com/ejuhjav/verifyr2/pull/73)).
+- Use htmltools for HTML generation outside of shiny app ([#75](https://github.com/ejuhjav/verifyr2/pull/75)).
+- Force word level comparison in HTML export ([#82](https://github.com/ejuhjav/verifyr2/pull/82)).
+- Improve testing related to optional dependencies ([#83](https://github.com/ejuhjav/verifyr2/pull/83)).
+- Implement comparator for excel files ([#76](https://github.com/ejuhjav/verifyr2/pull/76)).
+- Add explicit lintr check to pipeline ([#87](https://github.com/ejuhjav/verifyr2/pull/87)).
 
 # verifyr2 1.2.0
 
