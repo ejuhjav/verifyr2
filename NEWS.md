@@ -8,6 +8,7 @@
 - Improve testing related to optional dependencies ([#83](https://github.com/ejuhjav/verifyr2/pull/83)).
 - Implement comparator for excel files ([#76](https://github.com/ejuhjav/verifyr2/pull/76)).
 - Add explicit lintr check to pipeline ([#87](https://github.com/ejuhjav/verifyr2/pull/87)).
+- Add windows & macos checks to pipeline ([#90](https://github.com/ejuhjav/verifyr2/pull/90)).
 
 # verifyr2 1.2.0
 
