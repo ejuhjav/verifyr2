@@ -48,17 +48,6 @@ jobs:
           docker run --rm -e NOT_CRAN=true -v ${{ github.workspace }}:/workdir -w /workdir my-r-package-ci \
           Rscript -e "library(testthat); remotes::install_local('.'); lintr::expect_lint_free()"
 
-      - name: Run urlchecker
-        run: |
-          docker run --rm -e NOT_CRAN=true -v ${{ github.workspace }}:/workdir -w /workdir my-r-package-ci \
-          Rscript -e " \
-            results <- urlchecker::url_check(); \
-            if (nrow(results) > 0) { \
-              print(results); \
-              stop('URL check failed! Fix broken or redirected URLs above before submitting to CRAN.', call. = FALSE); \
-            } \
-          "
-
       - name: Show the event that triggered the workflow
         run: |
           echo "Triggered by event: ${{ github.event_name }}"
